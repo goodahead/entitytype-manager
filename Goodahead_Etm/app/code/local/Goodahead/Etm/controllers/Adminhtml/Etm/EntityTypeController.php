@@ -13,6 +13,16 @@ class Goodahead_Etm_Adminhtml_Etm_EntityTypeController extends Goodahead_Etm_Con
 
 
 
+    public function gridAction()
+    {
+        $this->loadLayout();
+        $this->getResponse()->setBody(
+            $this->getLayout()->createBlock('goodahead_etm/adminhtml_entity_types')->toHtml()
+        );
+    }
+
+
+
     /* Deletes  entity types */
     public function deleteAction()
     {
@@ -29,6 +39,39 @@ class Goodahead_Etm_Adminhtml_Etm_EntityTypeController extends Goodahead_Etm_Con
             }
         }
 
+        $this->_redirectReferer();
+    }
+
+
+
+    public function massDeleteAction()
+    {
+        $etmEntityTypes = $this->getRequest()->getParam('entity_type_ids');
+        if (!is_array($etmEntityTypes)) {
+            $this->_getSession()->addError($this->__('Please select entity type(s).'));
+        } else {
+            if (!empty($etmEntityTypes)) {
+                try {
+                    foreach ($etmEntityTypes as $entityTypeId) {
+                        $this->getRequest()->setParam('entity_type_id', $entityTypeId);
+                        $this->_initEntityType();
+
+                        $entityType = Mage::registry('etm_entity_type');
+
+                        if ($entityType && $entityType->getId()) {
+                            $entityType->delete();
+
+                            Mage::unregister('etm_entity_type');
+                        }
+                    }
+                    $this->_getSession()->addSuccess(
+                        $this->__('Total of %d record(s) have been deleted.', count($etmEntityTypes))
+                    );
+                } catch (Exception $e) {
+                    $this->_getSession()->addError($e->getMessage());
+                }
+            }
+        }
         $this->_redirectReferer();
     }
 
