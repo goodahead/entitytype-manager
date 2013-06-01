@@ -15,4 +15,9 @@ class Goodahead_Etm_Model_Resource_Entity_Type_Collection extends Mage_Eav_Model
             'main_table.entity_type_id = etm_entity_type.entity_type_id');
         return $this;
     }
+
+    public function toOptionArray()
+    {
+        return $this->_toOptionArray('entity_type_id', 'entity_type_name');
+    }
 }
