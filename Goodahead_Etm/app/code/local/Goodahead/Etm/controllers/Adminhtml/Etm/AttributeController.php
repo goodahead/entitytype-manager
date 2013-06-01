@@ -40,4 +40,13 @@ class Goodahead_Etm_Adminhtml_Etm_AttributeController extends Goodahead_Etm_Cont
                 break;
         }
     }
+
+    /**
+     * Grid ajax action
+     */
+    public function gridAction()
+    {
+        $this->loadLayout();
+        $this->renderLayout();
+    }
 }
