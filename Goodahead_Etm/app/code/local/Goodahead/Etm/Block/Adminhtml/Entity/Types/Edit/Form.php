@@ -26,10 +26,6 @@ class Goodahead_Etm_Block_Adminhtml_Entity_Types_Edit_Form extends Mage_Adminhtm
             'required'  => true,
         ));
 
-        if ($entityType->getId()) {
-            $form->getElement('entity_type_code')->setReadonly('readonly');
-        }
-
         $fieldSet->addField('entity_type_name', 'text', array(
             'label'     => Mage::helper('goodahead_etm')->__("Entity Type Name"),
             'name'      => 'entity_type_name',
@@ -37,11 +33,12 @@ class Goodahead_Etm_Block_Adminhtml_Entity_Types_Edit_Form extends Mage_Adminhtm
             'required'  => true,
         ));
 
-
         if ($entityType->getId()) {
             $form->addField('entity_type_id', 'hidden', array(
                 'name' => 'entity_type_id',
             ));
+            $form->getElement('entity_type_code')->setReadonly('readonly');
+            $form->getElement('entity_type_code')->setDisabled(1);
             $form->setValues($entityType->getData());
         }
 

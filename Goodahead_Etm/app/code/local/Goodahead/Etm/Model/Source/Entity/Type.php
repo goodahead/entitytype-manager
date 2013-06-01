@@ -2,9 +2,17 @@
 
 class Goodahead_Etm_Model_Source_Entity_Type
 {
-    public function toOptionArray()
+    public function toOptionArray($addEmpty = false)
     {
-        $collection = Mage::getResourceModel('goodahead_etm/entity_type_collection');
-        return $collection->load()->toOptionArray('entity_type_id', 'entity_type_name');
+        $collection = Mage::getModel('goodahead_etm/entity_type')->getCollection();
+        $result = array();
+        if ($addEmpty) {
+            $result[] = array(
+                'value' => '',
+                'label' => '',
+            );
+        }
+        $result = array_merge($result, $collection->load()->toOptionArray());
+        return $result;
     }
 }

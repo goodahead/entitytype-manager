@@ -1,6 +1,12 @@
 <?php
 class Goodahead_Etm_Block_Adminhtml_Entity_Grid extends Mage_Adminhtml_Block_Widget_Grid
 {
+    protected function _getEtmHelper()
+    {
+        return Mage::helper('goodahead_etm');
+    }
+
+
     protected function _construct()
     {
         $this->setId('entityType');
@@ -14,12 +20,9 @@ class Goodahead_Etm_Block_Adminhtml_Entity_Grid extends Mage_Adminhtml_Block_Wid
     protected function _prepareCollection()
     {
         $entityType = Mage::registry('etm_entity_type');
-
-
-        $collection = Mage::getModel('goodahead_etm/entity')->getCollection($entityType->getEntityTypeCode());
-        //$collection = Mage::getModel('goodahead_etm/entity')->getCollection();
-        $collection->joinVisibleAttributes();
-
+        $collection = Mage::getModel('goodahead_etm/entity')
+            ->getCollection($entityType->getEntityTypeCode())
+            ->joinVisibleAttributes($entityType->getEntityTypeCode());
 
         $this->setCollection($collection);
 
@@ -28,8 +31,16 @@ class Goodahead_Etm_Block_Adminhtml_Entity_Grid extends Mage_Adminhtml_Block_Wid
 
     protected function _prepareColumns()
     {
-        return;
 
+        //$this->getVisibleAttributes()
+
+        $this->addColumn('entity_id', array(
+            'header'            => Mage::helper('goodahead_etm')->__('Entity ID'),
+            'width'             => '100',
+            'filter_index'      => 'main_table.entity_id',
+            'index'             => 'entity_id',
+            'type'              => 'number'
+        ));
 
         $this->addColumn('entity_type_id', array(
             'header'            => Mage::helper('goodahead_etm')->__('Entity Type ID'),
@@ -39,19 +50,18 @@ class Goodahead_Etm_Block_Adminhtml_Entity_Grid extends Mage_Adminhtml_Block_Wid
             'type'              => 'number'
         ));
 
-        $this->addColumn('entity_type_code', array(
-            'header'            => Mage::helper('goodahead_etm')->__('Entity Type Code'),
-            'filter_index'      => 'main_table.entity_type_code',
-            'index'             => 'entity_type_code',
-            'type'              => 'text'
-        ));
 
-        $this->addColumn('entity_type_name', array(
-            'header'            => Mage::helper('goodahead_etm')->__('Entity Type Name'),
-            'filter_index'      => 'entity_type_name',
-            'index'             => 'entity_type_name',
-            'type'              => 'text'
-        ));
+        $entityType = Mage::registry('etm_entity_type');
+        $visibleAttr = $this->_getEtmHelper()->getVisibleAttributes($entityType->getEntityTypeCode());
+        foreach($visibleAttr as $attributeCode) {
+            $this->addColumn($attributeCode, array(
+                'header'            => Mage::helper('goodahead_etm')->__($attributeCode),
+                'index'             => $attributeCode,
+                'type'              => 'text'
+            ));
+        }
+
+
 
         $this->addColumn('action', array(
             'header'            => Mage::helper('goodahead_etm')->__('Action'),

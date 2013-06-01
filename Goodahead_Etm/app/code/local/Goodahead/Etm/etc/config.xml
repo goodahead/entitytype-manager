@@ -20,6 +20,9 @@
                     <eav_entity_type>
                         <table>goodahead_etm_eav_entity_type</table>
                     </eav_entity_type>
+                    <eav_attribute>
+                        <table>goodahead_etm_eav_attribute</table>
+                    </eav_attribute>
                 </entities>
             </goodahead_etm_resource>
         </models>
@@ -78,6 +81,38 @@
                     </goodahead_etm_render_menu>
                 </observers>
             </core_layout_block_create_after>
+            <adminhtml_catalog_product_attribute_edit_prepare_form>
+                <observers>
+                    <goodahead_etm_add_additional_fields>
+                        <class>goodahead_etm/observer</class>
+                        <method>adminhtmlCatalogProductAttributeEditPrepareForm</method>
+                    </goodahead_etm_add_additional_fields>
+                </observers>
+            </adminhtml_catalog_product_attribute_edit_prepare_form>
+            <controller_action_predispatch_adminhtml_catalog_product_attribute_save>
+                <observers>
+                    <goodahead_etm_predispatch_attribute_save>
+                        <class>goodahead_etm/observer</class>
+                        <method>catalogProductAttributeSavePredispatch</method>
+                    </goodahead_etm_predispatch_attribute_save>
+                </observers>
+            </controller_action_predispatch_adminhtml_catalog_product_attribute_save>
+            <catalog_entity_attribute_save_before>
+                <observers>
+                    <goodahead_etm_assign_entity_type>
+                        <class>goodahead_etm/observer</class>
+                        <method>catalogEntityAttributeSaveBefore</method>
+                    </goodahead_etm_assign_entity_type>
+                </observers>
+            </catalog_entity_attribute_save_before>
+            <catalog_entity_attribute_save_after>
+                <observers>
+                    <goodahead_etm_assign_entity_type>
+                        <class>goodahead_etm/observer</class>
+                        <method>catalogEntityAttributeSaveAfter</method>
+                    </goodahead_etm_assign_entity_type>
+                </observers>
+            </catalog_entity_attribute_save_after>
         </events>
     </adminhtml>
     <frontend>

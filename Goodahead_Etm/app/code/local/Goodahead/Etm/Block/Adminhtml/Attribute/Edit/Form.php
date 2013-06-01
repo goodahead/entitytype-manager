@@ -21,6 +21,10 @@ class Goodahead_Etm_Block_Adminhtml_Attribute_Edit_Form extends Mage_Eav_Block_A
             'enctype' => 'multipart/form-data'
         ));
 
+        $inputTypes = Mage::getModel('eav/adminhtml_system_config_source_inputtype')->toOptionArray();
+        $yesNo      = Mage::getModel('adminhtml/system_config_source_yesno')->toOptionArray();
+        $scopes     = Mage::getModel('goodahead_etm/source_scope')->toOptionArray();
+
         $attribute = $this->getAttributeObject();
 
         if ($attribute->getId()) {
@@ -35,23 +39,46 @@ class Goodahead_Etm_Block_Adminhtml_Attribute_Edit_Form extends Mage_Eav_Block_A
             Mage_Eav_Model_Entity_Attribute::ATTRIBUTE_CODE_MAX_LENGTH
         );
         $fieldSet->addField('attribute_code', 'text', array(
-            'name'  => 'attribute_code',
-            'label' => Mage::helper('goodahead_etm')->__('Attribute Code'),
-            'title' => Mage::helper('goodahead_etm')->__('Attribute Code'),
-            'note'  => Mage::helper('goodahead_etm')->__('For internal use. Must be unique with no spaces. Maximum length of attribute code must be less then %s symbols', Mage_Eav_Model_Entity_Attribute::ATTRIBUTE_CODE_MAX_LENGTH),
-            'class' => $validateClass,
+            'name'     => 'attribute_code',
+            'label'    => Mage::helper('goodahead_etm')->__('Attribute Code'),
+            'title'    => Mage::helper('goodahead_etm')->__('Attribute Code'),
+            'note'     => Mage::helper('goodahead_etm')->__('For internal use. Must be unique with no spaces. Maximum length of attribute code must be less then %s symbols', Mage_Eav_Model_Entity_Attribute::ATTRIBUTE_CODE_MAX_LENGTH),
+            'class'    => $validateClass,
             'required' => true,
         ));
-
-        $inputTypes = Mage::getModel('eav/adminhtml_system_config_source_inputtype')->toOptionArray();
-        $yesNo = Mage::getModel('adminhtml/system_config_source_yesno')->toOptionArray();
-
+        $fieldSet->addField('attribute_name', 'text', array(
+            'name'     => 'attribute_name',
+            'label'    => Mage::helper('goodahead_etm')->__('Attribute Name'),
+            'title'    => Mage::helper('goodahead_etm')->__('Attribute Name'),
+            'class'    => 'required-entry',
+            'required' => true,
+        ));
+        $fieldSet->addField('is_global', 'select', array(
+            'name'   => 'is_global',
+            'label'  => Mage::helper('goodahead_etm')->__('Scope'),
+            'title'  => Mage::helper('goodahead_etm')->__('Scope'),
+            'note'   => Mage::helper('goodahead_etm')->__('Declare attribute value saving scope'),
+            'values' => $scopes
+        ));
+        $fieldSet->addField('is_visible', 'select', array(
+            'name'  => 'is_visible',
+            'label'  => Mage::helper('goodahead_etm')->__('Is Visible'),
+            'title'  => Mage::helper('goodahead_etm')->__('Is Visible'),
+            'values' => $yesNo,
+        ));
         $fieldSet->addField('frontend_input', 'select', array(
-            'name' => 'frontend_input',
-            'label' => Mage::helper('goodahead_etm')->__('Catalog Input Type for Store Owner'),
-            'title' => Mage::helper('goodahead_etm')->__('Catalog Input Type for Store Owner'),
-            'value' => 'text',
-            'values'=> $inputTypes
+            'name'   => 'frontend_input',
+            'label'  => Mage::helper('goodahead_etm')->__('Catalog Input Type for Store Owner'),
+            'title'  => Mage::helper('goodahead_etm')->__('Catalog Input Type for Store Owner'),
+            'value'  => 'text',
+            'values' => $inputTypes
+        ));
+        $fieldSet->addField('frontend_input_renderer', 'text', array(
+            'name'   => 'frontend_input_renderer',
+            'label'  => Mage::helper('goodahead_etm')->__('Frontend Input Renderer'),
+            'title'  => Mage::helper('goodahead_etm')->__('Frontend Input Renderer'),
+            'value'  => 'text',
+            'values' => $inputTypes
         ));
 
         //TODO: add default value field

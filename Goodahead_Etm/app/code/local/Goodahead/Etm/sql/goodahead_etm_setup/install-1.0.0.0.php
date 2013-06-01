@@ -1,6 +1,6 @@
 <?php
 
-/** @var $installer Goodahead_Etm_Model_Entity_Setup */
+/** @var $installer Goodahead_Etm_Model_Resource_Entity_Setup */
 $installer = $this;
 $installer->startSetup();
 
@@ -45,5 +45,36 @@ $installer->getConnection()->addForeignKey(
     $installer->getTable('goodahead_etm/eav_entity_type'),
     'entity_type_id'
 );
+
+/**
+ * Create table 'goodahead_etm/eav_attribute'
+ */
+$table = $installer->getConnection()
+    ->newTable($installer->getTable('goodahead_etm/eav_attribute'))
+    ->addColumn('attribute_id', Varien_Db_Ddl_Table::TYPE_SMALLINT, null, array(
+        'unsigned'  => true,
+        'nullable'  => false,
+        'primary'   => true,
+        ), 'Attribute ID')
+    ->addColumn('attribute_name', Varien_Db_Ddl_Table::TYPE_TEXT, 255, array(
+        ), 'Attribute Name')
+    ->addColumn('frontend_input_renderer', Varien_Db_Ddl_Table::TYPE_TEXT, 255, array(
+        ), 'Frontend Input Renderer')
+    ->addColumn('is_global', Varien_Db_Ddl_Table::TYPE_SMALLINT, null, array(
+        'unsigned'  => true,
+        'nullable'  => false,
+        'default'   => '1',
+        ), 'Is Global')
+    ->addColumn('is_visible', Varien_Db_Ddl_Table::TYPE_SMALLINT, null, array(
+        'unsigned'  => true,
+        'nullable'  => false,
+        'default'   => '1',
+        ), 'Is Visible')
+    ->addForeignKey(
+        $installer->getFkName('goodahead_etm/eav_attribute', 'attribute_id', 'eav/attribute', 'attribute_id'),
+        'attribute_id', $installer->getTable('eav/attribute'), 'attribute_id',
+        Varien_Db_Ddl_Table::ACTION_CASCADE, Varien_Db_Ddl_Table::ACTION_CASCADE)
+    ->setComment('ETM EAV Attribute Table');
+$installer->getConnection()->createTable($table);
 
 $installer->endSetup();

@@ -7,10 +7,22 @@ class Goodahead_Etm_Model_Resource_Attribute extends Mage_Eav_Model_Resource_Ent
         $select = parent::_getLoadSelect($field, $value, $object);
         $select->joinInner(
             array('etm_entity_type' => $this->getTable('goodahead_etm/eav_entity_type')),
-            $this->getMainTable().'.entity_type_id = etm_entity_type.entity_type_id'
+            $this->getMainTable() . '.entity_type_id = etm_entity_type.entity_type_id'
+        );
+        $select->joinInner(
+            array('etm_attribute' => $this->getTable('goodahead_etm/eav_attribute')),
+            $this->getMainTable() . '.attribute_id = etm_attribute.attribute_id'
         );
 
         return $select;
+    }
+
+    protected function _afterSave(Mage_Core_Model_Abstract $object)
+    {
+        parent::_afterSave($object);
+
+        $tableName = $this->getTable('goodahead_etm/eav_attribute');
+        $this->_getWriteAdapter()->insertOnDuplicate($tableName, $this->_prepareDataForTable($object, $tableName));
     }
 
     /**
