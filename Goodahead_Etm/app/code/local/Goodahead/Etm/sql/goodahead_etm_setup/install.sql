@@ -20,3 +20,5 @@ DROP TABLE IF EXISTS `goodahead_etm_entity_char`;
 DROP TABLE IF EXISTS `goodahead_etm_entity_entity_type`;
 DROP TABLE IF EXISTS `goodahead_etm_entity`;
 DROP TABLE IF EXISTS `goodahead_etm_eav_attribute`;
+
+DELETE FROM `eav_entity_type` WHERE `entity_model` = 'goodahead_etm/entity';

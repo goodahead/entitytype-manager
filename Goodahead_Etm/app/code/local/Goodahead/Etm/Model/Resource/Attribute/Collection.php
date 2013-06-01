@@ -58,6 +58,10 @@ class Goodahead_Etm_Model_Resource_Attribute_Collection extends Mage_Eav_Model_R
             'main_table.entity_type_id = etm_entity_type.entity_type_id',
             array()
         );
+        $this->getSelect()->joinInner(
+            array('etm_attribute' => $this->getTable('goodahead_etm/eav_attribute')),
+            'main_table.attribute_id = etm_attribute.attribute_id'
+        );
 
         $this->addFieldToFilter('main_table.entity_type_id', $this->getEntityType()->getId());
 

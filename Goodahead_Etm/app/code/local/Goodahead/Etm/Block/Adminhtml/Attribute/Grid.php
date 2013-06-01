@@ -52,8 +52,19 @@ class Goodahead_Etm_Block_Adminhtml_Attribute_Grid extends Mage_Eav_Block_Adminh
             'index'    => 'attribute_id',
             'type'     => 'number'
         ));
+        $this->addColumn('attribute_name', array(
+            'header'   => Mage::helper('goodahead_etm')->__('Attribute Name'),
+            'sortable' => true,
+            'index'    => 'attribute_name'
+        ));
 
         parent::_prepareColumns();
+
+        $this->addColumn('attribute_name', array(
+            'header'   => Mage::helper('goodahead_etm')->__('Attribute Name'),
+            'sortable' => true,
+            'index'    => 'attribute_name'
+        ));
 
         $this->addColumn('action',
             array(
