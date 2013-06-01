@@ -44,7 +44,7 @@
             <adminhtml>
                 <args>
                     <modules>
-                        <importexport before="Mage_Adminhtml">Goodahead_Etm_Adminhtml</importexport>
+                        <Goodahead_Etm before="Mage_Adminhtml">Goodahead_Etm_Adminhtml</Goodahead_Etm>
                     </modules>
                 </args>
             </adminhtml>
