@@ -17,16 +17,16 @@ class Goodahead_Etm_Model_Entity_Setup extends Mage_Eav_Model_Entity_Setup
         return isset($array[$key]) ? $array[$key] : $default;
     }
 
-
     /**
      * Create entity tables
      *
-     * @param string $baseName
+     * @param $baseTableName
      * @param array $options
      * - no-main
      * - no-default-types
      * - types
-     * @return unknown
+     * @throws Mage_Core_Exception
+     * @return Goodahead_Etm_Model_Entity_Setup
      */
     public function createEntityTables($baseTableName, array $options = array())
     {
