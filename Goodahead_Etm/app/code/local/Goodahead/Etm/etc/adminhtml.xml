@@ -21,8 +21,36 @@
                         <title>Entity Type Manager</title>
                         <sort_order>65</sort_order>
                         <children>
-                            <manage translate="title">
-                                <title>Entity Type Manager</title>
+                            <manage_attributes translate="title">
+                                <title>Manage Attributes</title>
+                                <sort_order>0</sort_order>
+                                <children>
+                                    <save translate="title">
+                                        <title>Save Attribute</title>
+                                        <sort_order>0</sort_order>
+                                    </save>
+                                    <delete translate="title">
+                                        <title>Delete Attribute</title>
+                                        <sort_order>10</sort_order>
+                                    </delete>
+                                </children>
+                            </manage_attributes>
+                            <manage_entities translate="title">
+                                <title>Manage Entities</title>
+                                <sort_order>0</sort_order>
+                                <children>
+                                    <save translate="title">
+                                        <title>Save Entity</title>
+                                        <sort_order>0</sort_order>
+                                    </save>
+                                    <delete translate="title">
+                                        <title>Delete Entity</title>
+                                        <sort_order>10</sort_order>
+                                    </delete>
+                                </children>
+                            </manage_entities>
+                            <manage_entityTypes translate="title">
+                                <title>Manage Entity Types</title>
                                 <sort_order>0</sort_order>
                                 <children>
                                     <save translate="title">
@@ -34,7 +62,7 @@
                                         <sort_order>10</sort_order>
                                     </delete>
                                 </children>
-                            </manage>
+                            </manage_entityTypes>
                         </children>
                     </goodahead_etm>
                     <system>
