@@ -26,6 +26,7 @@
             <goodahead_etm_setup>
                 <setup>
                     <module>Goodahead_Etm</module>
+                    <class>Mage_Eav_Model_Entity_Setup</class>
                 </setup>
             </goodahead_etm_setup>
         </resources>
