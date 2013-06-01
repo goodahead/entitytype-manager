@@ -93,7 +93,7 @@
         <layout>
             <updates>
                 <goodahead_etm>
-                    <file>goodahead_etm/goodahead_etm.xml</file>
+                    <file>goodahead/etm.xml</file>
                 </goodahead_etm>
             </updates>
         </layout>
