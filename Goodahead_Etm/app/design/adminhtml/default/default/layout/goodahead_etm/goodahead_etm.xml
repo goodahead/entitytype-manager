@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <layout>
-    <adminhtml_attribute_index>
+    <adminhtml_etm_attribute_index>
         <reference name="content">
             <!-- add blocks here -->
         </reference>
-    </adminhtml_attribute_index>
+    </adminhtml_etm_attribute_index>
+    <adminhtml_etm_entity_index>
+        <reference name="content">
+            <!-- add blocks here -->
+        </reference>
+    </adminhtml_etm_entity_index>
     <adminhtml_etm_entityType_index>
         <reference name="content">
             <!-- add blocks here -->
         </reference>
     </adminhtml_etm_entityType_index>
-    <adminhtml_entity_index>
-        <reference name="content">
-            <!-- add blocks here -->
-        </reference>
-    </adminhtml_entity_index>
 </layout>
