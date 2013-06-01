@@ -6,7 +6,7 @@ class Goodahead_Etm_Block_Adminhtml_Entity_Types_Edit_Form extends Mage_Adminhtm
     {
         $form = new Varien_Data_Form(array(
             'id'            => 'edit_form',
-            'action'        => $this->getData('action'),
+            'action'        => $this->getUrl('*/*/save'),
             'method'        => 'post',
             'enctype'       => 'multipart/form-data',
             'use_container' => true
