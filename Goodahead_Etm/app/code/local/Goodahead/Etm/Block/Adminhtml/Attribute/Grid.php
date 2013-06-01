@@ -60,10 +60,23 @@ class Goodahead_Etm_Block_Adminhtml_Attribute_Grid extends Mage_Eav_Block_Adminh
 
         parent::_prepareColumns();
 
-        $this->addColumn('attribute_name', array(
-            'header'   => Mage::helper('goodahead_etm')->__('Attribute Name'),
+        $this->removeColumn('attribute_label');
+
+        $scopes = Mage::getModel('goodahead_etm/source_scope')->toArray();
+        $this->addColumn('is_global', array(
+            'header'   => Mage::helper('goodahead_etm')->__('Scope'),
             'sortable' => true,
-            'index'    => 'attribute_name'
+            'index'    => 'is_global',
+            'type'     => 'options',
+            'options'  => $scopes
+        ));
+        $yesNo = Mage::getModel('adminhtml/system_config_source_yesno')->toArray();
+        $this->addColumn('is_visible', array(
+            'header'   => Mage::helper('goodahead_etm')->__('Is Visible'),
+            'sortable' => true,
+            'index'    => 'is_visible',
+            'type'     => 'options',
+            'options'  => $yesNo
         ));
 
         $this->addColumn('action',
