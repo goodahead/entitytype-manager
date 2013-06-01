@@ -1,5 +1,5 @@
 <?php
-class Goodahead_QuoteTemplate_Block_Adminhtml_Templates_Grid extends Mage_Adminhtml_Block_Widget_Grid
+class Goodahead_Etm_Block_Adminhtml_EntityTypes_Grid extends Mage_Adminhtml_Block_Widget_Grid
 {
     protected function _construct()
     {
