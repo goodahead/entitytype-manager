@@ -131,14 +131,6 @@ class Goodahead_Etm_Adminhtml_Etm_EntityTypeController extends Goodahead_Etm_Con
                 $entityType = Mage::getModel('goodahead_etm/entity_type');
                 $entityType->setData($data);
                 $entityType->save();
-
-                $setup = Mage::getResourceModel('goodahead_etm/entity_setup', 'core_setup');
-                $setup->addAttributeSet($code, $setup->getDefaultAttributeSetName());
-                // set to entity type default attribute set id
-                $defaultAttributeSet = Mage::getModel('eav/entity_attribute_set')->load($entityType->getId(), 'entity_type_id');
-                $entityType->setDefaultAttributeSetId($defaultAttributeSet->getId());
-                $entityType->save();
-                $setup->addAttributeGroup($code, $setup->getDefaultGroupName(), $setup->getGeneralGroupName());
             }
         }
         $this->getResponse()->setRedirect($this->getUrl('*/*/'));
