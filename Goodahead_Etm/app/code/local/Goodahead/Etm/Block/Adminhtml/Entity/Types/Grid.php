@@ -115,10 +115,14 @@ class Goodahead_Etm_Block_Adminhtml_Entity_Types_Grid extends Mage_Adminhtml_Blo
         return $this;
     }
 
-    public function getRowUrl($template)
+    /**
+     * @param Goodahead_Etm_Model_Resource_Entity_Type $entityType
+     * @return string
+     */
+    public function getRowUrl($entityType)
     {
         return $this->getUrl('*/*/edit', array(
-            'entity_type_id' => $template->getId(),
+            'entity_type_id' => $entityType->getId(),
         ));
     }
 

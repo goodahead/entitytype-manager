@@ -15,19 +15,20 @@ class Goodahead_Etm_Block_Adminhtml_Entity_Types_Edit_Form extends Mage_Adminhtm
         $entityType = Mage::registry('etm_entity_type');
 
         $fieldSet = $form->addFieldset('entity_type_data', array());
+        $validateClass = sprintf('required-entry validate-code validate-length maximum-length-%d',
+            Mage_Eav_Model_Entity_Attribute::ATTRIBUTE_CODE_MAX_LENGTH
+        );
 
         $fieldSet->addField('entity_type_code', 'text', array(
             'label'     => Mage::helper('goodahead_etm')->__("Entity Type Code"),
             'name'      => 'entity_type_code',
-            'class'     => 'required-entry',
+            'class'     => $validateClass,
             'required'  => true,
         ));
-
 
         if ($entityType->getId()) {
             $form->getElement('entity_type_code')->setReadonly('readonly');
         }
-
 
         $fieldSet->addField('entity_type_name', 'text', array(
             'label'     => Mage::helper('goodahead_etm')->__("Entity Type Name"),

@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * Class Goodahead_Etm_Model_Entity_Type
+ *
+ * @method string getEntityTypeName() getEntityTypeName()
+ */
 class Goodahead_Etm_Model_Entity_Type extends Mage_Eav_Model_Entity_Type
 {
     protected function _construct()
@@ -17,5 +22,4 @@ class Goodahead_Etm_Model_Entity_Type extends Mage_Eav_Model_Entity_Type
         }
         return $this;
     }
-
 }
