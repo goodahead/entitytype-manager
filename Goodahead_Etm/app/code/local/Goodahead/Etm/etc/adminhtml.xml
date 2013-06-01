@@ -5,21 +5,21 @@
             <title>Entity Type Manager</title>
             <sort_order>100</sort_order>
             <children>
-                <manage_attributes translate="title">
-                    <title>Manage Attributes</title>
-                    <action>adminhtml/etm_attribute</action>
-                    <sort_order>10</sort_order>
-                </manage_attributes>
-                <manage_entities translate="title">
-                    <title>Manage Entities</title>
-                    <action>adminhtml/etm_entity</action>
-                    <sort_order>20</sort_order>
-                </manage_entities>
                 <manage_entityTypes translate="title">
                     <title>Manage Entity Types</title>
                     <action>adminhtml/etm_entityType</action>
-                    <sort_order>30</sort_order>
+                    <sort_order>10</sort_order>
                 </manage_entityTypes>
+                <manage_attributes translate="title" update="goodahead_etm/data/updateMenu">
+                    <title>Manage Attributes</title>
+                    <sort_order>20</sort_order>
+                    <base_link>adminhtml/etm_attribute/index/entity_type_id/%d</base_link>
+                </manage_attributes>
+                <manage_entities translate="title" update="goodahead_etm/data/updateMenu">
+                    <title>Manage Entities</title>
+                    <sort_order>30</sort_order>
+                    <base_link>adminhtml/etm_entity/index/entity_type_id/%d</base_link>
+                </manage_entities>
             </children>
          </goodahead_etm>
     </menu>

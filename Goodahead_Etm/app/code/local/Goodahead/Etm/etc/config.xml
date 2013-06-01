@@ -61,6 +61,24 @@
                 </goodahead_etm>
             </updates>
         </layout>
+        <events>
+            <controller_action_predispatch_adminhtml>
+                <observers>
+                    <goodahead_etm_render_menu>
+                        <class>goodahead_etm/observer</class>
+                        <method>renderMenu</method>
+                    </goodahead_etm_render_menu>
+                </observers>
+            </controller_action_predispatch_adminhtml>
+            <core_layout_block_create_after>
+                <observers>
+                    <goodahead_etm_render_menu>
+                        <class>goodahead_etm/observer</class>
+                        <method>updateMenuBlockCacheId</method>
+                    </goodahead_etm_render_menu>
+                </observers>
+            </core_layout_block_create_after>
+        </events>
     </adminhtml>
     <frontend>
         <routers>
