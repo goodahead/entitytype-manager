@@ -36,9 +36,16 @@ class Goodahead_Etm_Adminhtml_Etm_AttributeController extends Goodahead_Etm_Cont
     protected function _isAllowed()
     {
         switch ($this->getRequest()->getActionName()) {
+            case 'edit':
+            case 'save':
+                return Mage::getSingleton('admin/session')->isAllowed('goodahead_etm/manage_attributes/save');
+                break;
+            case 'delete':
+                return Mage::getSingleton('admin/session')->isAllowed('goodahead_etm/manage_attributes/delete');
+                break;
             case 'index':
             default:
-                return Mage::getSingleton('admin/session')->isAllowed('goodahead_etm/manage');
+                return Mage::getSingleton('admin/session')->isAllowed('goodahead_etm/manage_attributes');
                 break;
         }
     }

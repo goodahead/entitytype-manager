@@ -36,9 +36,16 @@ class Goodahead_Etm_Adminhtml_Etm_EntityController extends Goodahead_Etm_Control
     protected function _isAllowed()
     {
         switch ($this->getRequest()->getActionName()) {
+            case 'edit':
+            case 'save':
+                return Mage::getSingleton('admin/session')->isAllowed('goodahead_etm/manage_entities/save');
+                break;
+            case 'delete':
+                return Mage::getSingleton('admin/session')->isAllowed('goodahead_etm/manage_entities/delete');
+                break;
             case 'index':
             default:
-                return Mage::getSingleton('admin/session')->isAllowed('goodahead_etm/manage');
+                return Mage::getSingleton('admin/session')->isAllowed('goodahead_etm/manage_entities');
                 break;
         }
     }
