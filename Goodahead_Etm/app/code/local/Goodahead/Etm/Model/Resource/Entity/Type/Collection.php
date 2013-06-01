@@ -6,7 +6,7 @@ class Goodahead_Etm_Model_Resource_Entity_Type_Collection extends Mage_Eav_Model
     {
         parent::_initSelect();
         $this->getSelect()->joinInner(
-            array('etm_entity_type' => $this->getTable('goodahead_etm/eav_entity_type')),
+            array('etm_entity_type' => $this->getTable('etm_entity_type')),
             'main_table.entity_type_id = etm_entity_type.entity_type_id');
         return $this;
     }
