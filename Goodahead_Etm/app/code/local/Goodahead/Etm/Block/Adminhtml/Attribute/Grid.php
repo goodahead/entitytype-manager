@@ -36,6 +36,7 @@ class Goodahead_Etm_Block_Adminhtml_Attribute_Grid extends Mage_Eav_Block_Adminh
      */
     protected function _prepareCollection()
     {
+        /** @var Goodahead_Etm_Model_Resource_Attribute_Collection $collection */
         $collection = Mage::getResourceModel('goodahead_etm/attribute_collection');
         $this->setCollection($collection);
 
@@ -89,7 +90,7 @@ class Goodahead_Etm_Block_Adminhtml_Attribute_Grid extends Mage_Eav_Block_Adminh
     protected function _prepareMassaction()
     {
         $this->setMassactionIdField('entity_type_id');
-        $this->getMassactionBlock()->setFormFieldName('entity_type_ids');
+        $this->getMassactionBlock()->setFormFieldName('attribute_ids');
         $this->getMassactionBlock()->addItem('delete', array(
             'label'   => Mage::helper('goodahead_etm')->__('Delete'),
             'url'     => $this->getUrl('*/*/massDelete'),

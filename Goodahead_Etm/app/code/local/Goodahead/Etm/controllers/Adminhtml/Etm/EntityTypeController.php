@@ -11,19 +11,16 @@ class Goodahead_Etm_Adminhtml_Etm_EntityTypeController extends Goodahead_Etm_Con
         $this->renderLayout();
     }
 
-
-
+    /**
+     * Grid ajax action
+     */
     public function gridAction()
     {
         $this->loadLayout();
-        $this->getResponse()->setBody(
-            $this->getLayout()->createBlock('goodahead_etm/adminhtml_entity_types')->toHtml()
-        );
+        $this->renderLayout();
     }
 
-
-
-    /* Deletes  entity types */
+   /* Deletes  entity types */
     public function deleteAction()
     {
         $entityType = Mage::getModel('eav/entity_type')->load($this->getRequest()->getParam('entity_type_id', null));
