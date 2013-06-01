@@ -16,7 +16,7 @@ $table = $installer->getConnection()
     ), 'Entity Type ID')
     ->addColumn('entity_type_name', Varien_Db_Ddl_Table::TYPE_TEXT, 128, array(
         'nullable'  => false,
-    ), 'User Email')
+    ), 'Entity Type Name')
     ->addForeignKey($installer->getFkName('goodahead_etm/eav_entity_type', 'entity_type_id', 'eav/entity_type', 'entity_type_id'),
         'entity_type_id', $installer->getTable('eav/entity_type'), 'entity_type_id',
         Varien_Db_Ddl_Table::ACTION_CASCADE, Varien_Db_Ddl_Table::ACTION_CASCADE

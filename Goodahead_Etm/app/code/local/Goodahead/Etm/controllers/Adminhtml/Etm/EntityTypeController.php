@@ -11,6 +11,29 @@ class Goodahead_Etm_Adminhtml_Etm_EntityTypeController extends Goodahead_Etm_Con
         $this->renderLayout();
     }
 
+
+
+    /* Deletes  entity types */
+    public function deleteAction()
+    {
+        $this->_initEntityType();
+
+        $entityType = Mage::registry('etm_entity_type');
+
+        if ($entityType && $entityType->getId()) {
+            try {
+                $entityType->delete();
+                $this->_getSession()->addSuccess($this->getEtmHelper()->__('Entity type successfully deleted'));
+            } catch (Exception $e) {
+                $this->_getSession()->addError($e->getMessage());
+            }
+        }
+
+        $this->_redirectReferer();
+    }
+
+
+
     /**
      * ACL check
      *

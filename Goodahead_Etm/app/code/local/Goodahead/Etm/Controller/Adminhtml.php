@@ -42,4 +42,11 @@ class Goodahead_Etm_Controller_Adminhtml extends Mage_Adminhtml_Controller_Actio
 
         return $this;
     }
+
+
+    /* @return Goodahead_Etm_Helper_Data */
+    protected function getEtmHelper()
+    {
+        return Mage::helper('goodahead_etm');
+    }
 }
