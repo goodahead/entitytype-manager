@@ -2,6 +2,11 @@
 
 class Goodahead_Etm_Model_Resource_Entity_Type_Collection extends Mage_Eav_Model_Resource_Entity_Type_Collection
 {
+    protected function _construct()
+    {
+        $this->_init('goodahead_etm/entity_type');
+    }
+
     protected function _initSelect()
     {
         parent::_initSelect();
