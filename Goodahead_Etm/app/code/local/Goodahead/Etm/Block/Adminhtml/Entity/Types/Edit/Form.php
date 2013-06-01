@@ -32,7 +32,7 @@ class Goodahead_Etm_Block_Adminhtml_Entity_Types_Edit_Form extends Mage_Adminhtm
 
 
         if ($entityType->getId()) {
-            $form->getElement('entity_type_code')->setRequired('required');
+            $form->getElement('entity_type_code')->setReadonly('readonly');
         }
 
 
@@ -42,8 +42,6 @@ class Goodahead_Etm_Block_Adminhtml_Entity_Types_Edit_Form extends Mage_Adminhtm
             'class'     => 'required-entry',
             'required'  => true,
         ));
-
-
 
         $this->setForm($form);
         return parent::_prepareForm();
