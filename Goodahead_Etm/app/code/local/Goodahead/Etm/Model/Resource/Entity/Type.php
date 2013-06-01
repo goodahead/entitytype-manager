@@ -19,7 +19,7 @@ class Goodahead_Etm_Model_Resource_Entity_Type extends Mage_Eav_Model_Resource_E
         return $select;
     }
 
-    protected function _afterSave($object)
+    protected function _afterSave(Mage_Core_Model_Abstract $object)
     {
         parent::_afterSave($object);
         $tableName = $this->getTable('etm_entity_type');
