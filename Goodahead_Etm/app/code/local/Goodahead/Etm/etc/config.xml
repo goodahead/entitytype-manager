@@ -14,9 +14,9 @@
             <goodahead_etm_resource>
                 <class>Goodahead_Etm_Model_Resource</class>
                 <entities>
-                    <eav>
-                        <table>goodahead_etm_eav</table>
-                    </eav>
+                    <entity>
+                        <table>goodahead_etm_entity</table>
+                    </entity>
                     <eav_entity_type>
                         <table>goodahead_etm_eav_entity_type</table>
                     </eav_entity_type>
