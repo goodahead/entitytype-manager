@@ -51,7 +51,7 @@ class Goodahead_Etm_Helper_Data extends Mage_Core_Helper_Abstract
             $this->_visibleAttributes = array();
 
             foreach($collection as $attribute) {
-                $this->_visibleAttributes[] = $attribute->getAttributeCode();
+                $this->_visibleAttributes[$attribute->getAttributeCode()] = $attribute->getAttributeName();
             }
         }
 

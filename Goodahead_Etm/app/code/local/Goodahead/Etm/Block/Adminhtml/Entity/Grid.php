@@ -53,9 +53,9 @@ class Goodahead_Etm_Block_Adminhtml_Entity_Grid extends Mage_Adminhtml_Block_Wid
 
         $entityType = Mage::registry('etm_entity_type');
         $visibleAttr = $this->_getEtmHelper()->getVisibleAttributes($entityType->getEntityTypeCode());
-        foreach($visibleAttr as $attributeCode) {
+        foreach($visibleAttr as $attributeCode => $attrTitle) {
             $this->addColumn($attributeCode, array(
-                'header'            => Mage::helper('goodahead_etm')->__($attributeCode),
+                'header'            => Mage::helper('goodahead_etm')->__($attrTitle),
                 'index'             => $attributeCode,
                 'type'              => 'text'
             ));
