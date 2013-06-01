@@ -1,6 +1,6 @@
 <?php
 
-class Goodahead_Etm_Adminhtml_EntityTypeController extends Mage_Adminhtml_Controller_Action
+class Goodahead_Etm_Adminhtml_Etm_EntityTypeController extends Mage_Adminhtml_Controller_Action
 {
     /**
      * Entity Type Manager index page

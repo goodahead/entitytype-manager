@@ -7,7 +7,7 @@
             <children>
                 <manage translate="title" module="goodahead_etm">
                     <title>Entity Type Manager</title>
-                    <action>adminhtml/etm</action>
+                    <action>adminhtml/etm_entityType</action>
                     <sort_order>50</sort_order>
                 </manage>
             </children>

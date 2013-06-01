@@ -1,9 +1,9 @@
 <?php
 
-class Goodahead_Etm_Adminhtml_EntityController extends Goodahead_Etm_Controllers_Adminhtml
+class Goodahead_Etm_Adminhtml_Etm_AttributeController extends Goodahead_Etm_Controllers_Adminhtml
 {
     /**
-     * Entity grid page
+     * Entity Type Manager index page
      */
     public function indexAction()
     {
@@ -16,13 +16,13 @@ class Goodahead_Etm_Adminhtml_EntityController extends Goodahead_Etm_Controllers
                 Mage::helper('goodahead_etm')->__('Entity Type Manager')
             );
             $this->_addBreadcrumb(
-                Mage::helper('goodahead_etm')->__('Manage Entities'),
-                Mage::helper('goodahead_etm')->__('Manage Entities')
+                Mage::helper('goodahead_etm')->__('Manage Attributes'),
+                Mage::helper('goodahead_etm')->__('Manage Attributes')
             );
 
 
             $this->renderLayout();
-        // TODO: Catch only our exception
+            // TODO: Catch only our exception
         } catch (Exception $e) {
             $this->_forward('no_route');
         }
