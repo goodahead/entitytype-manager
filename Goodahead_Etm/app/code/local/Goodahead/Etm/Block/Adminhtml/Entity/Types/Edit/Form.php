@@ -14,13 +14,6 @@ class Goodahead_Etm_Block_Adminhtml_Entity_Types_Edit_Form extends Mage_Adminhtm
 
         $entityType = Mage::registry('etm_entity_type');
 
-        if ($entityType->getId()) {
-            $form->addField('entity_type_id', 'hidden', array(
-                'name' => 'entity_type_id',
-            ));
-            $form->setValues($entityType->getData());
-        }
-
         $fieldSet = $form->addFieldset('entity_type_data', array());
 
         $fieldSet->addField('entity_type_code', 'text', array(
@@ -42,6 +35,14 @@ class Goodahead_Etm_Block_Adminhtml_Entity_Types_Edit_Form extends Mage_Adminhtm
             'class'     => 'required-entry',
             'required'  => true,
         ));
+
+
+        if ($entityType->getId()) {
+            $form->addField('entity_type_id', 'hidden', array(
+                'name' => 'entity_type_id',
+            ));
+            $form->setValues($entityType->getData());
+        }
 
         $this->setForm($form);
         return parent::_prepareForm();
