@@ -1,6 +1,6 @@
 <?php
 
-class Goodahead_Etm_Adminhtml_Etm_EntityController extends Goodahead_Etm_Controllers_Adminhtml
+class Goodahead_Etm_Adminhtml_Etm_EntityController extends Goodahead_Etm_Controller_Adminhtml
 {
     /**
      * Entity grid page
@@ -9,21 +9,12 @@ class Goodahead_Etm_Adminhtml_Etm_EntityController extends Goodahead_Etm_Control
     {
         try {
             $this->_initEntityType();
-            $this->loadLayout();
-            $this->_setActiveMenu('goodahead_etm');
-            $this->_addBreadcrumb(
-                Mage::helper('goodahead_etm')->__('Entity Type Manager'),
-                Mage::helper('goodahead_etm')->__('Entity Type Manager')
-            );
-            $this->_addBreadcrumb(
-                Mage::helper('goodahead_etm')->__('Manage Entities'),
-                Mage::helper('goodahead_etm')->__('Manage Entities')
-            );
 
-
+            $this->_initAction($this->__('Manage Entities'));
             $this->renderLayout();
         // TODO: Catch only our exception
         } catch (Exception $e) {
+            Mage::logException($e);
             $this->_forward('no_route');
         }
     }

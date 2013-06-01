@@ -3,13 +3,23 @@
     <menu>
          <goodahead_etm translate="title" module="goodahead_etm">
             <title>Entity Type Manager</title>
-            <sort_order>65</sort_order>
+            <sort_order>100</sort_order>
             <children>
-                <manage translate="title" module="goodahead_etm">
-                    <title>Entity Type Manager</title>
+                <manage_attributes translate="title">
+                    <title>Manage Attributes</title>
+                    <action>adminhtml/etm_attribute</action>
+                    <sort_order>10</sort_order>
+                </manage_attributes>
+                <manage_entities translate="title">
+                    <title>Manage Entities</title>
+                    <action>adminhtml/etm_entity</action>
+                    <sort_order>20</sort_order>
+                </manage_entities>
+                <manage_entityTypes translate="title">
+                    <title>Manage Entity Types</title>
                     <action>adminhtml/etm_entityType</action>
-                    <sort_order>50</sort_order>
-                </manage>
+                    <sort_order>30</sort_order>
+                </manage_entityTypes>
             </children>
          </goodahead_etm>
     </menu>

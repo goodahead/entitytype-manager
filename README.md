@@ -53,3 +53,5 @@ Tasks (nice to have)
 --------------------
 
 1. Media gallery support for attributes
+2. Add mass actions to grid for delete operations
+3. UrlRewrites for frontend SEO url for entities (this include URL model)
