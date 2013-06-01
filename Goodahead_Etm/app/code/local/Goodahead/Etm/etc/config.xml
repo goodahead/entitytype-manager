@@ -9,11 +9,14 @@
         <models>
             <goodahead_etm>
                 <class>Goodahead_Etm_Model</class>
+                <resourceModel>goodahead_etm_resource</resourceModel>
             </goodahead_etm>
             <goodahead_etm_resource>
                 <class>Goodahead_Etm_Model_Resource</class>
                 <entities>
-                    <!-- add tables here -->
+                    <eav>
+                        <table>goodahead_etm_eav</table>
+                    </eav>
                 </entities>
             </goodahead_etm_resource>
         </models>
@@ -26,7 +29,7 @@
             <goodahead_etm_setup>
                 <setup>
                     <module>Goodahead_Etm</module>
-                    <class>Mage_Eav_Model_Entity_Setup</class>
+                    <class>Goodahead_Etm_Model_Entity_Setup</class>
                 </setup>
             </goodahead_etm_setup>
         </resources>
