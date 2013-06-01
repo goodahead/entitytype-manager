@@ -1,2 +1,11 @@
-app/etc/modules/Goodahead_Etm.xml      app/etc/modules/Goodahead_Etm.xml
-app/code/local/Goodahead/Etm/          app/code/local/Goodahead/Etm/
+# module
+app/etc/modules/Goodahead_Etm.xml                               app/etc/modules/Goodahead_Etm.xml
+app/code/local/Goodahead/Etm/                                   app/code/local/Goodahead/Etm/
+
+# frontend design
+app/design/frontend/base/default/layout/goodahead_etm/          app/design/frontend/base/default/layout/goodahead_etm/
+app/design/frontend/base/default/template/goodahead_etm/        app/design/frontend/base/default/template/goodahead_etm/
+
+# backend design
+app/design/adminhtml/default/default/layout/goodahead_etm/      app/design/adminhtml/default/default/layout/goodahead_etm/
+app/design/adminhtml/default/default/template/goodahead_etm/    app/design/adminhtml/default/default/template/goodahead_etm/
