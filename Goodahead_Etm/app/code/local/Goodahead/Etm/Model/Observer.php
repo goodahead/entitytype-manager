@@ -49,13 +49,17 @@ class Goodahead_Etm_Model_Observer {
         $_helper = Mage::helper('goodahead_etm');
 
 
-        $fieldset->addField('goodahead_etm_entity_type', 'select', array(
+        $fieldset->addField('goodahead_etm_entity_type_id', 'select', array(
             'name' => 'goodahead_etm_entity_type_id',
             'label' => $_helper->__("Bind to Custom Entity Type"),
             'title' => $_helper->__('Can be used only with catalog input type Dropdown or Multiple Select'),
             'note' => $_helper->__('Can be used only with catalog input type Dropdown or Multiple Select. Bind this product attribute to custom Entity Type.'),
             'values' => Mage::getModel('goodahead_etm/source_entity_type')->toOptionArray(true),
         ), 'frontend_input');
+
+        if ($attribute->getId()) {
+            $form->getElement('goodahead_etm_entity_type_id')->setDisabled(1);
+        }
 
 //        $allowedInputs = array (
 //            'select' => true,
@@ -97,16 +101,19 @@ class Goodahead_Etm_Model_Observer {
             } else {
                 $attribute->unsetData('goodahead_etm_entity_type_id');
             }
-            if ($attribute->getFrontendInput() == 'select') {
+            if ($attribute->getFrontendInput() == 'select' && !$attribute->hasData('_update_binding')) {
                 $attribute->setData('_update_binding', true);
             }
+        } else {
+            $attribute->unsetData('goodahead_etm_entity_type_id');
         }
     }
+
     public function catalogEntityAttributeSaveAfter($observer)
     {
         $attribute = $observer->getEvent()->getAttribute();
         if ($attribute->getData('_update_binding')) {
-            $attribute->unsetData('_update_binding');
+            $attribute->setData('_update_binding', 0);
             if (($entityTypeId = Mage::registry('goodahead_etm_attribute_entity_type')) !== false) {
                 $attribute->setData('source_model', 'goodahead_etm/source_entity');
                 $attribute->setData('goodahead_etm_entity_type_id', $entityTypeId);
@@ -114,5 +121,4 @@ class Goodahead_Etm_Model_Observer {
             }
         }
     }
-
 }

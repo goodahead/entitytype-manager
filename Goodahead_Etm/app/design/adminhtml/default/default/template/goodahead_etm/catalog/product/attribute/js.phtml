@@ -10,17 +10,17 @@ function updateEntityTypeBindings()
 {
     if($('matage-options-panel')){
         var panel = $('matage-options-panel');
-        if ($('goodahead_etm_entity_type')) {
-            var entityTypeBind = $('goodahead_etm_entity_type');
+        if ($('goodahead_etm_entity_type_id')) {
+            var entityTypeBind = $('goodahead_etm_entity_type_id');
             if ($('frontend_input') && ($('frontend_input').value=='select' || $('frontend_input').value=='multiselect')) {
-                setRowVisibility('goodahead_etm_entity_type', true);
+                setRowVisibility('goodahead_etm_entity_type_id', true);
                 if (entityTypeBind.value != '') {
                     panel.hide();
                 } else {
                     panel.show();
                 }
             } else {
-                setRowVisibility('goodahead_etm_entity_type', false);
+                setRowVisibility('goodahead_etm_entity_type_id', false);
                 if (entityTypeBind.value) {
                     entityTypeBind.value = '';
                 }
@@ -33,8 +33,8 @@ if($('frontend_input')){
     Event.observe($('frontend_input'), 'change', updateEntityTypeBindings);
 }
 
-if ($('goodahead_etm_entity_type')) {
-    Event.observe($('goodahead_etm_entity_type'), 'change', updateEntityTypeBindings);
+if ($('goodahead_etm_entity_type_id')) {
+    Event.observe($('goodahead_etm_entity_type_id'), 'change', updateEntityTypeBindings);
 }
 updateEntityTypeBindings();
 
