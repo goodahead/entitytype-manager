@@ -15,4 +15,11 @@
             <block type="goodahead_etm/adminhtml_entity_types" name="entity.types.grid_container" />
         </reference>
     </adminhtml_etm_entitytype_index>
+    <adminhtml_etm_entitytype_edit>
+        <reference name="content">
+            <block type="goodahead_etm/adminhtml_entity_types_edit" name="entity.types.form_container">
+                <block type="goodahead_etm/adminhtml_entity_types_edit_form" name="entity.types.form_container.form" as="form" />
+            </block>
+        </reference>
+    </adminhtml_etm_entitytype_edit>
 </layout>

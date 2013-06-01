@@ -11,13 +11,11 @@ class Goodahead_Etm_Controller_Adminhtml extends Mage_Adminhtml_Controller_Actio
     protected function _initEntityType()
     {
         $entityTypeId = $this->getRequest()->getParam('entity_type_id', null);
-        // TODO: Use our own model instead of eav/entity_type model
-        $entityType = Mage::getModel('eav/entity_type')->load($entityTypeId);
-        if ($entityType->getId()) {
+        $entityType = Mage::getModel('goodahead_etm/entity_type')->load($entityTypeId);
+        if ($entityType->getId() || $entityTypeId === null) {
             Mage::register('etm_entity_type', $entityType);
             return $this;
         }
-        // TODO: Use our own exception type
         throw new Goodahead_Etm_Exception(Mage::helper('goodahead_etm')->__('Entity type not found'));
     }
 
