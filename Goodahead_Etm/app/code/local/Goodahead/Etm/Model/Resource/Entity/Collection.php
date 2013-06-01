@@ -1,7 +1,15 @@
 <?php
 class Goodahead_Etm_Model_Resource_Entity_Collection extends Mage_Eav_Model_Entity_Collection_Abstract
 {
-    protected $_entityType = null;
+    protected $_entityType          = null;
+
+
+    protected function _getEtmHelper()
+    {
+        return Mage::helper('goodahead_etm');
+    }
+
+
 
     /**
      * @param null $entityType
@@ -24,21 +32,12 @@ class Goodahead_Etm_Model_Resource_Entity_Collection extends Mage_Eav_Model_Enti
         $this->_init('goodahead_etm/entity');
     }
 
-    public function joinVisibleAttributes()
+    public function joinVisibleAttributes($entityTypeCode)
     {
-        $visibleAttributes = $this->getVisibleAttributes();
+        $visibleAttributes = $this->_getEtmHelper()->getVisibleAttributes($entityTypeCode);
 
-        //$attributeSetModel->load($product->getAttributeSetId());
+        $this->addAttributeToSelect($visibleAttributes);
 
-
-    }
-
-
-    public function getVisibleAttributes()
-    {
-        $entityType = Mage::registry('etm_entity_type');
-
-
-
+        return $this;
     }
 }
