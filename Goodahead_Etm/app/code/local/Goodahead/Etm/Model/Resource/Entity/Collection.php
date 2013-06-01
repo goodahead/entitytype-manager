@@ -36,7 +36,7 @@ class Goodahead_Etm_Model_Resource_Entity_Collection extends Mage_Eav_Model_Enti
     {
         $visibleAttributes = $this->_getEtmHelper()->getVisibleAttributes($entityTypeCode);
 
-        $this->addAttributeToSelect($visibleAttributes);
+        $this->addAttributeToSelect(array_keys($visibleAttributes));
 
         return $this;
     }
