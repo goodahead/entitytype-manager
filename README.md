@@ -21,7 +21,7 @@ Tasks (must have)
 
 ###### Entity type manager
 1. <del>Create grid for custom entity types with CRUD functionality</del>
-2. Create entity type Add/Edit form
+2. <del>Create entity type Add/Edit form</del>
 3. <del>Create corresponding models to work with custom entity types</del>
 
 ###### Attributes manager
