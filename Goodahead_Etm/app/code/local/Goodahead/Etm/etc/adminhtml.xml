@@ -1,0 +1,55 @@
+<?xml version="1.0"?>
+<config>
+    <menu>
+         <goodahead_etm translate="title" module="goodahead_etm">
+            <title>Entity Type Manager</title>
+            <sort_order>65</sort_order>
+            <children>
+                <manage translate="title" module="goodahead_etm">
+                    <title>Entity Type Manager</title>
+                    <action>adminhtml/etm</action>
+                    <sort_order>50</sort_order>
+                </manage>
+            </children>
+         </goodahead_etm>
+    </menu>
+    <acl>
+        <resources>
+            <admin>
+                <children>
+                    <goodahead_etm translate="title" module="goodahead_etm">
+                        <title>Entity Type Manager</title>
+                        <sort_order>65</sort_order>
+                        <children>
+                            <manage translate="title">
+                                <title>Entity Type Manager</title>
+                                <sort_order>0</sort_order>
+                                <children>
+                                    <save translate="title">
+                                        <title>Save Entity Type</title>
+                                        <sort_order>0</sort_order>
+                                    </save>
+                                    <delete translate="title">
+                                        <title>Delete Entity Type</title>
+                                        <sort_order>10</sort_order>
+                                    </delete>
+                                </children>
+                            </manage>
+                        </children>
+                    </goodahead_etm>
+                    <system>
+                        <children>
+                            <config>
+                                <children>
+                                    <goodahead_etm translate="title" module="goodahead_etm">
+                                        <title>Entity Type Manager</title>
+                                    </goodahead_etm>
+                                </children>
+                            </config>
+                        </children>
+                    </system>
+                </children>
+            </admin>
+        </resources>
+    </acl>
+</config>
