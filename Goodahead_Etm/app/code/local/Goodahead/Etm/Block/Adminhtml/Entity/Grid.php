@@ -1,19 +1,25 @@
 <?php
-class Goodahead_Etm_Block_Adminhtml_Entity_Types_Grid extends Mage_Adminhtml_Block_Widget_Grid
+class Goodahead_Etm_Block_Adminhtml_Entity_Grid extends Mage_Adminhtml_Block_Widget_Grid
 {
     protected function _construct()
     {
-        $this->setId('entityTypesGrid');
-        $this->_controller = 'adminhtml_entity_types';
+        $this->setId('entityType');
+        $this->_controller = 'adminhtml_entity';
         $this->setUseAjax(true);
 
-        $this->setDefaultSort('main_table.entity_type_id');
-        $this->setDefaultDir('DESC');
+        //$this->setDefaultSort('main_table.entity_type_id');
+        //$this->setDefaultDir('DESC');
     }
 
     protected function _prepareCollection()
     {
-        $collection = Mage::getResourceModel('goodahead_etm/entity_type_collection');
+        $entityType = Mage::registry('etm_entity_type');
+
+
+        $collection = Mage::getModel('goodahead_etm/entity')->getCollection($entityType->getEntityTypeCode());
+        //$collection = Mage::getModel('goodahead_etm/entity')->getCollection();
+        $collection->joinVisibleAttributes();
+
 
         $this->setCollection($collection);
 
@@ -22,6 +28,9 @@ class Goodahead_Etm_Block_Adminhtml_Entity_Types_Grid extends Mage_Adminhtml_Blo
 
     protected function _prepareColumns()
     {
+        return;
+
+
         $this->addColumn('entity_type_id', array(
             'header'            => Mage::helper('goodahead_etm')->__('Entity Type ID'),
             'width'             => '100',
@@ -115,14 +124,10 @@ class Goodahead_Etm_Block_Adminhtml_Entity_Types_Grid extends Mage_Adminhtml_Blo
         return $this;
     }
 
-    /**
-     * @param Goodahead_Etm_Model_Resource_Entity_Type $entityType
-     * @return string
-     */
-    public function getRowUrl($entityType)
+    public function getRowUrl($template)
     {
         return $this->getUrl('*/*/edit', array(
-            'entity_type_id' => $entityType->getId(),
+            'entity_type_id' => $template->getId(),
         ));
     }
 

@@ -37,8 +37,6 @@ class Goodahead_Etm_Adminhtml_Etm_EntityTypeController extends Goodahead_Etm_Con
         $this->_redirectReferer();
     }
 
-
-
     public function massDeleteAction()
     {
         $etmEntityTypes = $this->getRequest()->getParam('entity_type_ids');
@@ -109,30 +107,69 @@ class Goodahead_Etm_Adminhtml_Etm_EntityTypeController extends Goodahead_Etm_Con
 
     public function saveAction()
     {
-        $data = $this->getRequest()->getPost();
+        $redirectPath   = '*/*';
+        $redirectParams = array();
+
+        $data         = $this->getRequest()->getPost();
+        $entityTypeId = $this->getRequest()->getPost('entity_type_id', null);
+
+        /** @var Goodahead_Etm_Model_Entity_Type $entityTypeModel */
+        $entityTypeModel = Mage::getModel('goodahead_etm/entity_type');
+
         if ($data) {
-            $entityTypeId = $this->getRequest()->getPost('entity_type_id', null);
-            $entityType = Mage::getModel('goodahead_etm/entity_type')->load($entityTypeId);
-            $code = $this->getRequest()->getPost('entity_type_code', null);
-            $name = $this->getRequest()->getPost('entity_type_name', null);
-            if ($entityType->getId()) {
-                $entityType->setEntityTypeName($name);
-                $entityType->save();
-            } else {
-                $data = array(
-                    'entity_type_code'              => $code,
-                    'entity_model'                  => 'goodahead_etm/entity',
-                    'entity_table'                  => 'goodahead_etm/eav',
-                    'increment_per_store'           => 0,
-                    'increment_pad_length'          => 8,
-                    'increment_pad_char'            => 0,
-                    'entity_type_name'              => $name,
+            try {
+                $hasError = false;
+
+                $entityTypeModel->load($entityTypeId);
+                $code = $this->getRequest()->getPost('entity_type_code', null);
+                $name = $this->getRequest()->getPost('entity_type_name', null);
+                if ($entityTypeModel->getId()) {
+                    $entityTypeModel->setEntityTypeName($name);
+                    $entityTypeModel->save();
+                } else {
+                    $data = array(
+                        'entity_type_code'     => $code,
+                        'entity_model'         => 'goodahead_etm/entity',
+                        'entity_table'         => 'goodahead_etm/entity',
+                        'increment_per_store'  => 0,
+                        'increment_pad_length' => 8,
+                        'increment_pad_char'   => 0,
+                        'entity_type_name'     => $name,
+                    );
+                    $entityTypeModel = Mage::getModel('goodahead_etm/entity_type');
+                    $entityTypeModel->setData($data);
+                    $entityTypeModel->save();
+                }
+
+                // check if 'Save and Continue'
+                if ($this->getRequest()->getParam('back')) {
+                    $redirectPath   = '*/*/edit';
+                    $redirectParams['entity_type_id'] = $entityTypeModel->getId();
+                }
+            } catch (Goodahead_Etm_Exception $e) {
+                $hasError = true;
+                $this->_getSession()->addException($e,
+                    Mage::helper('goodahead_etm')->__('You are not allowed to edit non-custom entity type')
                 );
-                $entityType = Mage::getModel('goodahead_etm/entity_type');
-                $entityType->setData($data);
-                $entityType->save();
+            } catch (Mage_Core_Exception $e) {
+                $hasError = true;
+                $this->_getSession()->addError($e->getMessage());
+            } catch (Exception $e) {
+                $hasError = true;
+                $this->_getSession()->addException($e,
+                    Mage::helper('goodahead_etm')->__('An error occurred while saving entity type.')
+                );
+            }
+
+            if ($hasError) {
+                $this->_getSession()->setFormData($data);
+                $redirectPath   = '*/*/edit';
+                if ($entityTypeModel->getId()) {
+                    $redirectParams['entity_type_id'] = $entityTypeId;
+                }
             }
         }
-        $this->getResponse()->setRedirect($this->getUrl('*/*/'));
+
+        $this->_redirect($redirectPath, $redirectParams);
     }
 }

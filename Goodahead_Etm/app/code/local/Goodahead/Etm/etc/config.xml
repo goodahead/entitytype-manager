@@ -20,6 +20,9 @@
                     <eav_entity_type>
                         <table>goodahead_etm_eav_entity_type</table>
                     </eav_entity_type>
+                    <eav_attribute>
+                        <table>goodahead_etm_eav_attribute</table>
+                    </eav_attribute>
                 </entities>
             </goodahead_etm_resource>
         </models>

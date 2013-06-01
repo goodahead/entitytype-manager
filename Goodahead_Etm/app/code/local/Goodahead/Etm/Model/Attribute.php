@@ -22,4 +22,14 @@ class Goodahead_Etm_Model_Attribute extends Mage_Eav_Model_Entity_Attribute
     {
         $this->getResource()->deleteAttributes($attributeIds);
     }
+
+    /**
+     * Retrieve entity type
+     *
+     * @return string
+     */
+    public function getEntityType()
+    {
+        return Mage::getModel('goodahead_etm/entity_type')->load($this->getEntityTypeId());
+    }
 }

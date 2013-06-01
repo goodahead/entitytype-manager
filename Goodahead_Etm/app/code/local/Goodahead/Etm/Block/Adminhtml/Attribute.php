@@ -31,6 +31,11 @@ class Goodahead_Etm_Block_Adminhtml_Attribute extends Mage_Adminhtml_Block_Widge
         parent::__construct();
 
         $this->_updateButton('back', 'onclick', 'setLocation(\'' . $this->getUrl('*/etm_entityType') . '\')');
+
+        $addUrl = $this->getUrl('*/*/new', array(
+            'entity_type_id' => $this->_getEntityTypeFromRegistry()->getId(),
+        ));
         $this->_updateButton('add', 'label', Mage::helper('goodahead_etm')->__('Add New Attribute'));
+        $this->_updateButton('add', 'onclick', 'setLocation(\'' . $addUrl . '\')');
     }
 }

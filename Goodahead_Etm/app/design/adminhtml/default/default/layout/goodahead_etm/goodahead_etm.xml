@@ -8,9 +8,18 @@
     <adminhtml_etm_attribute_grid>
         <block type="goodahead_etm/adminhtml_attribute_grid" name="root" />
     </adminhtml_etm_attribute_grid>
+    <adminhtml_etm_attribute_edit>
+        <reference name="content">
+            <block type="goodahead_etm/adminhtml_attribute_edit" name="etm.attribute.form_container" />
+        </reference>
+        <!-- TODO: add default value field -->
+        <!--<reference name="js">-->
+            <!--<block type="adminhtml/template" name="attribute_edit_js" template="catalog/product/attribute/js.phtml" />-->
+        <!--</reference>-->
+    </adminhtml_etm_attribute_edit>
     <adminhtml_etm_entity_index>
         <reference name="content">
-            <!-- add blocks here -->
+            <block type="goodahead_etm/adminhtml_entity" name="etm.entity.grid_container" />
         </reference>
     </adminhtml_etm_entity_index>
     <adminhtml_etm_entitytype_grid>
@@ -23,9 +32,7 @@
     </adminhtml_etm_entitytype_index>
     <adminhtml_etm_entitytype_edit>
         <reference name="content">
-            <block type="goodahead_etm/adminhtml_entity_types_edit" name="etm.entity.types.form_container">
-                <block type="goodahead_etm/adminhtml_entity_types_edit_form" name="entity.types.form_container.form" as="form" />
-            </block>
+            <block type="goodahead_etm/adminhtml_entity_types_edit" name="etm.entity.types.form_container" />
         </reference>
     </adminhtml_etm_entitytype_edit>
 

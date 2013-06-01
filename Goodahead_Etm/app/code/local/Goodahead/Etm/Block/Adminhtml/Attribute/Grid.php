@@ -101,11 +101,15 @@ class Goodahead_Etm_Block_Adminhtml_Attribute_Grid extends Mage_Eav_Block_Adminh
         return $this;
     }
 
+    /**
+     * @param Goodahead_Etm_Block_Adminhtml_Attribute $attribute
+     * @return string
+     */
     public function getRowUrl($attribute)
     {
         return $this->getUrl('*/*/edit', array(
             'entity_type_id' => $this->_getEntityTypeFromRegistry()->getId(),
-            'id'             => $attribute->getId(),
+            'attribute_id'   => $attribute->getId(),
         ));
     }
 
