@@ -6,7 +6,7 @@ class Goodahead_Etm_Model_Resource_Entity_Type extends Mage_Eav_Model_Resource_E
     {
         parent::_construct();
         $this->_setResource(NULL, array(
-            'eav_entity_type_extra' => 'goodahead_etm/eav_entity_type',
+            'etm_entity_type' => 'goodahead_etm/eav_entity_type',
         ));
 
     }
@@ -22,7 +22,7 @@ class Goodahead_Etm_Model_Resource_Entity_Type extends Mage_Eav_Model_Resource_E
     protected function _afterSave($object)
     {
         parent::_afterSave($object);
-        $tableName = $this->getTable('eav_entity_type_extra');
+        $tableName = $this->getTable('etm_entity_type');
         $this->_getWriteAdapter()->insertOnDuplicate(
             $tableName, $this->_prepareDataForTable($object, $tableName));
     }
