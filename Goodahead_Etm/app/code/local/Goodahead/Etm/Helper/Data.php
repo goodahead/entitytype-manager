@@ -26,7 +26,10 @@ class Goodahead_Etm_Helper_Data extends Mage_Core_Helper_Abstract
             foreach ($entityTypesCollection as $entityType) {
                 $index += 10;
                 $menuItem = $children->addChild(sprintf('goodahead_etm_entity_type_%d', $entityType->getId()));
-                $menuItem->addChild('title', $entityType->getEntityTypeCode());
+                $menuItem->addChild('title',
+                    strlen($entityType->getEntityTypeName())
+                        ? $entityType->getEntityTypeName()
+                        : $entityType->getEntityTypeCode());
                 $menuItem->addChild('sort_order', $index);
                 $menuItem->addChild('action', sprintf((string)$node->base_link, $entityType->getId()));
             }

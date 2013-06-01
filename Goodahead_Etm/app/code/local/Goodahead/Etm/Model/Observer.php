@@ -24,8 +24,12 @@ class Goodahead_Etm_Model_Observer {
         if ($block instanceof Mage_Adminhtml_Block_Page_Menu) {
             /** @var $menu Varien_Simplexml_Element */
             $menu = Mage::getSingleton('admin/config')->getAdminhtmlConfig()->getNode('menu');
-            $cacheIdSuffix = md5($menu->asXML());
-            $block->setData('cache_key', $block->getCacheKey() . '_' . $cacheIdSuffix);
+            $additionalCacheKeyInfo = $block->getAdditionalCacheKeyInfo();
+            if (!is_array($additionalCacheKeyInfo)) {
+                $additionalCacheKeyInfo = array();
+            }
+            $additionalCacheKeyInfo['goodahead_etm_cache_key_info'] = md5($menu->asXML());
+            $block->setAdditionalCacheKeyInfo($additionalCacheKeyInfo);
         }
     }
 
