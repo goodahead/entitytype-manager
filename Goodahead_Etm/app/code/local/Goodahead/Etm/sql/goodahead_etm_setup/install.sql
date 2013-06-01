@@ -6,3 +6,4 @@ DROP TABLE IF EXISTS `goodahead_etm_eav_int`;
 DROP TABLE IF EXISTS `goodahead_etm_eav_text`;
 DROP TABLE IF EXISTS `goodahead_etm_eav_varchar`;
 DROP TABLE IF EXISTS `goodahead_etm_eav_char`;
+DROP TABLE IF EXISTS `goodahead_etm_eav_entity_type`;
