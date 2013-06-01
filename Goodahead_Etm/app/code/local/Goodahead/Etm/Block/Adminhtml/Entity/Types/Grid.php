@@ -1,10 +1,10 @@
 <?php
-class Goodahead_Etm_Block_Adminhtml_EntityTypes_Grid extends Mage_Adminhtml_Block_Widget_Grid
+class Goodahead_Etm_Block_Adminhtml_Entity_Types_Grid extends Mage_Adminhtml_Block_Widget_Grid
 {
     protected function _construct()
     {
         $this->setId('entityTypesGrid');
-        $this->_controller = 'adminhtml_entitytypes';
+        $this->_controller = 'adminhtml_entity_types';
         $this->setUseAjax(true);
 
         //$this->setDefaultSort('id');
@@ -54,7 +54,7 @@ class Goodahead_Etm_Block_Adminhtml_EntityTypes_Grid extends Mage_Adminhtml_Bloc
 
     public function getRowUrl($template)
     {
-        return $this->getUrl('*/*/useTemplate', array(
+        return $this->getUrl('*/*/use', array(
             'id' => $template->getId(),
         ));
     }

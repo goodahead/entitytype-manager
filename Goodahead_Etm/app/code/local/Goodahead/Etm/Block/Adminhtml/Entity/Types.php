@@ -1,10 +1,10 @@
 <?php
-class Goodahead_Etm_Block_Adminhtml_EntityTypes extends Mage_Adminhtml_Block_Widget_Grid_Container
+class Goodahead_Etm_Block_Adminhtml_Entity_Types extends Mage_Adminhtml_Block_Widget_Grid_Container
 {
     public function __construct()
     {
         $this->_blockGroup = 'goodahead_etm';
-        $this->_controller = 'adminhtml_entitytypes';
+        $this->_controller = 'adminhtml_entity_types';
         $this->_headerText = Mage::helper('goodahead_etm')->__('Entity Types');
 
         parent::__construct();
