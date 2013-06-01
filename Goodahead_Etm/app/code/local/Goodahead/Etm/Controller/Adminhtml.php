@@ -5,6 +5,7 @@ class Goodahead_Etm_Controller_Adminhtml extends Mage_Adminhtml_Controller_Actio
     /**
      * Init entity type object based on passed entity_type_id parameter
      *
+     * @throws Goodahead_Etm_Exception
      * @return $this
      */
     protected function _initEntityType()
@@ -17,7 +18,7 @@ class Goodahead_Etm_Controller_Adminhtml extends Mage_Adminhtml_Controller_Actio
             return $this;
         }
         // TODO: Use our own exception type
-        Mage::throwException('Entity type not found');
+        throw new Goodahead_Etm_Exception(Mage::helper('goodahead_etm')->__('Entity type not found'));
     }
 
     /**
@@ -35,8 +36,9 @@ class Goodahead_Etm_Controller_Adminhtml extends Mage_Adminhtml_Controller_Actio
             ->_addBreadcrumb($helper->__('Entity Type Manager'), $helper->__('Entity Type Manager'))
             ->_addBreadcrumb($title, $title);
 
-            $this->_title($this->__('Entity Type Manager'))
-                ->_title($title);
+        // set title
+        $this->_title($this->__('Entity Type Manager'))
+            ->_title($title);
 
         return $this;
     }
