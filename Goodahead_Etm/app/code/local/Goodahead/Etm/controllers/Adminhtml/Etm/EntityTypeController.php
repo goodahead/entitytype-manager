@@ -122,7 +122,7 @@ class Goodahead_Etm_Adminhtml_Etm_EntityTypeController extends Goodahead_Etm_Con
                 $data = array(
                     'entity_type_code'              => $code,
                     'entity_model'                  => 'goodahead_etm/entity',
-                    'entity_table'                  => 'goodahead_etm/eav',
+                    'entity_table'                  => 'goodahead_etm/entity',
                     'increment_per_store'           => 0,
                     'increment_pad_length'          => 8,
                     'increment_pad_char'            => 0,

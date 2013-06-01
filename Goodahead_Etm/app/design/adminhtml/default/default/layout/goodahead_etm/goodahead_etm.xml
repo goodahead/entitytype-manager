@@ -10,7 +10,7 @@
     </adminhtml_etm_attribute_grid>
     <adminhtml_etm_entity_index>
         <reference name="content">
-            <!-- add blocks here -->
+            <block type="goodahead_etm/adminhtml_entity" name="etm.entity.grid_container" />
         </reference>
     </adminhtml_etm_entity_index>
     <adminhtml_etm_entitytype_grid>
