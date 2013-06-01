@@ -5,10 +5,11 @@ class Goodahead_Etm_Block_Adminhtml_Entity_Types_Edit_Form extends Mage_Adminhtm
     protected function _prepareForm()
     {
         $form = new Varien_Data_Form(array(
-            'id'        => 'entity_type_edit_form',
-            'action'    => $this->getData('action'),
-            'method'    => 'post',
-            'enctype'   => 'multipart/form-data'
+            'id'            => 'edit_form',
+            'action'        => $this->getData('action'),
+            'method'        => 'post',
+            'enctype'       => 'multipart/form-data',
+            'use_container' => true
         ));
 
         $entityType = Mage::registry('etm_entity_type');
@@ -21,6 +22,7 @@ class Goodahead_Etm_Block_Adminhtml_Entity_Types_Edit_Form extends Mage_Adminhtm
         }
 
         $fieldSet = $form->addFieldset('entity_type_data', array());
+        /* @todo Make read-only on edit */
         $fieldSet->addField('entity_type_code', 'text', array(
             'label'     => Mage::helper('goodahead_etm')->__("Entity Type Code"),
             'name'      => 'entity_type_code',
@@ -34,7 +36,8 @@ class Goodahead_Etm_Block_Adminhtml_Entity_Types_Edit_Form extends Mage_Adminhtm
             'required'  => true,
         ));
 
-        $form->setUseContainer(true);
+
+
         $this->setForm($form);
         return parent::_prepareForm();
     }
