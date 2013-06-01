@@ -80,4 +80,11 @@
             </updates>
         </layout>
     </frontend>
+    <phpunit>
+        <suite>
+            <modules>
+                <Goodahead_Etm />
+            </modules>
+        </suite>
+    </phpunit>
 </config>
