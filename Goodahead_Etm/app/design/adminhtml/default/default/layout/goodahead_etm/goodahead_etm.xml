@@ -28,4 +28,10 @@
             </block>
         </reference>
     </adminhtml_etm_entitytype_edit>
+
+    <adminhtml_catalog_product_attribute_edit>
+        <reference name="js">
+            <block type="adminhtml/template" name="goodahead_etm_entity_type_edit_js" template="goodahead_etm/catalog/product/attribute/js.phtml"></block>
+        </reference>
+    </adminhtml_catalog_product_attribute_edit>
 </layout>

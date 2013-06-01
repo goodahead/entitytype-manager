@@ -1,0 +1,42 @@
+bebebe
+<?php
+
+echo "test";
+?>
+<script type="text/javascript">
+//<![CDATA[
+
+function updateEntityTypeBindings()
+{
+    if($('matage-options-panel')){
+        var panel = $('matage-options-panel');
+        if ($('goodahead_etm_entity_type')) {
+            var entityTypeBind = $('goodahead_etm_entity_type');
+            if ($('frontend_input') && ($('frontend_input').value=='select' || $('frontend_input').value=='multiselect')) {
+                setRowVisibility('goodahead_etm_entity_type', true);
+                if (entityTypeBind.value != '') {
+                    panel.hide();
+                } else {
+                    panel.show();
+                }
+            } else {
+                setRowVisibility('goodahead_etm_entity_type', false);
+                if (entityTypeBind.value) {
+                    entityTypeBind.value = '';
+                }
+            }
+        }
+    }
+}
+
+if($('frontend_input')){
+    Event.observe($('frontend_input'), 'change', updateEntityTypeBindings);
+}
+
+if ($('goodahead_etm_entity_type')) {
+    Event.observe($('goodahead_etm_entity_type'), 'change', updateEntityTypeBindings);
+}
+updateEntityTypeBindings();
+
+//]]>
+</script>

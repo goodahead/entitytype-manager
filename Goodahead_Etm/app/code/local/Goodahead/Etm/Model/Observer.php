@@ -33,4 +33,86 @@ class Goodahead_Etm_Model_Observer {
         }
     }
 
+    public function adminhtmlCatalogProductAttributeEditPrepareForm($observer)
+    {
+        /* @var $form Varien_Data_Form */
+        $form = $observer->getEvent()->getForm();
+        /* @var $fieldset Varien_Data_Form_Element_Fieldset */
+        $fieldset = $form->getElement('base_fieldset');
+        /* @var $frontendInput Varien_Data_Form_Element_Select */
+        $frontendInput = $form->getElement('frontend_input');
+//        $frontendInput->get
+
+        $attribute = $observer->getEvent()->getAttribute();
+//        $hiddenFields = Mage::registry('attribute_type_hidden_fields');
+
+        $_helper = Mage::helper('goodahead_etm');
+
+
+        $fieldset->addField('goodahead_etm_entity_type', 'select', array(
+            'name' => 'goodahead_etm_entity_type_id',
+            'label' => $_helper->__("Bind to Custom Entity Type"),
+            'title' => $_helper->__('Can be used only with catalog input type Dropdown or Multiple Select'),
+            'note' => $_helper->__('Can be used only with catalog input type Dropdown or Multiple Select. Bind this product attribute to custom Entity Type.'),
+            'values' => Mage::getModel('goodahead_etm/source_entity_type')->toOptionArray(true),
+        ), 'frontend_input');
+
+//        $allowedInputs = array (
+//            'select' => true,
+//            'multiselect' =>true,
+//        );
+
+//        foreach ($frontendInput->getValues() as $value) {
+//            if (!array_key_exists($value['value'], $allowedInputs)) {
+//                if (array_key_exists($value['value'], $hiddenFields)) {
+//                    $hiddenFields[$value['value']][] = 'goodahead_etm_entity_type';
+//                } else {
+//                    $hiddenFields[$value['value']] = array('goodahead_etm_entity_type');
+//                }
+//            }
+//        }
+
+//        Mage::unregister('attribute_type_hidden_fields');
+//        Mage::register('attribute_type_hidden_fields', $hiddenFields);
+//        $fieldset
+    }
+
+    public function catalogProductAttributeSavePredispatch($observer)
+    {
+        /** @var  $controller Mage_Adminhtml_Controller_Action */
+        $controller = $observer->getEvent()->getControllerAction();
+        $request = $controller->getRequest();
+        if ($entityTypeId = $request->getParam('goodahead_etm_entity_type_id')) {
+            Mage::register('goodahead_etm_attribute_entity_type', $entityTypeId);
+        }
+    }
+
+    public function catalogEntityAttributeSaveBefore($observer)
+    {
+        $attribute = $observer->getEvent()->getAttribute();
+        if ($attribute->isObjectNew()) {
+            if (($entityTypeId = Mage::registry('goodahead_etm_attribute_entity_type')) !== false) {
+                $attribute->setData('source_model', 'goodahead_etm/source_entity');
+                $attribute->setData('goodahead_etm_entity_type_id', $entityTypeId);
+            } else {
+                $attribute->unsetData('goodahead_etm_entity_type_id');
+            }
+            if ($attribute->getFrontendInput() == 'select') {
+                $attribute->setData('_update_binding', true);
+            }
+        }
+    }
+    public function catalogEntityAttributeSaveAfter($observer)
+    {
+        $attribute = $observer->getEvent()->getAttribute();
+        if ($attribute->getData('_update_binding')) {
+            $attribute->unsetData('_update_binding');
+            if (($entityTypeId = Mage::registry('goodahead_etm_attribute_entity_type')) !== false) {
+                $attribute->setData('source_model', 'goodahead_etm/source_entity');
+                $attribute->setData('goodahead_etm_entity_type_id', $entityTypeId);
+                $attribute->save();
+            }
+        }
+    }
+
 }
