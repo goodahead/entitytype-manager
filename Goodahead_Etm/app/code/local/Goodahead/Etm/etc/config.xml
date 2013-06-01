@@ -32,7 +32,7 @@
             <goodahead_etm_setup>
                 <setup>
                     <module>Goodahead_Etm</module>
-                    <class>Goodahead_Etm_Model_Entity_Setup</class>
+                    <class>Goodahead_Etm_Model_Resource_Entity_Setup</class>
                 </setup>
             </goodahead_etm_setup>
         </resources>

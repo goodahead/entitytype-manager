@@ -1,6 +1,30 @@
 <?php
-class Goodahead_Etm_Model_Entity_Setup extends Mage_Eav_Model_Entity_Setup
+class Goodahead_Etm_Model_Resource_Entity_Setup extends Mage_Eav_Model_Entity_Setup
 {
+    /**
+     * @return string
+     */
+    public function getDefaultAttributeSetName()
+    {
+        return $this->_defaultAttributeSetName;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDefaultGroupName()
+    {
+        return $this->_defaultGroupName;
+    }
+
+    /**
+     * @return string
+     */
+    public function getGeneralGroupName()
+    {
+        return $this->_generalGroupName;
+    }
+
     /**
      * Retrieve value from array by key or return default value
      *

@@ -114,7 +114,31 @@ class Goodahead_Etm_Adminhtml_Etm_EntityTypeController extends Goodahead_Etm_Con
     {
         $data = $this->getRequest()->getPost();
         if ($data) {
+            $entityTypeId = $this->getRequest()->getPost('entity_type_id', null);
+            $entityType = Mage::getModel('goodahead_etm/entity_type')->load($entityTypeId);
+            $code = $this->getRequest()->getPost('entity_type_code', null);
+            $name = $this->getRequest()->getPost('entity_type_name', null);
+            if ($entityType->getId()) {
+                $entityType->setEntityTypeName($name);
+                $entityType->save();
+            } else {
+                $data = array(
+                    'entity_type_code'              => $code,
+                    'entity_model'                  => 'goodahead_etm/entity',
+                    'entity_table'                  => 'goodahead_etm/eav',
+                    'increment_per_store'           => 0,
+                    'increment_pad_length'          => 8,
+                    'increment_pad_char'            => 0,
+                    'entity_type_name'              => $name,
+                );
+                $entityType = Mage::getModel('goodahead_etm/entity_type');
+                $entityType->setData($data);
+                $entityType->save();
 
+                $setup = Mage::getResourceModel('goodahead_etm/entity_setup', 'core_setup');
+                $setup->addAttributeSet($code, $setup->getDefaultAttributeSetName());
+                $setup->addAttributeGroup($code, $setup->getDefaultGroupName(), $setup->getGeneralGroupName());
+            }
         }
         $this->getResponse()->setRedirect($this->getUrl('*/*/'));
     }
