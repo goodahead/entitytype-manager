@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Goodahead_Etm>
+            <version>1.0.0.0</version>
+        </Goodahead_Etm>
+    </modules>
+    <global>
+        <models>
+            <goodahead_etm>
+                <class>Goodahead_Etm_Model</class>
+            </goodahead_etm>
+            <goodahead_etm_resource>
+                <class>Goodahead_Etm_Model_Resource</class>
+                <entities>
+                    <!-- add tables here -->
+                </entities>
+            </goodahead_etm_resource>
+        </models>
+        <helpers>
+            <goodahead_etm>
+                <class>Goodahead_Etm_Helper</class>
+            </goodahead_etm>
+        </helpers>
+        <resources>
+            <goodahead_etm_setup>
+                <setup>
+                    <module>Goodahead_Etm</module>
+                </setup>
+            </goodahead_etm_setup>
+        </resources>
+        <blocks>
+            <goodahead_etm>
+                <class>Goodahead_Etm_Block</class>
+            </goodahead_etm>
+        </blocks>
+    </global>
+</config>

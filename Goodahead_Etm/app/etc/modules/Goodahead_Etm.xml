@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Goodahead_Etm>
+            <active>true</active>
+            <codePool>local</codePool>
+            <depends>
+                <Mage_Eav/>
+                <Mage_Adminhtml/>
+                <Mage_Catalog/>
+            </depends>
+        </Goodahead_Etm>
+    </modules>
+</config>
