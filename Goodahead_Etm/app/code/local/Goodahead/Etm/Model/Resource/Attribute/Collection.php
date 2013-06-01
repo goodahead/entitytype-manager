@@ -3,11 +3,28 @@
 class Goodahead_Etm_Model_Resource_Attribute_Collection extends Mage_Eav_Model_Resource_Entity_Attribute_Collection
 {
     /**
-     * Default attribute entity type code
-     *
-     * @var string
+     * @var Mage_Eav_Model_Entity_Type
      */
-    protected $_entityTypeCode   = 'goodahead_etm';
+    protected $_entityType;
+
+    /**
+     * @return Mage_Eav_Model_Entity_Type
+     */
+    public function getEntityType()
+    {
+        if (!$this->_entityType) {
+            $this->_entityType = $this->_getEntityTypeFromRegistry();
+        }
+        return $this->_entityType;
+    }
+
+    /**
+     * @param Mage_Eav_Model_Entity_Type $entityType
+     */
+    public function setEntityType($entityType)
+    {
+        $this->_entityType = $entityType;
+    }
 
     /**
      * Get entity type object from registry
@@ -28,22 +45,6 @@ class Goodahead_Etm_Model_Resource_Attribute_Collection extends Mage_Eav_Model_R
     }
 
     /**
-     * Init collection
-     *
-     * @param string $model
-     * @param string|null $resourceModel
-     * @return $this
-     */
-    protected function _init($model, $resourceModel = null)
-    {
-        $this->_entityType = $this->_getEntityTypeFromRegistry();
-
-        parent::_init($model, $resourceModel);
-
-        return $this;
-    }
-
-    /**
      * Initialize collection select
      *
      * @return $this
@@ -58,7 +59,7 @@ class Goodahead_Etm_Model_Resource_Attribute_Collection extends Mage_Eav_Model_R
             array()
         );
 
-        $this->addFieldToFilter('main_table.entity_type_id', $this->_getEntityTypeFromRegistry()->getId());
+        $this->addFieldToFilter('main_table.entity_type_id', $this->getEntityType()->getId());
 
         return $this;
     }
