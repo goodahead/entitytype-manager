@@ -36,6 +36,7 @@ class Goodahead_Etm_Block_Adminhtml_Attribute_Grid extends Mage_Eav_Block_Adminh
      */
     protected function _prepareCollection()
     {
+        /** @var Goodahead_Etm_Model_Resource_Attribute_Collection $collection */
         $collection = Mage::getResourceModel('goodahead_etm/attribute_collection');
         $this->setCollection($collection);
 
@@ -63,17 +64,17 @@ class Goodahead_Etm_Block_Adminhtml_Attribute_Grid extends Mage_Eav_Block_Adminh
                 'actions'   => array(
                     array(
                         'caption' => Mage::helper('goodahead_etm')->__('Edit'),
-                        'url'     => $this->getUrl('*/*/edit', array(
-                            'entity_type_id' => $this->_getEntityTypeFromRegistry()->getId(),
-                        )),
-                        'field'   => 'id'
+                        'url'     => array(
+                            'base' => '*/*/delete/entity_type_id/' . $this->_getEntityTypeFromRegistry()->getId(),
+                        ),
+                        'field'   => 'attribute_id',
                     ),
                     array(
                         'caption' => Mage::helper('goodahead_etm')->__('Delete'),
-                        'url'     => $this->getUrl('*/*/delete', array(
-                            'entity_type_id' => $this->_getEntityTypeFromRegistry()->getId(),
-                        )),
-                        'field'   => 'id',
+                        'url'     => array(
+                            'base' => '*/*/delete/entity_type_id/' . $this->_getEntityTypeFromRegistry()->getId(),
+                        ),
+                        'field'   => 'attribute_id',
                         'confirm' => Mage::helper('goodahead_etm')->__('Are you sure you want to delete attribute?')
                     ),
                 ),
@@ -89,10 +90,12 @@ class Goodahead_Etm_Block_Adminhtml_Attribute_Grid extends Mage_Eav_Block_Adminh
     protected function _prepareMassaction()
     {
         $this->setMassactionIdField('entity_type_id');
-        $this->getMassactionBlock()->setFormFieldName('entity_type_ids');
+        $this->getMassactionBlock()->setFormFieldName('attribute_ids');
         $this->getMassactionBlock()->addItem('delete', array(
             'label'   => Mage::helper('goodahead_etm')->__('Delete'),
-            'url'     => $this->getUrl('*/*/massDelete'),
+            'url'     => $this->getUrl('*/*/massDelete', array(
+                'entity_type_id' => $this->_getEntityTypeFromRegistry()->getId(),
+            )),
             'confirm' => Mage::helper('goodahead_etm')->__('Are you sure you want to delete selected attributes?')
         ));
         return $this;

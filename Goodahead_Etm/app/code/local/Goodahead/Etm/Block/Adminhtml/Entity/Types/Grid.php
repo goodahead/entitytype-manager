@@ -117,8 +117,8 @@ class Goodahead_Etm_Block_Adminhtml_Entity_Types_Grid extends Mage_Adminhtml_Blo
 
     public function getRowUrl($template)
     {
-        return $this->getUrl('*/*/use', array(
-            'id' => $template->getId(),
+        return $this->getUrl('*/*/edit', array(
+            'entity_type_id' => $template->getId(),
         ));
     }
 

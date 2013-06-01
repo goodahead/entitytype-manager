@@ -20,13 +20,17 @@ Tasks (must have)
 -----------------
 
 ###### Entity type manager
-1. Create grid for custom entity types with CRUD functionality
-2. Create entity type Add/Edit form
-3. Create corresponding models to work with custom entity types
+1. <del>Create grid for custom entity types with CRUD functionality</del>
+2. <del>Create entity type Add/Edit form</del>
+3. <del>Create corresponding models to work with custom entity types</del>
 
 ###### Attributes manager
 1. Create entity type attribute manager grid with CRUD functionality
-2. Create attribute Add/Edit form
+2. Create attribute Add/Edit form with following fields:
+    * Attribute Code
+    * Attribute Name
+    * Attribute Scope (Global/Website/Store View)
+    * Attribute Type (Same as for Catalog/Product attributes)
 3. Create corresponding models to work with custom attributes
 
 ###### Entities manager
@@ -37,8 +41,8 @@ Tasks (must have)
 5. Add multi store view support for entity type data to allow translations
 
 ###### Custom admin menu
-1. For Attribute manager and Entity manager menu items should be based on existing custom entity types
-2. Hide Attribute manager and Entity manager menu when no custom entity types defined
+1. <del>For Attribute manager and Entity manager menu items should be based on existing custom entity types</del>
+2. <del>Hide Attribute manager and Entity manager menu when no custom entity types defined</del>
 
 ###### Catalog Product bindings
 1. When creating attribute with type Select or Multi-select add an option to bind this attribute to existing entity type.

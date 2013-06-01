@@ -14,9 +14,9 @@
             <goodahead_etm_resource>
                 <class>Goodahead_Etm_Model_Resource</class>
                 <entities>
-                    <eav>
-                        <table>goodahead_etm_eav</table>
-                    </eav>
+                    <entity>
+                        <table>goodahead_etm_entity</table>
+                    </entity>
                     <eav_entity_type>
                         <table>goodahead_etm_eav_entity_type</table>
                     </eav_entity_type>
@@ -32,7 +32,7 @@
             <goodahead_etm_setup>
                 <setup>
                     <module>Goodahead_Etm</module>
-                    <class>Goodahead_Etm_Model_Entity_Setup</class>
+                    <class>Goodahead_Etm_Model_Resource_Entity_Setup</class>
                 </setup>
             </goodahead_etm_setup>
         </resources>
@@ -61,6 +61,24 @@
                 </goodahead_etm>
             </updates>
         </layout>
+        <events>
+            <controller_action_predispatch_adminhtml>
+                <observers>
+                    <goodahead_etm_render_menu>
+                        <class>goodahead_etm/observer</class>
+                        <method>renderMenu</method>
+                    </goodahead_etm_render_menu>
+                </observers>
+            </controller_action_predispatch_adminhtml>
+            <core_layout_block_create_after>
+                <observers>
+                    <goodahead_etm_render_menu>
+                        <class>goodahead_etm/observer</class>
+                        <method>updateMenuBlockCacheId</method>
+                    </goodahead_etm_render_menu>
+                </observers>
+            </core_layout_block_create_after>
+        </events>
     </adminhtml>
     <frontend>
         <routers>
