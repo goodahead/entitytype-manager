@@ -42,7 +42,7 @@
     </adminhtml_etm_entitytype_index>
     <adminhtml_etm_entitytype_edit>
         <reference name="content">
-            <block type="goodahead_etm/adminhtml_entity_types_edit" name="etm.entity.types.form_container" />
+            <!--<block type="goodahead_etm/adminhtml_entity_types_edit" name="etm.entity.types.form_container" />-->
         </reference>
         <reference name="js">
             <block type="adminhtml/template" name="goodahead_etm_entity_type_edit_variables_js" template="goodahead_etm/entity/type/edit/variables.phtml"></block>

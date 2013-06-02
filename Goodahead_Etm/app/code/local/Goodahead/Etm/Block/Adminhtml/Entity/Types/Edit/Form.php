@@ -125,12 +125,40 @@ class Goodahead_Etm_Block_Adminhtml_Entity_Types_Edit_Form extends Mage_Adminhtm
      */
     public function getVariables()
     {
+        $entityType = Mage::registry('etm_entity_type');
+
+        $visibleAttribute = Mage::helper('goodahead_etm')->getVisibleAttributes($entityType->getId());
         $variables = array();
 
-        /*$variables[] = Mage::getModel('goodahead_etm/source_entity_variables')
-            ->toOptionArray(true);*/
+        foreach($visibleAttribute as $attributeCode => $attribute) {
+            $variables[] = array(
+                'value' => $attributeCode,
+                'label' => $attribute->getAttributeName()
+            );
+        }
 
 
-        return $variables;
+
+        $optionArray = array();
+        foreach ($variables as $variable) {
+            $optionArray[] = array(
+                'value' => '{{var ' . $variable['value'] . '}}',
+                'label' => Mage::helper('goodahead_etm')->__('%s', $variable['label'])
+            );
+        }
+        if ($optionArray) {
+            $optionArray = array(
+                'label' => Mage::helper('core')->__('Entity Attributes'),
+                'value' => $optionArray
+            );
+        }
+
+
+        return $optionArray;
     }
+
+
+
+
+
 }
