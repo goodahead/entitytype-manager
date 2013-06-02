@@ -14,7 +14,9 @@ class Goodahead_Etm_Block_Adminhtml_Entity_Types_Edit_Form extends Mage_Adminhtm
 
         $entityType = Mage::registry('etm_entity_type');
 
-        $fieldSet = $form->addFieldset('entity_type_data', array());
+        $fieldSet = $form->addFieldset('entity_type_data', array(
+            'class' => 'fieldset-wide',
+        ));
         $validateClass = sprintf('required-entry validate-code validate-length maximum-length-%d',
             Mage_Eav_Model_Entity_Attribute::ATTRIBUTE_CODE_MAX_LENGTH
         );
@@ -29,6 +31,30 @@ class Goodahead_Etm_Block_Adminhtml_Entity_Types_Edit_Form extends Mage_Adminhtm
         $fieldSet->addField('entity_type_name', 'text', array(
             'label'     => Mage::helper('goodahead_etm')->__("Entity Type Name"),
             'name'      => 'entity_type_name',
+            'class'     => 'required-entry',
+            'required'  => true,
+        ));
+
+        $fieldSet->addField('entity_type_root_template', 'select', array(
+            'label'     => Mage::helper('goodahead_etm')->__("Entity Type Root Template"),
+            'name'      => 'entity_type_root_template',
+            'values'    => Mage::getSingleton('page/source_layout')->toOptionArray(),
+            'class'     => 'required-entry',
+            'required'  => true,
+        ));
+
+        $fieldSet->addField('entity_type_layout_xml', 'textarea', array(
+            'label'     => Mage::helper('goodahead_etm')->__("Layout XML"),
+            'name'      => 'entity_type_layout_xml',
+            'style'     => 'height:7em',
+            'class'     => 'required-entry',
+            'required'  => true,
+        ));
+
+        $fieldSet->addField('entity_type_content', 'textarea', array(
+            'label'     => Mage::helper('goodahead_etm')->__("Content"),
+            'name'      => 'entity_type_content',
+            'style'     => 'height:24em',
             'class'     => 'required-entry',
             'required'  => true,
         ));
