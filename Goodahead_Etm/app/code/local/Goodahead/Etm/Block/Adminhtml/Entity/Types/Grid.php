@@ -44,26 +44,6 @@ class Goodahead_Etm_Block_Adminhtml_Entity_Types_Grid extends Mage_Adminhtml_Blo
             'type'              => 'text'
         ));
 
-        $this->addColumn('action', array(
-            'header'            => Mage::helper('goodahead_etm')->__('Action'),
-            'width'             => '100',
-            'type'              => 'action',
-            'getter'            => 'getId',
-            'actions'           => array(
-                array(
-                    'caption' => Mage::helper('goodahead_etm')->__('Delete'),
-                    'url'     => array(
-                        'base' => '*/*/delete',
-                    ),
-                    'field'   => 'entity_type_id',
-                    'confirm' => Mage::helper('goodahead_etm')->__('Are you sure?')
-                )
-            ),
-            'filter'            => false,
-            'sortable'          => false,
-            'index'             => 'entity_type_id',
-        ));
-
         $this->addColumn('action',
             array(
                 'header'    => Mage::helper('goodahead_etm')->__('Actions'),
