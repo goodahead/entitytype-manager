@@ -59,7 +59,7 @@ class Goodahead_Etm_Block_Adminhtml_Entity_Grid extends Mage_Adminhtml_Block_Wid
         $this->addColumn('action',
             array(
                 'header'    => Mage::helper('goodahead_etm')->__('Actions'),
-                'width'     => '50px',
+                'width'     => '100',
                 'type'      => 'action',
                 'getter'    => 'getId',
                 'actions'   => array(

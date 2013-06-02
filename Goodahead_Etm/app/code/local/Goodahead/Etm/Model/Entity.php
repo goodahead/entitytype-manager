@@ -71,9 +71,6 @@ class Goodahead_Etm_Model_Entity extends Mage_Core_Model_Abstract
         }
     }
 
-<<<<<<< HEAD
-
-=======
     /**
      * @return Goodahead_Etm_Model_Entity_Type
      */
@@ -84,5 +81,4 @@ class Goodahead_Etm_Model_Entity extends Mage_Core_Model_Abstract
         }
         return $this->_entityTypeInstance;
     }
->>>>>>> b5422ea96e4833947959648e12ae21738fbf530b
 }
