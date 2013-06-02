@@ -74,7 +74,6 @@ class Goodahead_Etm_Model_Resource_Entity_Collection extends Mage_Eav_Model_Enti
 
     public function _loadAttributes($printQuery = false, $logQuery = false)
     {
-        $this->_storeId = 1;
         if (empty($this->_items) || empty($this->_itemsById) || empty($this->_selectAttributes)) {
             return $this;
         }
