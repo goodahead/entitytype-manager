@@ -29,6 +29,7 @@ class Goodahead_Etm_Block_Adminhtml_Entity_Grid extends Mage_Adminhtml_Block_Wid
         return parent::_prepareCollection();
     }
 
+
     protected function _prepareColumns()
     {
 
@@ -37,7 +38,6 @@ class Goodahead_Etm_Block_Adminhtml_Entity_Grid extends Mage_Adminhtml_Block_Wid
         $this->addColumn('entity_id', array(
             'header'            => Mage::helper('goodahead_etm')->__('Entity ID'),
             'width'             => '100',
-            'filter_index'      => 'main_table.entity_id',
             'index'             => 'entity_id',
             'type'              => 'number'
         ));
