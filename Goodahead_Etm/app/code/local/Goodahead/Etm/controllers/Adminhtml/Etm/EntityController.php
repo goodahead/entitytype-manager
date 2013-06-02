@@ -80,6 +80,12 @@ class Goodahead_Etm_Adminhtml_Etm_EntityController extends Goodahead_Etm_Control
         $this->_initAction($this->__('Create Entity'));
         $this->_initEntityType();
         $this->_initEntity();
+        $entity = Mage::registry('etm_entity');
+        if (!$entity->getId()) {
+            $this->getLayout()->getBlock('content')->unsetChild('store_switcher');
+        }
+        $storeId = $this->getRequest()->getParam('store', 0);
+        $entity->setStoreId($storeId);
 
         // set entered data if was error when we do save
         $data = $this->_getSession()->getFormData();

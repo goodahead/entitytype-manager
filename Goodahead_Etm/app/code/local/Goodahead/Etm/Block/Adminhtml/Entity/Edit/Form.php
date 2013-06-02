@@ -2,6 +2,15 @@
 
 class Goodahead_Etm_Block_Adminhtml_Entity_Edit_Form extends Mage_Adminhtml_Block_Widget_Form
 {
+    protected function _prepareLayout()
+    {
+        parent::_prepareLayout();
+        Varien_Data_Form::setFieldsetElementRenderer(
+            $this->getLayout()->createBlock('goodahead_etm/adminhtml_form_renderer_fieldset_element')
+        );
+        return $this;
+    }
+
     protected function _prepareForm()
     {
         $form = new Varien_Data_Form(array(
@@ -14,6 +23,8 @@ class Goodahead_Etm_Block_Adminhtml_Entity_Edit_Form extends Mage_Adminhtml_Bloc
 
         $entityType = Mage::registry('etm_entity_type');
         $entity = Mage::registry('etm_entity');
+
+        $form->setDataObject($entity);
 
         $fieldSet = $form->addFieldset('entity_data', array(
             'legend' => Mage::helper('goodahead_etm')->__("Entity Attributes")

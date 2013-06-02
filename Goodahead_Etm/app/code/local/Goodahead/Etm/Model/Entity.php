@@ -5,6 +5,8 @@ class Goodahead_Etm_Model_Entity extends Mage_Core_Model_Abstract
     protected $_entityTypeId = null;
     protected $_entityTypeInstance = null;
 
+    protected $_storeId = null;
+
     protected function _construct()
     {
         $this->_init('goodahead_etm/entity');
@@ -22,6 +24,7 @@ class Goodahead_Etm_Model_Entity extends Mage_Core_Model_Abstract
         }
         $collection = Mage::getResourceModel($this->_resourceCollectionName, $this->_getResource(array('entity_type_id' => $entityTypeId)));
         $collection->setEntityType($entityTypeId);
+        $collection->setStoreId($this->getStoreId());
         return $collection;
     }
 
@@ -80,6 +83,24 @@ class Goodahead_Etm_Model_Entity extends Mage_Core_Model_Abstract
             $this->_entityTypeInstance = Mage::getModel('goodahead_etm/entity_type')->load($this->_getEntityTypeId());
         }
         return $this->_entityTypeInstance;
+    }
+
+    public function setStoreId($storeId)
+    {
+        $this->_storeId = $storeId;
+    }
+
+    /**
+     * Returns store id with which attribute values loaded
+     *
+     * @return int
+     */
+    public function getStoreId()
+    {
+        if ($this->_storeId !== null) {
+            return $this->_storeId;
+        }
+        return Mage::app()->getStore()->getId();
     }
 
     public function getEntityLabel()

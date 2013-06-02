@@ -1,15 +1,13 @@
 <?php
 class Goodahead_Etm_Model_Resource_Entity_Collection extends Mage_Eav_Model_Entity_Collection_Abstract
 {
-    protected $_entityType          = null;
-
+    protected $_entityType  = null;
+    protected $_storeId     = null;
 
     protected function _getEtmHelper()
     {
         return Mage::helper('goodahead_etm');
     }
-
-
 
     /**
      * @param null $entityType
@@ -25,6 +23,22 @@ class Goodahead_Etm_Model_Resource_Entity_Collection extends Mage_Eav_Model_Enti
     public function getEntityType()
     {
         return $this->_entityType;
+    }
+
+    /**
+     * @param null $storeId
+     */
+    public function setStoreId($storeId)
+    {
+        $this->_storeId = $storeId;
+    }
+
+    /**
+     * @return null
+     */
+    public function getStoreId()
+    {
+        return $this->_storeId;
     }
 
     protected function _construct()
