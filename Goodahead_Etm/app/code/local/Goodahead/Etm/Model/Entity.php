@@ -81,4 +81,15 @@ class Goodahead_Etm_Model_Entity extends Mage_Core_Model_Abstract
         }
         return $this->_entityTypeInstance;
     }
+
+    public function getEntityLabel()
+    {
+        $typeInstance = $this->getEntityTypeInstance();
+        $defaultAttributeId = $typeInstance->getDefaultAttributeId();
+        $defaultAttribute = Mage::getModel('goodahead_etm/attribute')->load($defaultAttributeId);
+        if (!$defaultAttribute->getId()) {
+            return $this->getId();
+        }
+        return $defaultAttribute->getAttributeName();
+    }
 }
