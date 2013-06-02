@@ -48,6 +48,14 @@ class Goodahead_Etm_Block_Adminhtml_Attribute_Edit extends Mage_Adminhtml_Block_
             $this->_removeButton('delete');
         }
 
+        $deleteUrl = $this->getUrl('*/*/delete', array(
+            'entity_type_id' => $this->_getEntityTypeFromRegistry()->getId(),
+            'attribute_id'   => $this->getRequest()->getParam('attribute_id'),
+        ));
+        $this->_updateButton('delete', 'onclick', 'deleteConfirm(\''
+            . Mage::helper('goodahead_etm')->__('Are you sure you want to delete attribute?'). '\', \''
+            . $deleteUrl . '\')'
+        );
         $backUrl = $this->getUrl('*/*/index', array(
             'entity_type_id' => $this->_getEntityTypeFromRegistry()->getId(),
         ));
