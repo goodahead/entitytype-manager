@@ -89,7 +89,7 @@ class Goodahead_Etm_Block_Adminhtml_Attribute_Grid extends Mage_Eav_Block_Adminh
                     array(
                         'caption' => Mage::helper('goodahead_etm')->__('Edit'),
                         'url'     => array(
-                            'base' => '*/*/delete/entity_type_id/' . $this->_getEntityTypeFromRegistry()->getId(),
+                            'base' => '*/*/edit/entity_type_id/' . $this->_getEntityTypeFromRegistry()->getId(),
                         ),
                         'field'   => 'attribute_id',
                     ),
