@@ -127,10 +127,8 @@ class Goodahead_Etm_Block_Adminhtml_Entity_Types_Edit_Form extends Mage_Adminhtm
     {
         $variables = array();
 
-        $visibleAttributes = Mage::helper('goodahead_etm')->
-
-        $variables[] = Mage::getModel('core/source_email_variables')
-            ->toOptionArray(true);
+        /*$variables[] = Mage::getModel('goodahead_etm/source_entity_variables')
+            ->toOptionArray(true);*/
 
 
         return $variables;
