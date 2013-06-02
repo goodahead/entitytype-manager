@@ -125,11 +125,13 @@ class Goodahead_Etm_Adminhtml_Etm_EntityTypeController extends Goodahead_Etm_Con
                 $hasError = false;
                 $entityTypeModel->load($entityTypeId);
 
-                $postFields = array('entity_type_code',
+                $postFields = array(
+                    'entity_type_code',
                     'entity_type_name',
                     'entity_type_root_template',
                     'entity_type_layout_xml',
-                    'entity_type_content'
+                    'entity_type_content',
+                    'default_attribute_id'
                 );
                 $postData = array();
                 foreach ($postFields as $_field) {
