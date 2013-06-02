@@ -47,7 +47,8 @@ Tasks (must have)
 ###### Catalog Product bindings
 1. <del>When creating attribute with type Select or Multi-select add an option to bind this attribute to existing entity type.
 This will set up source model and frontend renderer for this attribute.<del>
-2. On frontend have custom renderer for attributes that defined as "Visible on product view page on frontend" to show
+2. Add source model for Catalog attributes to Entities binding.
+3. On frontend have custom renderer for attributes that defined as "Visible on product view page on frontend" to show
 link to entity type landing page.
 
 ###### Entity type frontend landing pages
