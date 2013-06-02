@@ -42,10 +42,10 @@ class Goodahead_Etm_Helper_Data extends Mage_Core_Helper_Abstract
     }
 
 
-    public function getVisibleAttributes($entityType)
+    public function getVisibleAttributes($entityTypeId)
     {
         $collection = Mage::getResourceModel('goodahead_etm/attribute_collection');
-        $collection->setEntityType($entityType);
+        $collection->setEntityType($entityTypeId);
 
         if (is_null($this->_visibleAttributes)) {
             $this->_visibleAttributes = array();

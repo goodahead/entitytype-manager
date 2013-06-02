@@ -22,7 +22,7 @@ class Goodahead_Etm_Block_Adminhtml_Entity_Grid extends Mage_Adminhtml_Block_Wid
         $entityType = Mage::registry('etm_entity_type');
         $collection = Mage::getModel('goodahead_etm/entity')
             ->getCollection($entityType->getEntityTypeCode())
-            ->joinVisibleAttributes($entityType->getEntityTypeCode());
+            ->joinVisibleAttributes($entityType->getId());
 
         $this->setCollection($collection);
 
@@ -46,7 +46,7 @@ class Goodahead_Etm_Block_Adminhtml_Entity_Grid extends Mage_Adminhtml_Block_Wid
 
 
         $entityType = Mage::registry('etm_entity_type');
-        $visibleAttr = $this->_getEtmHelper()->getVisibleAttributes($entityType->getEntityTypeCode());
+        $visibleAttr = $this->_getEtmHelper()->getVisibleAttributes($entityType->getId());
         foreach($visibleAttr as $attributeCode => $attrTitle) {
             $this->addColumn($attributeCode, array(
                 'header'            => Mage::helper('goodahead_etm')->__($attrTitle),

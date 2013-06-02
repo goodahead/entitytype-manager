@@ -16,6 +16,7 @@ class Goodahead_Etm_Adminhtml_Etm_EntityController extends Goodahead_Etm_Control
         // TODO: Catch only our exception
         } catch (Exception $e) {
             Mage::logException($e);
+            Mage::throwException($e);
             $this->_forward('no_route');
         }
     }
@@ -60,25 +61,14 @@ class Goodahead_Etm_Adminhtml_Etm_EntityController extends Goodahead_Etm_Control
     }
 
     /**
-     * ACL check
-     *
-     * @return bool
+     * Grid ajax action
      */
-    protected function _isAllowed()
+    public function gridAction()
     {
-        switch ($this->getRequest()->getActionName()) {
-            case 'edit':
-            case 'save':
-                return Mage::getSingleton('admin/session')->isAllowed('goodahead_etm/manage_entities/save');
-                break;
-            case 'delete':
-                return Mage::getSingleton('admin/session')->isAllowed('goodahead_etm/manage_entities/delete');
-                break;
-            case 'index':
-            default:
-                return Mage::getSingleton('admin/session')->isAllowed('goodahead_etm/manage_entities');
-                break;
-        }
+        $this->_initEntityType();
+        $this->_initEntity();
+        $this->loadLayout();
+        $this->renderLayout();
     }
 
     public function newAction()
@@ -102,5 +92,27 @@ class Goodahead_Etm_Adminhtml_Etm_EntityController extends Goodahead_Etm_Control
         }
 
         $this->renderLayout();
+    }
+
+    /**
+     * ACL check
+     *
+     * @return bool
+     */
+    protected function _isAllowed()
+    {
+        switch ($this->getRequest()->getActionName()) {
+            case 'edit':
+            case 'save':
+                return Mage::getSingleton('admin/session')->isAllowed('goodahead_etm/manage_entities/save');
+                break;
+            case 'delete':
+                return Mage::getSingleton('admin/session')->isAllowed('goodahead_etm/manage_entities/delete');
+                break;
+            case 'index':
+            default:
+                return Mage::getSingleton('admin/session')->isAllowed('goodahead_etm/manage_entities');
+                break;
+        }
     }
 }

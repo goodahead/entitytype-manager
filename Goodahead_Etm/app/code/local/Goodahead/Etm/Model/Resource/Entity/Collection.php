@@ -32,9 +32,9 @@ class Goodahead_Etm_Model_Resource_Entity_Collection extends Mage_Eav_Model_Enti
         $this->_init('goodahead_etm/entity');
     }
 
-    public function joinVisibleAttributes($entityTypeCode)
+    public function joinVisibleAttributes($entityTypeId)
     {
-        $visibleAttributes = $this->_getEtmHelper()->getVisibleAttributes($entityTypeCode);
+        $visibleAttributes = $this->_getEtmHelper()->getVisibleAttributes($entityTypeId);
 
         $this->addAttributeToSelect(array_keys($visibleAttributes));
 
