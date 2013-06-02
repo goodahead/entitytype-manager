@@ -37,6 +37,17 @@ class Goodahead_Etm_Block_Adminhtml_Entity_Types_Edit_Form extends Mage_Adminhtm
             $form->addField('entity_type_id', 'hidden', array(
                 'name' => 'entity_type_id',
             ));
+
+            $entityTypeAttributes = Mage::getModel('goodahead_etm/source_attribute')->toOptionsArray($entityType, true);
+
+            $fieldSet->addField('default_attribute_id', 'select', array(
+                'label'     => Mage::helper('goodahead_etm')->__("Default Attribute"),
+                'name'      => 'default_attribute_id',
+                'required'  => false,
+                'values'    => $entityTypeAttributes,
+                'note'      => Mage::helper('goodahead_etm')->__("This attribute is used to display entity label"),
+            ));
+
             $form->getElement('entity_type_code')->setReadonly('readonly');
             $form->getElement('entity_type_code')->setDisabled(1);
             $form->setValues($entityType->getData());

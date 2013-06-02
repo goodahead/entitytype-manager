@@ -3,12 +3,12 @@
 class Goodahead_Etm_Model_Resource_Attribute_Collection extends Mage_Eav_Model_Resource_Entity_Attribute_Collection
 {
     /**
-     * @var Mage_Eav_Model_Entity_Type
+     * @var Goodahead_Etm_Model_Entity_Type
      */
     protected $_entityType;
 
     /**
-     * @return Mage_Eav_Model_Entity_Type
+     * @return Goodahead_Etm_Model_Entity_Type
      */
     public function getEntityType()
     {
@@ -19,17 +19,30 @@ class Goodahead_Etm_Model_Resource_Attribute_Collection extends Mage_Eav_Model_R
     }
 
     /**
-     * @param Mage_Eav_Model_Entity_Type $entityType
+     *
      */
     public function setEntityType($entityType)
     {
-        $this->_entityType = $entityType;
+        if ($entityType instanceof Goodahead_Etm_Model_Entity_Type) {
+            $this->_entityType = $entityType;
+        } else {
+            $this->_entityType = Mage::getModel('goodahead_etm/entity_type')->load($entityType);
+        }
+        if (!$this->_entityType->getId()) {
+            $helper = Mage::helper('goodahead_etm');
+            throw new Goodahead_Etm_Exception($helper->__('Entity type not found'));
+        }
+    }
+
+    public function toOptionArray()
+    {
+        return $this->_toOptionArray('attribute_id', 'attribute_name');
     }
 
     /**
      * Get entity type object from registry
      *
-     * @return Mage_Eav_Model_Entity_Type
+     * @return Goodahead_Etm_Model_Entity_Type
      * @throws Goodahead_Etm_Exception
      */
     protected function _getEntityTypeFromRegistry()

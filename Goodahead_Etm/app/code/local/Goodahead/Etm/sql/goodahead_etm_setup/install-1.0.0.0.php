@@ -14,6 +14,11 @@ $table
         'nullable'  => false,
         'primary'   => true,
     ), 'Entity Type ID')
+    ->addColumn('default_attribute_id', Varien_Db_Ddl_Table::TYPE_INTEGER, null, array(
+        'identity'  => false,
+        'unsigned'  => true,
+        'nullable'  => true,
+    ), 'Entity Type ID')
     ->addColumn('entity_type_name', Varien_Db_Ddl_Table::TYPE_TEXT, 128, array(
         'nullable'  => false,
     ), 'User Email')
@@ -21,6 +26,8 @@ $table
         'entity_type_id', $installer->getTable('eav/entity_type'), 'entity_type_id',
         Varien_Db_Ddl_Table::ACTION_CASCADE, Varien_Db_Ddl_Table::ACTION_CASCADE
     )
+    ->addIndex($installer->getIdxName('goodahead_etm/eav_entity_type', array('default_attribute_id')),
+        array('default_attribute_id'))
     ->setComment('ETM Entity Type extended info');
 $installer->getConnection()->createTable($table);
 
@@ -76,5 +83,17 @@ $table = $installer->getConnection()
         Varien_Db_Ddl_Table::ACTION_CASCADE, Varien_Db_Ddl_Table::ACTION_CASCADE)
     ->setComment('ETM EAV Attribute Table');
 $installer->getConnection()->createTable($table);
+
+/**
+ * Add foreign key to entity type table
+ */
+$installer->getConnection()->addForeignKey(
+    $installer->getFkName('goodahead_etm/eav_entity_type', 'default_attribute_id', 'goodahead_etm/eav_attribute', 'attribute_id'),
+    $installer->getTable('goodahead_etm/eav_entity_type'),
+    'default_attribute_id',
+    $installer->getTable('goodahead_etm/eav_attribute'),
+    'attribute_id',
+    Varien_Db_Ddl_Table::ACTION_SET_NULL, Varien_Db_Ddl_Table::ACTION_CASCADE
+);
 
 $installer->endSetup();

@@ -12,6 +12,14 @@ class Goodahead_Etm_Model_Entity_Type extends Mage_Eav_Model_Entity_Type
         $this->_init('goodahead_etm/entity_type');
     }
 
+    protected function _beforeSave()
+    {
+        parent::_beforeSave();
+        if ($this->getData('default_attribute_id') == '') {
+            $this->setData('default_attribute_id', null);
+        }
+    }
+
     protected function _afterSave()
     {
         parent::_afterSave();
