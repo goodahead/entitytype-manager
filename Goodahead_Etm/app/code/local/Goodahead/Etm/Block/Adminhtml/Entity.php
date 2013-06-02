@@ -5,7 +5,12 @@ class Goodahead_Etm_Block_Adminhtml_Entity extends Mage_Adminhtml_Block_Widget_G
     {
         $this->_blockGroup = 'goodahead_etm';
         $this->_controller = 'adminhtml_entity';
-        $this->_headerText = Mage::helper('goodahead_etm')->__('Entities');
+
+        $entityType = Mage::registry('etm_entity_type');
+
+        $this->_headerText = Mage::helper('goodahead_etm')->__(
+            'Manage "%s"', $entityType->getEntityTypeName()
+        );
 
         parent::__construct();
 

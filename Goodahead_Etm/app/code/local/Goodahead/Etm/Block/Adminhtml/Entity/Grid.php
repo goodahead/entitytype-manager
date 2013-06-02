@@ -13,8 +13,8 @@ class Goodahead_Etm_Block_Adminhtml_Entity_Grid extends Mage_Adminhtml_Block_Wid
         $this->_controller = 'adminhtml_entity';
         $this->setUseAjax(true);
 
-        //$this->setDefaultSort('main_table.entity_type_id');
-        //$this->setDefaultDir('DESC');
+        $this->setDefaultSort('main_table.entity_id');
+        $this->setDefaultDir('DESC');
     }
 
     protected function _prepareCollection()
@@ -42,13 +42,7 @@ class Goodahead_Etm_Block_Adminhtml_Entity_Grid extends Mage_Adminhtml_Block_Wid
             'type'              => 'number'
         ));
 
-        $this->addColumn('entity_type_id', array(
-            'header'            => Mage::helper('goodahead_etm')->__('Entity Type ID'),
-            'width'             => '100',
-            'filter_index'      => 'main_table.entity_type_id',
-            'index'             => 'entity_type_id',
-            'type'              => 'number'
-        ));
+
 
 
         $entityType = Mage::registry('etm_entity_type');
@@ -74,13 +68,13 @@ class Goodahead_Etm_Block_Adminhtml_Entity_Grid extends Mage_Adminhtml_Block_Wid
                     'url'     => array(
                         'base' => '*/*/delete',
                     ),
-                    'field'   => 'entity_type_id',
+                    'field'   => 'entity_id',
                     'confirm' => Mage::helper('goodahead_etm')->__('Are you sure?')
                 )
             ),
             'filter'            => false,
             'sortable'          => false,
-            'index'             => 'entity_type_id',
+            'index'             => 'entity_id',
         ));
 
         $this->addColumn('action',
@@ -91,25 +85,18 @@ class Goodahead_Etm_Block_Adminhtml_Entity_Grid extends Mage_Adminhtml_Block_Wid
                 'getter'    => 'getId',
                 'actions'   => array(
                     array(
-                        'caption' => Mage::helper('goodahead_etm')->__('Manage Attributes'),
-                        'url'     => array(
-                            'base' => '*/etm_attribute',
-                        ),
-                        'field'   => 'entity_type_id',
-                    ),
-                    array(
                         'caption' => Mage::helper('goodahead_etm')->__('Edit'),
                         'url'     => array(
                             'base' => '*/*/edit',
                         ),
-                        'field'   => 'entity_type_id',
+                        'field'   => 'entity_id',
                     ),
                     array(
                         'caption' => Mage::helper('goodahead_etm')->__('Delete'),
                         'url'     => array(
                             'base' => '*/*/delete',
                         ),
-                        'field'   => 'entity_type_id',
+                        'field'   => 'entity_id',
                         'confirm' => Mage::helper('goodahead_etm')->__('Are you sure you want to delete entity type?')
                     )
                 ),
@@ -124,8 +111,8 @@ class Goodahead_Etm_Block_Adminhtml_Entity_Grid extends Mage_Adminhtml_Block_Wid
 
     protected function _prepareMassaction()
     {
-        $this->setMassactionIdField('entity_type_id');
-        $this->getMassactionBlock()->setFormFieldName('entity_type_ids');
+        $this->setMassactionIdField('entity_id');
+        $this->getMassactionBlock()->setFormFieldName('entity_ids');
         $this->getMassactionBlock()->addItem('delete', array(
             'label'   => Mage::helper('goodahead_etm')->__('Delete'),
             'url'     => $this->getUrl('*/*/massDelete'),
@@ -137,7 +124,7 @@ class Goodahead_Etm_Block_Adminhtml_Entity_Grid extends Mage_Adminhtml_Block_Wid
     public function getRowUrl($template)
     {
         return $this->getUrl('*/*/edit', array(
-            'entity_type_id' => $template->getId(),
+            'entity_id' => $template->getId(),
         ));
     }
 
