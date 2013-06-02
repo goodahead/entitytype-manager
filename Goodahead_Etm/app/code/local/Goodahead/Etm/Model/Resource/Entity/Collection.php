@@ -18,7 +18,7 @@ class Goodahead_Etm_Model_Resource_Entity_Collection extends Mage_Eav_Model_Enti
     }
 
     /**
-     * @return null
+     * @return Goodahead_Etm_Model_Entity_Type
      */
     public function getEntityType()
     {
@@ -26,7 +26,7 @@ class Goodahead_Etm_Model_Resource_Entity_Collection extends Mage_Eav_Model_Enti
     }
 
     /**
-     * @param null $storeId
+     * @param Goodahead_Etm_Model_Entity_Type $storeId
      */
     public function setStoreId($storeId)
     {
@@ -55,6 +55,22 @@ class Goodahead_Etm_Model_Resource_Entity_Collection extends Mage_Eav_Model_Enti
         return $this;
     }
 
+    /**
+     * @param string $valueField
+     * @param string $labelField
+     * @param array $additional
+     * @return array
+     */
+    protected function _toOptionArray($valueField = 'entity_id', $labelField = 'name', $additional = array())
+    {
+        $defaultAttributeId = $this->getEntityType()->getDefaultAttributeId();
+        /** @var Goodahead_Etm_Model_Attribute $defaultAttribute */
+        $defaultAttribute = Mage::getModel('goodahead_etm/attribute')->load($defaultAttributeId);
+
+        $this->addAttributeToSelect($defaultAttribute->getAttributeCode());
+
+        return parent::_toOptionArray($valueField, $defaultAttribute->getAttributeCode(), $additional);
+    }
 
     public function _loadAttributes($printQuery = false, $logQuery = false)
     {
@@ -172,7 +188,4 @@ class Goodahead_Etm_Model_Resource_Entity_Collection extends Mage_Eav_Model_Enti
         }
 
         return $this;
-    }
-
-
-}
+    }}
