@@ -52,7 +52,7 @@ class Goodahead_Etm_Helper_Data extends Mage_Core_Helper_Abstract
             $this->_visibleAttributes = array();
 
             foreach($collection as $attribute) {
-                $this->_visibleAttributes[$attribute->getAttributeCode()] = $attribute->getAttributeName();
+                $this->_visibleAttributes[$attribute->getAttributeCode()] = $attribute;
             }
         }
 
@@ -63,6 +63,7 @@ class Goodahead_Etm_Helper_Data extends Mage_Core_Helper_Abstract
     {
         $collection = Mage::getResourceModel('goodahead_etm/attribute_collection');
         $collection->setEntityType($entityType);
+        $collection->addFieldToFilter('is_visible', 1);
         return $collection;
     }
 }

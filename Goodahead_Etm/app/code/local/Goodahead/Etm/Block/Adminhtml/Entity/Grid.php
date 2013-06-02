@@ -47,12 +47,26 @@ class Goodahead_Etm_Block_Adminhtml_Entity_Grid extends Mage_Adminhtml_Block_Wid
 
         $entityType = Mage::registry('etm_entity_type');
         $visibleAttr = $this->_getEtmHelper()->getVisibleAttributes($entityType->getId());
-        foreach($visibleAttr as $attributeCode => $attrTitle) {
-            $this->addColumn($attributeCode, array(
-                'header'            => Mage::helper('goodahead_etm')->__($attrTitle),
+        foreach($visibleAttr as $attributeCode => $attribute) {
+            $attributeParams = array(
+                'header'            => Mage::helper('goodahead_etm')->__($attribute->getAttributeName()),
                 'index'             => $attributeCode,
-                'type'              => 'text'
+                'type'              => $attribute->getBackendType(),
+            );
+            if  ($attribute->getBackendType() == 'int' && $attribute->getFrontendInput() == 'boolean') {
+                $attributeParams['type'] = 'options';
+                $attributeParams['width'] = '80px';
+                $attributeParams['options'] = array(
+                    '1' => Mage::helper('goodahead_etm')->__('Yes'),
+                    '0' => Mage::helper('goodahead_etm')->__('No')
+                );
+            }
+            $transport = new Varien_Object($attributeParams);
+            Mage::dispatchEvent('goodahead_etm_entity_grid_prepare_column', array(
+                'attribute' => $attribute,
+                'column_params' => $transport,
             ));
+            $this->addColumn($attributeCode, $transport->getData());
         }
 
 

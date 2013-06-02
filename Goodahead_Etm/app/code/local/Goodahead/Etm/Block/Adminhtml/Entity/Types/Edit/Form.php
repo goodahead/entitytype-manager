@@ -57,7 +57,7 @@ class Goodahead_Etm_Block_Adminhtml_Entity_Types_Edit_Form extends Mage_Adminhtm
             'required'  => false,
         ));
 
-        if ($entityType && $entityType->getId()) {
+        if ($entityType->getId()) {
             $form->addField('entity_type_id', 'hidden', array(
                 'name' => 'entity_type_id',
             ));
@@ -70,7 +70,7 @@ class Goodahead_Etm_Block_Adminhtml_Entity_Types_Edit_Form extends Mage_Adminhtm
                 'required'  => false,
                 'values'    => $entityTypeAttributes,
                 'note'      => Mage::helper('goodahead_etm')->__("This attribute is used to display entity label"),
-            ));
+            ), 'entity_type_name');
 
             $form->getElement('entity_type_code')->setReadonly('readonly');
             $form->getElement('entity_type_code')->setDisabled(1);

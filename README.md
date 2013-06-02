@@ -34,10 +34,10 @@ Tasks (must have)
 3. <del>Create corresponding models to work with custom attributes</del>
 
 ###### Entities manager
-1. Create entity grid with CRUD functionality
-2. Create entity Add/Edit form
+1. <del>Create entity grid with CRUD functionality</del>
+2. <del>Create entity Add/Edit form</del>
 3. Add WYSIWYG editor support for attributes of type text
-4. Create corresponding models to work with entity
+4. <del>Create corresponding models to work with entity</del>
 5. Add multi store view support for entity type data to allow translations
 
 ###### Custom admin menu
@@ -51,11 +51,11 @@ This will set up source model and frontend renderer for this attribute.<del>
 link to entity type landing page.
 
 ###### Entity type frontend landing pages
-1. Landing page HTML should be rendered using email template approach when customer can define variable placeholders.
+1. <del>Landing page HTML should be rendered using email template approach when customer can define variable placeholders.</del>
 
 Tasks (nice to have)
 --------------------
 
 1. Media gallery support for attributes
-2. Add mass actions to grid for delete operations
+2. <del>Add mass actions to grid for delete operations</del>
 3. UrlRewrites for frontend SEO url for entities (this include URL model)
