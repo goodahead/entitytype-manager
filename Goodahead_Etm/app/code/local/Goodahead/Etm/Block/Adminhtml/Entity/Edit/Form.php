@@ -22,7 +22,7 @@ class Goodahead_Etm_Block_Adminhtml_Entity_Edit_Form extends Mage_Adminhtml_Bloc
         $attributes = Mage::helper('goodahead_etm')->getVisibleAttributesCollection($entityType);
         foreach ($attributes as $attribute) {
             /* @var $attribute Mage_Eav_Model_Entity_Attribute */
-            $attribute->setFrontendLabel(Mage::helper('goodahead_etm')->__($attribute->getFrontend()->getLabel()));
+            $attribute->setFrontendLabel(Mage::helper('goodahead_etm')->__($attribute->getAttributeName()));
             $attribute->unsIsVisible();
         }
 
