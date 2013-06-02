@@ -66,7 +66,7 @@ class Goodahead_Etm_Block_Adminhtml_Entity_Grid extends Mage_Adminhtml_Block_Wid
                     array(
                         'caption' => Mage::helper('goodahead_etm')->__('Edit'),
                         'url'     => array(
-                            'base' => '*/*/edit',
+                            'base' => '*/*/edit/entity_type_id/' . $entityType->getId(),
                         ),
                         'field'   => 'entity_id',
                     ),
@@ -100,10 +100,11 @@ class Goodahead_Etm_Block_Adminhtml_Entity_Grid extends Mage_Adminhtml_Block_Wid
         return $this;
     }
 
-    public function getRowUrl($template)
+    public function getRowUrl($row)
     {
         return $this->getUrl('*/*/edit', array(
-            'entity_id' => $template->getId(),
+            'entity_id' => $row->getId(),
+            'entity_type_id' => $row->getEntityTypeId(),
         ));
     }
 
