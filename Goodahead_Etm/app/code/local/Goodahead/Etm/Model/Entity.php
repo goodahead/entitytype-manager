@@ -90,6 +90,6 @@ class Goodahead_Etm_Model_Entity extends Mage_Core_Model_Abstract
         if (!$defaultAttribute->getId()) {
             return $this->getId();
         }
-        return $defaultAttribute->getAttributeName();
+        return $this->getData($defaultAttribute->getAttributeCode());
     }
 }
