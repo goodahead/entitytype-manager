@@ -17,7 +17,6 @@ class Goodahead_Etm_IndexController extends Mage_Core_Controller_Front_Action
                 $this->getLayout()->helper('page/layout')->applyHandle($entityType->getEntityTypeRootTemplate());
             }
 
-
             $this->loadLayoutUpdates();
             $layoutUpdate = $entityType->getEntityTypeLayoutXml();
             $this->getLayout()->getUpdate()->addUpdate($layoutUpdate);
@@ -27,6 +26,7 @@ class Goodahead_Etm_IndexController extends Mage_Core_Controller_Front_Action
                 $this->getLayout()->helper('page/layout')
                     ->applyTemplate($entityType->getEntityTypeRootTemplate());
             }
+
             $this->renderLayout();
         } else {
             $this->_forward('no_route');

@@ -1,23 +1,17 @@
 <?php
 class Goodahead_Etm_Block_Etm extends Mage_Core_Block_Template
 {
-    protected $_entityTypeObject = null;
-
-    protected $_entityTypeCode = null;
-
-    public function getEntityTypeObject()
+    public function _toHtml()
     {
-        if ($this->_entityTypeObject === null) {
-            if ($this->_entityTypeCode !== null) {
-                $this->_entityTypeObject = Mage::getModel('goodahead_etm/entity_type')
-                    ->load($this->_entityTypeCode, 'entity_type_code');
-            }
-        }
-        return $this->_entityTypeObject;
-    }
+        /*
+         * @var $entity Goodahead_Etm_Model_Entity
+         * @var $textProcessor Mage_Core_Model_Email_Template
+         */
+        $entity = Mage::registry('goodahead_etm_entity');
+        $content = $entity->getEntityTypeInstance()->getEntityTypeContent();
 
-    public function setEntityTypeCode($entityTypeCode)
-    {
-        $this->_entityTypeCode = $entityTypeCode;
+        $textProcessor = Mage::getModel('core/email_template');
+        $textProcessor->setTemplateText($content);
+        return nl2br($textProcessor->getProcessedTemplate($entity->getData(), true));
     }
 }
