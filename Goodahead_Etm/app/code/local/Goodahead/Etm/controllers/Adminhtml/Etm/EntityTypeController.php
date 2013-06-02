@@ -91,7 +91,12 @@ class Goodahead_Etm_Adminhtml_Etm_EntityTypeController extends Goodahead_Etm_Con
     public function editAction()
     {
         $this->_initAction($this->__('Create Entity Type'));
-        $this->_initEntityType();
+        try {
+            $this->_initEntityType();
+        } catch (Goodahead_Etm_Exception $e) {
+            $this->_getSession()->addError($e->getMessage());
+            $this->_redirect('*/*/');
+        }
 
         // set entered data if was error when we do save
         $data = Mage::getSingleton('adminhtml/session')->getEntityTypeData(true);

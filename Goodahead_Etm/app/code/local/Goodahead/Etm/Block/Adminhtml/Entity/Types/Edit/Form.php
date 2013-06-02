@@ -57,7 +57,7 @@ class Goodahead_Etm_Block_Adminhtml_Entity_Types_Edit_Form extends Mage_Adminhtm
             'required'  => false,
         ));
 
-        if ($entityType->getId()) {
+        if ($entityType && $entityType->getId()) {
             $form->addField('entity_type_id', 'hidden', array(
                 'name' => 'entity_type_id',
             ));

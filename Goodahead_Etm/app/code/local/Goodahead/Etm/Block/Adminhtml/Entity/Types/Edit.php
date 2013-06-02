@@ -43,7 +43,7 @@ class Goodahead_Etm_Block_Adminhtml_Entity_Types_Edit extends Mage_Adminhtml_Blo
     {
         /** @var Goodahead_Etm_Model_Entity_Type $entityType */
         $entityType = Mage::registry('etm_entity_type');
-        if ($entityType->getId()) {
+        if ($entityType && $entityType->getId()) {
             return Mage::helper('goodahead_etm')->__("Edit Entity Type '%s'",
                  $this->escapeHtml($entityType->getEntityTypeName())
             );
