@@ -121,4 +121,13 @@ class Goodahead_Etm_Model_Observer {
             }
         }
     }
+
+    public function addHandlerToCatalogOutputHelper($observer)
+    {
+        /** @var Mage_Catalog_Helper_Output $outputHelper */
+        $outputHelper = $observer->getEvent()->getHelper();
+        $outputHandlerBlock
+            = Mage::app()->getLayout()->createBlock('goodahead_etm/product_attribute_output_handler');
+        $outputHelper->addHandler('productAttribute', $outputHandlerBlock);
+    }
 }

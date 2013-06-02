@@ -113,6 +113,14 @@
                     </goodahead_etm_assign_entity_type>
                 </observers>
             </catalog_entity_attribute_save_after>
+            <catalog_helper_output_construct>
+                <observers>
+                    <add_handler_to_catalog_output_helper>
+                        <class>goodahead_etm/observer</class>
+                        <method>addHandlerToCatalogOutputHelper</method>
+                    </add_handler_to_catalog_output_helper>
+                </observers>
+            </catalog_helper_output_construct>
         </events>
     </adminhtml>
     <frontend>
@@ -132,6 +140,16 @@
                 </goodahead_etm>
             </updates>
         </layout>
+        <events>
+            <catalog_helper_output_construct>
+                <observers>
+                    <add_handler_to_catalog_output_helper>
+                        <class>goodahead_etm/observer</class>
+                        <method>addHandlerToCatalogOutputHelper</method>
+                    </add_handler_to_catalog_output_helper>
+                </observers>
+            </catalog_helper_output_construct>
+        </events>
     </frontend>
     <phpunit>
         <suite>
