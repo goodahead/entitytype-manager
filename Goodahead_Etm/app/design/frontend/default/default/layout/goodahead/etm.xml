@@ -1,11 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
-    <etm_index_display>
-        <reference name="root">
-            <action method="setTemplate"><template>page/1column.phtml</template></action>
-        </reference>
+    <goodahead_etm_entity>
         <reference name="content">
-            <block type="goodahead_etm/etm" template="goodahead/etm/default.phtml" name="etm"/>
+            <block type="goodahead_etm/etm" name="etm"/>
         </reference>
-    </etm_index_display>
+    </goodahead_etm_entity>
 </layout>

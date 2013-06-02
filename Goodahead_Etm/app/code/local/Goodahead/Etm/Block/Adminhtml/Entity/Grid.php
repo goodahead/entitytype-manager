@@ -32,9 +32,6 @@ class Goodahead_Etm_Block_Adminhtml_Entity_Grid extends Mage_Adminhtml_Block_Wid
 
     protected function _prepareColumns()
     {
-
-        //$this->getVisibleAttributes()
-
         $this->addColumn('entity_id', array(
             'header'            => Mage::helper('goodahead_etm')->__('Entity ID'),
             'width'             => '100',
