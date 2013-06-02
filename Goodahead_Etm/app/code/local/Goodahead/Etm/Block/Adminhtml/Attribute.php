@@ -23,7 +23,9 @@ class Goodahead_Etm_Block_Adminhtml_Attribute extends Mage_Adminhtml_Block_Widge
     {
         $this->_blockGroup = 'goodahead_etm';
         $this->_controller = 'adminhtml_attribute';
-        $this->_headerText = Mage::helper('goodahead_etm')->__('Manage Attributes');
+
+        $typeName = $this->_getEntityTypeFromRegistry()->getEntityTypeName();
+        $this->_headerText = Mage::helper('goodahead_etm')->__('Manage %s Attributes', $typeName);
 
         $this->_backButtonLabel = Mage::helper('goodahead_etm')->__('Back to Entity Types List');
         $this->_addBackButton();

@@ -9,7 +9,7 @@ class Goodahead_Etm_Block_Adminhtml_Entity extends Mage_Adminhtml_Block_Widget_G
         $entityType = Mage::registry('etm_entity_type');
 
         $this->_headerText = Mage::helper('goodahead_etm')->__(
-            'Manage "%s"', $entityType->getEntityTypeName()
+            'Manage %s entities', $entityType->getEntityTypeName()
         );
 
         $this->_backButtonLabel = Mage::helper('goodahead_etm')->__('Back to Entity Types List');
