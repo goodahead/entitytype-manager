@@ -27,6 +27,7 @@
     </adminhtml_etm_entity_grid>
     <adminhtml_etm_entity_edit>
         <reference name="content">
+            <block type="adminhtml/store_switcher" name="store_switcher" before="-"></block>
             <block type="goodahead_etm/adminhtml_entity_edit" name="etm.entity.form_container" />
         </reference>
     </adminhtml_etm_entity_edit>
