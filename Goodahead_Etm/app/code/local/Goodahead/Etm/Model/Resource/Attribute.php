@@ -17,6 +17,29 @@ class Goodahead_Etm_Model_Resource_Attribute extends Mage_Eav_Model_Resource_Ent
         return $select;
     }
 
+    /**
+     * @param Goodahead_Etm_Model_Attribute|Mage_Core_Model_Abstract $object
+     * @return Mage_Eav_Model_Resource_Entity_Attribute
+     */
+    protected function _beforeSave(Mage_Core_Model_Abstract $object)
+    {
+        if ($object->isObjectNew()) {
+            /* @var $helper Mage_Catalog_Helper_Product */
+            $helper = Mage::helper('catalog/product');
+
+            $object->setIsUserDefined(1);
+            $object->setSourceModel($helper->getAttributeSourceModelByInputType($object->getFrontendInput()));
+            $object->setBackendModel($helper->getAttributeBackendModelByInputType($object->getFrontendInput()));
+            $object->setBackendType($object->getBackendTypeByInput($object->getFrontendInput()));
+        }
+
+        return parent::_beforeSave($object);
+    }
+
+    /**
+     * @param Goodahead_Etm_Model_Attribute|Mage_Core_Model_Abstract $object
+     * @return Mage_Eav_Model_Resource_Entity_Attribute|void
+     */
     protected function _afterSave(Mage_Core_Model_Abstract $object)
     {
         parent::_afterSave($object);
