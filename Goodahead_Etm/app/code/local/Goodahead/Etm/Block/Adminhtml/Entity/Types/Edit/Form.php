@@ -47,16 +47,14 @@ class Goodahead_Etm_Block_Adminhtml_Entity_Types_Edit_Form extends Mage_Adminhtm
             'label'     => Mage::helper('goodahead_etm')->__("Layout XML"),
             'name'      => 'entity_type_layout_xml',
             'style'     => 'height:7em',
-            'class'     => 'required-entry',
-            'required'  => true,
+            'required'  => false,
         ));
 
         $fieldSet->addField('entity_type_content', 'textarea', array(
             'label'     => Mage::helper('goodahead_etm')->__("Content"),
             'name'      => 'entity_type_content',
             'style'     => 'height:24em',
-            'class'     => 'required-entry',
-            'required'  => true,
+            'required'  => false,
         ));
 
         if ($entityType->getId()) {
