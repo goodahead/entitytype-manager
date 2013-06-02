@@ -51,6 +51,10 @@ class Goodahead_Etm_Block_Adminhtml_Entity_Edit_Form extends Mage_Adminhtml_Bloc
                 'value' => $entityType->getId(),
             ));
         }
+        $form->addField('store_id', 'hidden', array(
+            'name'  => 'store_id',
+            'value' => $this->getRequest()->getParam('store'),
+        ));
 
         $this->setForm($form);
         return parent::_prepareForm();

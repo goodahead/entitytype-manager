@@ -79,13 +79,12 @@ class Goodahead_Etm_Adminhtml_Etm_EntityController extends Goodahead_Etm_Control
     {
         $this->_initAction($this->__('Create Entity'));
         $this->_initEntityType();
-        $this->_initEntity();
-        $entity = Mage::registry('etm_entity');
+
+        $storeId = $this->getRequest()->getParam('store', 0);
+        $entity = $this->_initEntity($storeId);
         if (!$entity->getId()) {
             $this->getLayout()->getBlock('content')->unsetChild('store_switcher');
         }
-        $storeId = $this->getRequest()->getParam('store', 0);
-        $entity->setStoreId($storeId);
 
         // set entered data if was error when we do save
         $data = $this->_getSession()->getFormData();
@@ -116,9 +115,11 @@ class Goodahead_Etm_Adminhtml_Etm_EntityController extends Goodahead_Etm_Control
         }
         if ($data) {
             $this->_initEntityType();
-            $this->_initEntity();
-            /** @var $entity Goodahead_Etm_Model_Entity */
-            $entity = Mage::registry('etm_entity');
+            $storeId = $this->getRequest()->getParam('store_id', 0);
+            $entity = $this->_initEntity($storeId);
+            if (!$entity->getId()) {
+                $this->getLayout()->getBlock('content')->unsetChild('store_switcher');
+            }
 
             $entity->addData($data);
 

@@ -88,6 +88,8 @@ class Goodahead_Etm_Model_Entity extends Mage_Core_Model_Abstract
     public function setStoreId($storeId)
     {
         $this->_storeId = $storeId;
+
+        return $this;
     }
 
     /**
