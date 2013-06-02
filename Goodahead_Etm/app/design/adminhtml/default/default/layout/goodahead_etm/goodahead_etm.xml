@@ -19,6 +19,7 @@
     </adminhtml_etm_attribute_edit>
     <adminhtml_etm_entity_index>
         <reference name="content">
+            <block type="adminhtml/store_switcher" name="store_switcher" before="-"></block>
             <block type="goodahead_etm/adminhtml_entity" name="etm.entity.grid_container" />
         </reference>
     </adminhtml_etm_entity_index>
