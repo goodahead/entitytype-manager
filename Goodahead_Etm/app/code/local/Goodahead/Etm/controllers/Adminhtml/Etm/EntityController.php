@@ -19,6 +19,45 @@ class Goodahead_Etm_Adminhtml_Etm_EntityController extends Goodahead_Etm_Control
         }
     }
 
+    /* Deletes single entity */
+    public function deleteAction()
+    {
+        $entity = Mage::getModel('goodahead_etm/entity')->load($this->getRequest()->getParam('entity_id', null));
+
+        if ($entity && $entity->getId()) {
+            try {
+                $entity->delete();
+                $this->_getSession()->addSuccess($this->getEtmHelper()->__('Entity successfully deleted'));
+            } catch (Exception $e) {
+                $this->_getSession()->addError($e->getMessage());
+            }
+        }
+
+        $this->_redirectReferer();
+    }
+
+    public function massDeleteAction()
+    {
+        $etmEntitys = $this->getRequest()->getParam('entity_ids');
+        if (!is_array($etmEntitys)) {
+            $this->_getSession()->addError($this->__('Please select entity(s).'));
+        } else {
+            if (!empty($etmEntitys)) {
+                try {
+                    foreach ($etmEntitys as $entityId) {
+                        Mage::getModel('goodahead_etm/entity')->setId($entityId)->delete();
+                    }
+                    $this->_getSession()->addSuccess(
+                        $this->__('Total of %d record(s) have been deleted.', count($etmEntitys))
+                    );
+                } catch (Exception $e) {
+                    $this->_getSession()->addError($e->getMessage());
+                }
+            }
+        }
+        $this->_redirectReferer();
+    }
+
     /**
      * ACL check
      *
