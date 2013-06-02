@@ -123,8 +123,14 @@ class Goodahead_Etm_Adminhtml_Etm_EntityTypeController extends Goodahead_Etm_Con
                 $entityTypeModel->load($entityTypeId);
                 $code = $this->getRequest()->getPost('entity_type_code', null);
                 $name = $this->getRequest()->getPost('entity_type_name', null);
+                $rootTemplate = $this->getRequest()->getPost('entity_type_root_template', null);
+                $layoutXml = $this->getRequest()->getPost('entity_type_layout_xml', null);
+                $content = $this->getRequest()->getPost('entity_type_content', null);
                 if ($entityTypeModel->getId()) {
                     $entityTypeModel->setEntityTypeName($name);
+                    $entityTypeModel->setEntityTypeRootTemplate($rootTemplate);
+                    $entityTypeModel->setEntityTypeLayoutXml($layoutXml);
+                    $entityTypeModel->setEntityTypeContent($content);
                     $entityTypeModel->save();
                 } else {
                     $data = array(
@@ -135,6 +141,9 @@ class Goodahead_Etm_Adminhtml_Etm_EntityTypeController extends Goodahead_Etm_Con
                         'increment_pad_length' => 8,
                         'increment_pad_char'   => 0,
                         'entity_type_name'     => $name,
+                        'entity_type_root_template' => $rootTemplate,
+                        'entity_type_layout_xml'    => $layoutXml,
+                        'entity_type_content'     => $content,
                     );
                     $entityTypeModel = Mage::getModel('goodahead_etm/entity_type');
                     $entityTypeModel->setData($data);
