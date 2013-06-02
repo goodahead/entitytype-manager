@@ -128,9 +128,16 @@
         <layout>
             <updates>
                 <goodahead_etm>
-                    <file>goodahead_etm/goodahead_etm.xml</file>
+                    <file>goodahead/etm.xml</file>
                 </goodahead_etm>
             </updates>
         </layout>
     </frontend>
+    <phpunit>
+        <suite>
+            <modules>
+                <Goodahead_Etm />
+            </modules>
+        </suite>
+    </phpunit>
 </config>
