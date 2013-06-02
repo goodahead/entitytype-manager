@@ -25,13 +25,13 @@ Tasks (must have)
 3. <del>Create corresponding models to work with custom entity types</del>
 
 ###### Attributes manager
-1. Create entity type attribute manager grid with CRUD functionality
-2. Create attribute Add/Edit form with following fields:
-    * Attribute Code
-    * Attribute Name
-    * Attribute Scope (Global/Website/Store View)
-    * Attribute Type (Same as for Catalog/Product attributes)
-3. Create corresponding models to work with custom attributes
+1. <del>Create entity type attribute manager grid with CRUD functionality</del>
+2. <del>Create attribute Add/Edit form with following fields:</del>
+    * <del>Attribute Code</del>
+    * <del>Attribute Name</del>
+    * <del>Attribute Scope (Global/Website/Store View)</del>
+    * <del>Attribute Type (Same as for Catalog/Product attributes)</del>
+3. <del>Create corresponding models to work with custom attributes</del>
 
 ###### Entities manager
 1. Create entity grid with CRUD functionality
@@ -45,8 +45,8 @@ Tasks (must have)
 2. <del>Hide Attribute manager and Entity manager menu when no custom entity types defined</del>
 
 ###### Catalog Product bindings
-1. When creating attribute with type Select or Multi-select add an option to bind this attribute to existing entity type.
-This will set up source model and frontend renderer for this attribute.
+1. <del>When creating attribute with type Select or Multi-select add an option to bind this attribute to existing entity type.
+This will set up source model and frontend renderer for this attribute.<del>
 2. On frontend have custom renderer for attributes that defined as "Visible on product view page on frontend" to show
 link to entity type landing page.
 
