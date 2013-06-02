@@ -25,6 +25,11 @@
     <adminhtml_etm_entity_grid>
         <block type="goodahead_etm/adminhtml_entity_grid" name="root" />
     </adminhtml_etm_entity_grid>
+    <adminhtml_etm_entity_edit>
+        <reference name="content">
+            <block type="goodahead_etm/adminhtml_entity_edit" name="etm.entity.form_container" />
+        </reference>
+    </adminhtml_etm_entity_edit>
     <adminhtml_etm_entitytype_grid>
         <block type="goodahead_etm/adminhtml_entity_types_grid" name="root" />
     </adminhtml_etm_entitytype_grid>

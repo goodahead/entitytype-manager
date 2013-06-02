@@ -16,4 +16,9 @@ class Goodahead_Etm_Block_Adminhtml_Entity extends Mage_Adminhtml_Block_Widget_G
 
         $this->_updateButton('add', 'label', Mage::helper('goodahead_etm')->__('Add New Entity'));
     }
+
+    public function getCreateUrl()
+    {
+        return $this->getUrl('*/*/new', array('_current' => true));
+    }
 }

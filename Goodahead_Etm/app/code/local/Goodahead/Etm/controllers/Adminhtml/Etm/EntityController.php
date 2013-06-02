@@ -9,6 +9,7 @@ class Goodahead_Etm_Adminhtml_Etm_EntityController extends Goodahead_Etm_Control
     {
         try {
             $this->_initEntityType();
+            $this->_initEntity();
 
             $this->_initAction($this->__('Manage Entities'));
             $this->renderLayout();
@@ -78,5 +79,28 @@ class Goodahead_Etm_Adminhtml_Etm_EntityController extends Goodahead_Etm_Control
                 return Mage::getSingleton('admin/session')->isAllowed('goodahead_etm/manage_entities');
                 break;
         }
+    }
+
+    public function newAction()
+    {
+        $this->_forward('edit');
+    }
+
+    public function editAction()
+    {
+        $this->_initAction($this->__('Create Entity'));
+        $this->_initEntityType();
+        $this->_initEntity();
+
+        // set entered data if was error when we do save
+        $data = Mage::getSingleton('adminhtml/session')->getEntityData(true);
+
+        // restore data from SESSION
+        if ($data) {
+            $request = clone $this->getRequest();
+            $request->setParams($data);
+        }
+
+        $this->renderLayout();
     }
 }
