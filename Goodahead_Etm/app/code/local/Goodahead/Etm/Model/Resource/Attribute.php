@@ -35,7 +35,7 @@ class Goodahead_Etm_Model_Resource_Attribute extends Mage_Eav_Model_Resource_Ent
     {
         /** @var Goodahead_Etm_Model_Resource_Attribute_Collection $collection */
         $collection = Mage::getResourceModel('goodahead_etm/attribute_collection');
-        $collection->addFieldToFilter('attribute_id', $attributeIds);
+        $collection->addFieldToFilter('main_table.attribute_id', $attributeIds);
 
         // we should delete only attributes which belong to our custom entity types
         $attributeIdsToDelete = $collection->getAllIds();
