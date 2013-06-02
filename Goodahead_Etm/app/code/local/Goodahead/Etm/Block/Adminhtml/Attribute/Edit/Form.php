@@ -73,13 +73,6 @@ class Goodahead_Etm_Block_Adminhtml_Attribute_Edit_Form extends Mage_Eav_Block_A
             'value'  => 'text',
             'values' => $inputTypes
         ));
-        $fieldSet->addField('frontend_input_renderer', 'text', array(
-            'name'   => 'frontend_input_renderer',
-            'label'  => Mage::helper('goodahead_etm')->__('Frontend Input Renderer'),
-            'title'  => Mage::helper('goodahead_etm')->__('Frontend Input Renderer'),
-            'value'  => 'text',
-            'values' => $inputTypes
-        ));
 
         //TODO: add default value field
 //        $fieldSet->addField('default_value_text', 'text', array(
