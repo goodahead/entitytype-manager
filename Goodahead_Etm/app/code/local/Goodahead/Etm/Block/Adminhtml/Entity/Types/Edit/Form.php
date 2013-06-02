@@ -2,6 +2,25 @@
 
 class Goodahead_Etm_Block_Adminhtml_Entity_Types_Edit_Form extends Mage_Adminhtml_Block_Widget_Form
 {
+    /**
+     * Prepare layout.
+     * Add files to use dialog windows
+     *
+     * @return Mage_Adminhtml_Block_System_Email_Template_Edit_Form
+     */
+    protected function _prepareLayout()
+    {
+        if ($head = $this->getLayout()->getBlock('head')) {
+            $head->addItem('js', 'prototype/window.js')
+                ->addItem('js_css', 'prototype/windows/themes/default.css')
+                ->addCss('lib/prototype/windows/themes/magento.css')
+                ->addItem('js', 'mage/adminhtml/variables.js');
+        }
+        return parent::_prepareLayout();
+    }
+
+
+
     protected function _prepareForm()
     {
         $form = new Varien_Data_Form(array(
@@ -50,6 +69,23 @@ class Goodahead_Etm_Block_Adminhtml_Entity_Types_Edit_Form extends Mage_Adminhtm
             'required'  => false,
         ));
 
+
+
+        $fieldSet->addField('variables', 'hidden', array(
+            'name' => 'variables',
+        ));
+
+        $insertVariableButton = $this->getLayout()
+            ->createBlock('adminhtml/widget_button', '', array(
+                'type' => 'button',
+                'label' => Mage::helper('adminhtml')->__('Insert Variable...'),
+                'onclick' => 'openVariablesWindow();return false;'
+            ));
+
+        $fieldSet->addField('insert_variable', 'note', array(
+            'text' => $insertVariableButton->toHtml()
+        ));
+
         $fieldSet->addField('entity_type_content', 'textarea', array(
             'label'     => Mage::helper('goodahead_etm')->__("Content"),
             'name'      => 'entity_type_content',
@@ -75,9 +111,28 @@ class Goodahead_Etm_Block_Adminhtml_Entity_Types_Edit_Form extends Mage_Adminhtm
             $form->getElement('entity_type_code')->setReadonly('readonly');
             $form->getElement('entity_type_code')->setDisabled(1);
             $form->setValues($entityType->getData());
+            $form->getElement('variables')->setValue(Zend_Json::encode($this->getVariables()));
         }
 
         $this->setForm($form);
         return parent::_prepareForm();
+    }
+
+    /**
+     * Retrieve variables to insert into content
+     *
+     * @return array
+     */
+    public function getVariables()
+    {
+        $variables = array();
+
+        $visibleAttributes = Mage::helper('goodahead_etm')->
+
+        $variables[] = Mage::getModel('core/source_email_variables')
+            ->toOptionArray(true);
+
+
+        return $variables;
     }
 }
