@@ -56,31 +56,10 @@ class Goodahead_Etm_Block_Adminhtml_Entity_Grid extends Mage_Adminhtml_Block_Wid
         }
 
 
-
-        $this->addColumn('action', array(
-            'header'            => Mage::helper('goodahead_etm')->__('Action'),
-            'width'             => '100',
-            'type'              => 'action',
-            'getter'            => 'getId',
-            'actions'           => array(
-                array(
-                    'caption' => Mage::helper('goodahead_etm')->__('Delete'),
-                    'url'     => array(
-                        'base' => '*/*/delete',
-                    ),
-                    'field'   => 'entity_id',
-                    'confirm' => Mage::helper('goodahead_etm')->__('Are you sure?')
-                )
-            ),
-            'filter'            => false,
-            'sortable'          => false,
-            'index'             => 'entity_id',
-        ));
-
         $this->addColumn('action',
             array(
                 'header'    => Mage::helper('goodahead_etm')->__('Actions'),
-                'width'     => '200px',
+                'width'     => '50px',
                 'type'      => 'action',
                 'getter'    => 'getId',
                 'actions'   => array(
