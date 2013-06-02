@@ -63,7 +63,6 @@ class Goodahead_Etm_Helper_Data extends Mage_Core_Helper_Abstract
     {
         $collection = Mage::getResourceModel('goodahead_etm/attribute_collection');
         $collection->setEntityType($entityType);
-        $collection->addFieldToFilter('is_visible', 1);
         return $collection;
     }
 }
