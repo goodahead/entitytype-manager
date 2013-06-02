@@ -45,7 +45,7 @@ class Goodahead_Etm_Adminhtml_Etm_EntityController extends Goodahead_Etm_Control
             if (!empty($etmEntitys)) {
                 try {
                     foreach ($etmEntitys as $entityId) {
-                        Mage::getModel('goodahead_etm/entity')->setId($entityId)->delete();
+                        Mage::getModel('goodahead_etm/entity')->load($entityId)->delete();
                     }
                     $this->_getSession()->addSuccess(
                         $this->__('Total of %d record(s) have been deleted.', count($etmEntitys))
