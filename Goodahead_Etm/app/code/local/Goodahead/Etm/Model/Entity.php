@@ -50,15 +50,19 @@ class Goodahead_Etm_Model_Entity extends Mage_Core_Model_Abstract
 
     protected function _getEntityTypeId($id, $field = null)
     {
-        $resource = Mage::getSingleton('core/resource');
-        /** @var $connection Varien_Db_Adapter_Interface */
-        $connection = $resource->getConnection('core_read');
-        $select = $connection->select();
-        $select->from($resource->getTableName('goodahead_etm/entity'));
-        $field = $field ? $field : 'entity_id';
-        $select->where($field . ' = ?', $id);
-        $stmt = $select->query();
-        $data = $stmt->fetch();
-        return isset($data['entity_type_id']) ? (int)$data['entity_type_id'] : null;
+        if ($id !== null) {
+            $resource = Mage::getSingleton('core/resource');
+            /** @var $connection Varien_Db_Adapter_Interface */
+            $connection = $resource->getConnection('core_read');
+            $select = $connection->select();
+            $select->from($resource->getTableName('goodahead_etm/entity'));
+            $field = $field ? $field : 'entity_id';
+            $select->where($field . ' = ?', $id);
+            $stmt = $select->query();
+            $data = $stmt->fetch();
+            return isset($data['entity_type_id']) ? (int)$data['entity_type_id'] : null;
+        } else {
+            return $this->getEntityTypeId();
+        }
     }
 }

@@ -20,6 +20,25 @@ class Goodahead_Etm_Controller_Adminhtml extends Mage_Adminhtml_Controller_Actio
     }
 
     /**
+     * Init entity object based on passed entity_id parameter
+     *
+     * @throws Goodahead_Etm_Exception
+     * @return $this
+     */
+    protected function _initEntity()
+    {
+        $entityId = $this->getRequest()->getParam('entity_id', null);
+        $entity = Mage::getModel('goodahead_etm/entity')
+            ->setEntityTypeId(Mage::registry('etm_entity_type')->getId())
+            ->load($entityId);
+        if ($entity->getId() || $entityId === null) {
+            Mage::register('etm_entity', $entity);
+            return $this;
+        }
+        throw new Goodahead_Etm_Exception(Mage::helper('goodahead_etm')->__('Entity not found'));
+    }
+
+    /**
      * Init action
      *
      * @param string $title
