@@ -68,8 +68,6 @@ $table = $installer->getConnection()
         ), 'Attribute ID')
     ->addColumn('attribute_name', Varien_Db_Ddl_Table::TYPE_TEXT, 255, array(
         ), 'Attribute Name')
-    ->addColumn('frontend_input_renderer', Varien_Db_Ddl_Table::TYPE_TEXT, 255, array(
-        ), 'Frontend Input Renderer')
     ->addColumn('is_global', Varien_Db_Ddl_Table::TYPE_SMALLINT, null, array(
         'unsigned'  => true,
         'nullable'  => false,

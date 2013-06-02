@@ -17,6 +17,29 @@ class Goodahead_Etm_Model_Resource_Attribute extends Mage_Eav_Model_Resource_Ent
         return $select;
     }
 
+    /**
+     * @param Goodahead_Etm_Model_Attribute|Mage_Core_Model_Abstract $object
+     * @return Mage_Eav_Model_Resource_Entity_Attribute
+     */
+    protected function _beforeSave(Mage_Core_Model_Abstract $object)
+    {
+        if ($object->isObjectNew()) {
+            /* @var $helper Mage_Catalog_Helper_Product */
+            $helper = Mage::helper('catalog/product');
+
+            $object->setIsUserDefined(1);
+            $object->setSourceModel($helper->getAttributeSourceModelByInputType($object->getFrontendInput()));
+            $object->setBackendModel($helper->getAttributeBackendModelByInputType($object->getFrontendInput()));
+            $object->setBackendType($object->getBackendTypeByInput($object->getFrontendInput()));
+        }
+
+        return parent::_beforeSave($object);
+    }
+
+    /**
+     * @param Goodahead_Etm_Model_Attribute|Mage_Core_Model_Abstract $object
+     * @return Mage_Eav_Model_Resource_Entity_Attribute|void
+     */
     protected function _afterSave(Mage_Core_Model_Abstract $object)
     {
         parent::_afterSave($object);
@@ -35,7 +58,7 @@ class Goodahead_Etm_Model_Resource_Attribute extends Mage_Eav_Model_Resource_Ent
     {
         /** @var Goodahead_Etm_Model_Resource_Attribute_Collection $collection */
         $collection = Mage::getResourceModel('goodahead_etm/attribute_collection');
-        $collection->addFieldToFilter('attribute_id', $attributeIds);
+        $collection->addFieldToFilter('main_table.attribute_id', $attributeIds);
 
         // we should delete only attributes which belong to our custom entity types
         $attributeIdsToDelete = $collection->getAllIds();

@@ -9,7 +9,6 @@ class Goodahead_Etm_Adminhtml_Etm_EntityController extends Goodahead_Etm_Control
     {
         try {
             $this->_initEntityType();
-            $this->_initEntity();
 
             $this->_initAction($this->__('Manage Entities'));
             $this->renderLayout();
@@ -83,7 +82,7 @@ class Goodahead_Etm_Adminhtml_Etm_EntityController extends Goodahead_Etm_Control
         $this->_initEntity();
 
         // set entered data if was error when we do save
-        $data = Mage::getSingleton('adminhtml/session')->getEntityData(true);
+        $data = $this->_getSession()->getFormData();
 
         // restore data from SESSION
         if ($data) {
@@ -92,6 +91,69 @@ class Goodahead_Etm_Adminhtml_Etm_EntityController extends Goodahead_Etm_Control
         }
 
         $this->renderLayout();
+    }
+
+    /**
+     * Save action
+     */
+    public function saveAction()
+    {
+        $redirectPath   = '*/*';
+        $redirectParams = array();
+
+        // check if data sent
+        $data         = $this->getRequest()->getPost();
+        $entityTypeId = $this->getRequest()->getParam('entity_type_id');
+        if (!empty($entityTypeId)) {
+            $redirectParams = array('entity_type_id' => $entityTypeId);
+            $data['entity_type_id'] = $entityTypeId;
+        }
+        if ($data) {
+            $this->_initEntityType();
+            $this->_initEntity();
+            /** @var $entity Goodahead_Etm_Model_Entity */
+            $entity = Mage::registry('etm_entity');
+
+            $entity->addData($data);
+
+            try {
+                $hasError = false;
+
+                $entity->save();
+                $this->_getSession()->addSuccess(
+                    Mage::helper('goodahead_etm')->__('Entity has been saved.')
+                );
+
+                // check if 'Save and Continue'
+                if ($this->getRequest()->getParam('back')) {
+                    $redirectPath   = '*/*/edit';
+                    $redirectParams['entity_id'] = $entity->getId();
+                }
+            } catch (Goodahead_Etm_Exception $e) {
+                $hasError = true;
+                $this->_getSession()->addException($e,
+                    Mage::helper('goodahead_etm')->__('You are not allowed to edit non-custom entity')
+                );
+            } catch (Mage_Core_Exception $e) {
+                $hasError = true;
+                $this->_getSession()->addError($e->getMessage());
+            } catch (Exception $e) {
+                $hasError = true;
+                $this->_getSession()->addException($e,
+                    Mage::helper('goodahead_etm')->__('An error occurred while saving entity.')
+                );
+            }
+
+            if ($hasError) {
+                $this->_getSession()->setFormData($data);
+                $redirectPath = '*/*/edit';
+                if ($entity->getId()) {
+                    $redirectParams['entity_id'] = $entity->getId();
+                }
+            }
+        }
+
+        $this->_redirect($redirectPath, $redirectParams);
     }
 
     /**

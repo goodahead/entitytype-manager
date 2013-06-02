@@ -12,7 +12,12 @@ class Goodahead_Etm_Block_Adminhtml_Entity extends Mage_Adminhtml_Block_Widget_G
             'Manage "%s"', $entityType->getEntityTypeName()
         );
 
+        $this->_backButtonLabel = Mage::helper('goodahead_etm')->__('Back to Entity Types List');
+        $this->_addBackButton();
+
         parent::__construct();
+
+        $this->_updateButton('back', 'onclick', 'setLocation(\'' . $this->getUrl('*/etm_entityType') . '\')');
 
         $this->_updateButton('add', 'label', Mage::helper('goodahead_etm')->__('Add New Entity'));
     }

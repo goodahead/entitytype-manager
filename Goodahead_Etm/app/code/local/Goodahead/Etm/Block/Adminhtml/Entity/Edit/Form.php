@@ -15,9 +15,11 @@ class Goodahead_Etm_Block_Adminhtml_Entity_Edit_Form extends Mage_Adminhtml_Bloc
         $entityType = Mage::registry('etm_entity_type');
         $entity = Mage::registry('etm_entity');
 
-        $fieldSet = $form->addFieldset('entity_data', array());
+        $fieldSet = $form->addFieldset('entity_data', array(
+            'legend' => Mage::helper('goodahead_etm')->__("Entity Attributes")
+        ));
 
-        $attributes = Mage::helper('goodahead_etm')->getVisibleAttributesCollection($entityType->getEntityTypeCode());
+        $attributes = Mage::helper('goodahead_etm')->getVisibleAttributesCollection($entityType);
         foreach ($attributes as $attribute) {
             /* @var $attribute Mage_Eav_Model_Entity_Attribute */
             $attribute->setFrontendLabel(Mage::helper('goodahead_etm')->__($attribute->getFrontend()->getLabel()));
@@ -25,7 +27,6 @@ class Goodahead_Etm_Block_Adminhtml_Entity_Edit_Form extends Mage_Adminhtml_Bloc
         }
 
         $this->_setFieldset($attributes, $fieldSet);
-
 
         if ($entity->getId()) {
             $form->addField('entity_id', 'hidden', array(

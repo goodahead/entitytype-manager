@@ -3,6 +3,7 @@
 class Goodahead_Etm_Model_Entity extends Mage_Core_Model_Abstract
 {
     protected $_entityTypeId = null;
+    protected $_entityTypeInstance = null;
 
     protected function _construct()
     {
@@ -44,11 +45,15 @@ class Goodahead_Etm_Model_Entity extends Mage_Core_Model_Abstract
 
     public function load($id, $field = null)
     {
-        $this->_entityTypeId = $this->_getEntityTypeId($id, $field);
+        $_entityTypeId = $this->_getEntityTypeId($id, $field);
+        if ($_entityTypeId !== $this->_entityTypeId) {
+            $this->_entityTypeId = $_entityTypeId;
+            $this->_entityTypeInstance = null;
+        }
         return parent::load($id, $field);
     }
 
-    protected function _getEntityTypeId($id, $field = null)
+    protected function _getEntityTypeId($id = null, $field = null)
     {
         if ($id !== null) {
             $resource = Mage::getSingleton('core/resource');
@@ -66,5 +71,18 @@ class Goodahead_Etm_Model_Entity extends Mage_Core_Model_Abstract
         }
     }
 
+<<<<<<< HEAD
 
+=======
+    /**
+     * @return Goodahead_Etm_Model_Entity_Type
+     */
+    public function getEntityTypeInstance()
+    {
+        if (!isset($this->_entityTypeInstance) && $this->_getEntityTypeId()) {
+            $this->_entityTypeInstance = Mage::getModel('goodahead_etm/entity_type')->load($this->_getEntityTypeId());
+        }
+        return $this->_entityTypeInstance;
+    }
+>>>>>>> b5422ea96e4833947959648e12ae21738fbf530b
 }

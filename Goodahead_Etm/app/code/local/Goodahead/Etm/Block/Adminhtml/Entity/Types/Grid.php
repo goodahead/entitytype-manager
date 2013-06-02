@@ -47,10 +47,17 @@ class Goodahead_Etm_Block_Adminhtml_Entity_Types_Grid extends Mage_Adminhtml_Blo
         $this->addColumn('action',
             array(
                 'header'    => Mage::helper('goodahead_etm')->__('Actions'),
-                'width'     => '200px',
+                'width'     => '280px',
                 'type'      => 'action',
                 'getter'    => 'getId',
                 'actions'   => array(
+                    array(
+                        'caption' => Mage::helper('goodahead_etm')->__('Manage Entities'),
+                        'url'     => array(
+                            'base' => '*/etm_entity',
+                        ),
+                        'field'   => 'entity_type_id',
+                    ),
                     array(
                         'caption' => Mage::helper('goodahead_etm')->__('Manage Attributes'),
                         'url'     => array(
