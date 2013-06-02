@@ -27,6 +27,11 @@ class Goodahead_Etm_Block_Adminhtml_Entity_Edit extends Mage_Adminhtml_Block_Wid
             $this->_removeButton('delete');
         }
 
+        $entityTypeId = $this->getRequest()->getParam('entity_type_id');
+        $this->_updateButton('back', 'onclick', 'setLocation(\'' . $this->getUrl('*/etm_entity', array(
+        'entity_type_id' => $entityTypeId)) . '\')'
+        );
+
         $this->_formScripts[] = "
             function saveAndContinueEdit(){
                 editForm.submit($('edit_form').action+'back/edit/');
