@@ -117,9 +117,9 @@ class Goodahead_Etm_Adminhtml_Etm_EntityController extends Goodahead_Etm_Control
             $this->_initEntityType();
             $storeId = $this->getRequest()->getParam('store_id', 0);
             $entity = $this->_initEntity($storeId);
-            if (!$entity->getId()) {
-                $this->getLayout()->getBlock('content')->unsetChild('store_switcher');
-            }
+//            if (!$entity->getId()) {
+//                $this->getLayout()->getBlock('content')->unsetChild('store_switcher');
+//            }
 
             $entity->addData($data);
 

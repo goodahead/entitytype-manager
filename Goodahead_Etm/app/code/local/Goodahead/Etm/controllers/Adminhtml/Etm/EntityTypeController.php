@@ -106,7 +106,6 @@ class Goodahead_Etm_Adminhtml_Etm_EntityTypeController extends Goodahead_Etm_Con
             $request = clone $this->getRequest();
             $request->setParams($data);
         }
-
         $this->renderLayout();
     }
 

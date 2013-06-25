@@ -12,7 +12,7 @@ class Goodahead_Etm_Block_Adminhtml_Form_Renderer_Fieldset_Element
      */
     protected function _construct()
     {
-        $this->setTemplate('goodahead_etm/form/renderer/fieldset/element.phtml');
+        $this->setTemplate('goodahead/etm/form/renderer/fieldset/element.phtml');
     }
 
     public function isScopeGlobal($attribute)

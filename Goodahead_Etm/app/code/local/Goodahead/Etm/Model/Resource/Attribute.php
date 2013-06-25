@@ -28,7 +28,7 @@ class Goodahead_Etm_Model_Resource_Attribute extends Mage_Eav_Model_Resource_Ent
             $helper = Mage::helper('catalog/product');
 
             $object->setIsUserDefined(1);
-            $object->setSourceModel($helper->getAttributeSourceModelByInputType($object->getFrontendInput()));
+            $object->setSourceModel(Mage::helper('goodahead_etm')->getAttributeSourceModelByInputType($object->getFrontendInput()));
             $object->setBackendModel($helper->getAttributeBackendModelByInputType($object->getFrontendInput()));
             $object->setBackendType($object->getBackendTypeByInput($object->getFrontendInput()));
         }

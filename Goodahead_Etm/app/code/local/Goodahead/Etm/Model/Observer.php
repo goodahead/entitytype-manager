@@ -95,7 +95,7 @@ class Goodahead_Etm_Model_Observer {
     {
         $attribute = $observer->getEvent()->getAttribute();
         if ($attribute->isObjectNew()) {
-            if (($entityTypeId = Mage::registry('goodahead_etm_attribute_entity_type')) !== false) {
+            if (($entityTypeId = Mage::registry('goodahead_etm_attribute_entity_type'))) {
                 $attribute->setData('source_model', 'goodahead_etm/source_entity');
                 $attribute->setData('goodahead_etm_entity_type_id', $entityTypeId);
             } else {

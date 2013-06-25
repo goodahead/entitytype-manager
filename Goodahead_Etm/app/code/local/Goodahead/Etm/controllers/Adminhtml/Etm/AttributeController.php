@@ -225,7 +225,7 @@ class Goodahead_Etm_Adminhtml_Etm_AttributeController extends Goodahead_Etm_Cont
      */
     public function saveAction()
     {
-        $redirectPath   = '*/*';
+        $redirectPath   = '*/*/';
         $redirectParams = array();
 
         // check if data sent

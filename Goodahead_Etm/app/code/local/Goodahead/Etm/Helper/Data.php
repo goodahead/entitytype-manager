@@ -65,4 +65,22 @@ class Goodahead_Etm_Helper_Data extends Mage_Core_Helper_Abstract
         $collection->setEntityType($entityType);
         return $collection;
     }
+
+    public function getAttributeSourceModelByInputType($inputType)
+    {
+        $inputTypes = array(
+            'multiselect'   => array(
+                'backend_model'     => 'eav/entity_attribute_backend_array',
+                'source_model'      => 'eav/entity_attribute_source_table'
+            ),
+            'boolean'       => array(
+                'source_model'      => 'eav/entity_attribute_source_boolean'
+            )
+        );
+
+        if (!empty($inputTypes[$inputType]['source_model'])) {
+            return $inputTypes[$inputType]['source_model'];
+        }
+        return null;
+    }
 }

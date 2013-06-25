@@ -6,7 +6,6 @@ class Goodahead_Etm_Block_Adminhtml_Entity_Grid extends Mage_Adminhtml_Block_Wid
         return Mage::helper('goodahead_etm');
     }
 
-
     protected function _construct()
     {
         $this->setId('entityType');
@@ -29,7 +28,6 @@ class Goodahead_Etm_Block_Adminhtml_Entity_Grid extends Mage_Adminhtml_Block_Wid
         return parent::_prepareCollection();
     }
 
-
     protected function _prepareColumns()
     {
         $this->addColumn('entity_id', array(
@@ -39,17 +37,17 @@ class Goodahead_Etm_Block_Adminhtml_Entity_Grid extends Mage_Adminhtml_Block_Wid
             'type'              => 'number'
         ));
 
-
-
-
         $entityType = Mage::registry('etm_entity_type');
         $visibleAttr = $this->_getEtmHelper()->getVisibleAttributes($entityType->getId());
+
         foreach($visibleAttr as $attributeCode => $attribute) {
             $attributeParams = array(
                 'header'            => Mage::helper('goodahead_etm')->__($attribute->getAttributeName()),
                 'index'             => $attributeCode,
                 'type'              => $attribute->getBackendType(),
+                'attribute'         => $attribute,
             );
+
             if  ($attribute->getBackendType() == 'int' && $attribute->getFrontendInput() == 'boolean') {
                 $attributeParams['type'] = 'options';
                 $attributeParams['width'] = '80px';
@@ -58,14 +56,26 @@ class Goodahead_Etm_Block_Adminhtml_Entity_Grid extends Mage_Adminhtml_Block_Wid
                     '0' => Mage::helper('goodahead_etm')->__('No')
                 );
             }
+
+            //multiselect
+            if ($attribute->getFrontendInput() == 'multiselect') {
+                $attributeParams['options']   = $attribute->getSource()->getAllOptions();
+                $attributeParams['renderer']  = 'goodahead_etm/adminhtml_entity_grid_renderer_multiselect';
+            }
+
+            //select
+            if ($attribute->getFrontendInput() == 'select') {
+                $attributeParams['renderer']  = 'goodahead_etm/adminhtml_entity_grid_renderer_select';
+            }
+
             $transport = new Varien_Object($attributeParams);
             Mage::dispatchEvent('goodahead_etm_entity_grid_prepare_column', array(
                 'attribute' => $attribute,
                 'column_params' => $transport,
             ));
+
             $this->addColumn($attributeCode, $transport->getData());
         }
-
 
         $this->addColumn('action',
             array(
