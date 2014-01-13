@@ -1,0 +1,12 @@
+# Extension Code and config files
+Goodahead_Etm/app/code/community/Goodahead/Etm/                             app/code/community/Goodahead/Etm/
+Goodahead_Etm/app/etc/modules/Goodahead_Etm.xml                             app/etc/modules/Goodahead_Etm.xml
+Goodahead_Etm/app/etc/goodahead_etm_processor.xml                           app/etc/goodahead_etm_processor.xml
+
+# Fronted Design
+Goodahead_Etm/app/design/frontend/base/default/layout/goodahead/etm.xml     app/design/frontend/base/default/layout/goodahead/etm.xml
+Goodahead_Etm/app/design/frontend/base/default/template/goodahead/etm       app/design/frontend/base/default/template/goodahead/etm
+
+# Admin Design
+Goodahead_Etm/app/design/adminhtml/default/default/layout/goodahead/etm.xml app/design/adminhtml/default/default/layout/goodahead/etm.xml
+Goodahead_Etm/app/design/adminhtml/default/default/template/goodahead/etm   app/design/adminhtml/default/default/template/goodahead/etm

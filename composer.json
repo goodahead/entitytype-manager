@@ -1,0 +1,17 @@
+{
+    "name": "goodahead/entitytype-manager",
+    "type": "magento-module",
+    "license": "LGPL-3.0+",
+    "homepage": "https://github.com/goodahead/entitytype-manager",
+    "description": "Goodahead Entity Type Manager Extension",
+    "authors":[
+        {
+            "name":"Goodahead",
+            "email":"support@goodahead.com"
+        }
+    ],
+    "require":{
+        "magento-hackathon/magento-composer-installer":"*",
+        "goodahead/core"
+    }
+}
