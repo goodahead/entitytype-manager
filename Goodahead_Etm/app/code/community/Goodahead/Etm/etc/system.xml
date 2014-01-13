@@ -1,0 +1,65 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * This file is part of Goodahead_Etm extension
+ *
+ * This extension allows to create and manage custom EAV entity types
+ * and EAV entities
+ *
+ * Copyright (C) 2014 Goodahead Ltd. (http://www.goodahead.com)
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * and GNU General Public License along with this program.
+ * If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @category   Goodahead
+ * @package    Goodahead_Etm
+ * @copyright  Copyright (c) 2014 Goodahead Ltd. (http://www.goodahead.com)
+ * @license    http://www.gnu.org/licenses/lgpl-3.0-standalone.html GNU Lesser General Public License
+ */
+-->
+<config>
+    <sections>
+        <goodahead_etm module="goodahead_etm">
+            <class>separator-top</class>
+            <label>Entity Type Manager</label>
+            <tab>general</tab>
+            <frontend_type>text</frontend_type>
+            <sort_order>500</sort_order>
+            <show_in_default>1</show_in_default>
+            <show_in_website>1</show_in_website>
+            <show_in_store>1</show_in_store>
+            <groups>
+                <view translate="label">
+                    <label>Entity Type Manager Settings</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>10</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <enabled translate="label">
+                            <label>Enable On Frontend</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </enabled>
+                    </fields>
+                </view>
+            </groups>
+        </goodahead_etm>
+    </sections>
+</config>

@@ -1,12 +1,11 @@
-<?xml version="1.0"?>
-<!--
+<?php
 /**
  * This file is part of Goodahead_Etm extension
  *
  * This extension allows to create and manage custom EAV entity types
  * and EAV entities
  *
- * Copyright (C) 2013 Goodahead Ltd. (http://www.goodahead.com)
+ * Copyright (C) 2014 Goodahead Ltd. (http://www.goodahead.com)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -27,17 +26,31 @@
  * @copyright  Copyright (c) 2014 Goodahead Ltd. (http://www.goodahead.com)
  * @license    http://www.gnu.org/licenses/lgpl-3.0-standalone.html GNU Lesser General Public License
  */
--->
-<config>
-    <modules>
-        <Goodahead_Etm>
-            <active>true</active>
-            <codePool>community</codePool>
-            <depends>
-                <Mage_Eav/>
-                <Mage_Adminhtml/>
-                <Mage_Catalog/>
-            </depends>
-        </Goodahead_Etm>
-    </modules>
-</config>
+
+/**
+ * Class Goodahead_Etm_Block_Adminhtml_Attribute_Edit_Tab_Options
+ *
+ * Options tab for Entity Attribute Edit form
+ */
+class Goodahead_Etm_Block_Adminhtml_Attribute_Edit_Tab_Options
+    extends Mage_Eav_Block_Adminhtml_Attribute_Edit_Options_Abstract
+{
+    /**
+     * Set template used by Product Attributes edit form
+     */
+    public function __construct()
+    {
+        parent::__construct();
+        $this->setTemplate('catalog/product/attribute/options.phtml');
+    }
+
+    /**
+     * Retrieve attribute object from registry
+     *
+     * @return Goodahead_Etm_Model_Attribute current attribute model
+     */
+    public function getAttributeObject()
+    {
+        return Mage::registry('etm_attribute');
+    }
+}

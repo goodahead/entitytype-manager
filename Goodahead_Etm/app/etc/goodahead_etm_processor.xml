@@ -29,15 +29,34 @@
  */
 -->
 <config>
-    <modules>
-        <Goodahead_Etm>
-            <active>true</active>
-            <codePool>community</codePool>
-            <depends>
-                <Mage_Eav/>
-                <Mage_Adminhtml/>
-                <Mage_Catalog/>
-            </depends>
-        </Goodahead_Etm>
-    </modules>
+    <global>
+        <cache>
+            <request_processors>
+                <goodahead_etm_processor>Goodahead_Etm_Processor_Processor</goodahead_etm_processor>
+            </request_processors>
+        </cache>
+    </global>
+
+    <crontab>
+        <events>
+            <default>
+                <observers>
+                    <etm_cron_observer>
+                        <class>goodahead_etm/observer</class>
+                        <method>cronDispatch</method>
+                        <type>singleton</type>
+                    </etm_cron_observer>
+                </observers>
+            </default>
+            <always>
+                <observers>
+                    <etm_cron_observer>
+                        <class>goodahead_etm/observer</class>
+                        <method>cronDispatch</method>
+                        <type>singleton</type>
+                    </etm_cron_observer>
+                </observers>
+            </always>
+        </events>
+    </crontab>
 </config>

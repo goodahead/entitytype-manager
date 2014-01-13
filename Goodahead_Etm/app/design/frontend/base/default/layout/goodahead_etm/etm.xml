@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<layout>
-    <goodahead_etm_entity>
-        <reference name="content">
-            <block type="goodahead_etm/etm" name="etm"/>
-        </reference>
-    </goodahead_etm_entity>
-</layout>

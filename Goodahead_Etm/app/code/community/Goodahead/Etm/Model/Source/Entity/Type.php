@@ -1,12 +1,11 @@
-<?xml version="1.0"?>
-<!--
+<?php
 /**
  * This file is part of Goodahead_Etm extension
  *
  * This extension allows to create and manage custom EAV entity types
  * and EAV entities
  *
- * Copyright (C) 2013 Goodahead Ltd. (http://www.goodahead.com)
+ * Copyright (C) 2014 Goodahead Ltd. (http://www.goodahead.com)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -27,17 +26,20 @@
  * @copyright  Copyright (c) 2014 Goodahead Ltd. (http://www.goodahead.com)
  * @license    http://www.gnu.org/licenses/lgpl-3.0-standalone.html GNU Lesser General Public License
  */
--->
-<config>
-    <modules>
-        <Goodahead_Etm>
-            <active>true</active>
-            <codePool>community</codePool>
-            <depends>
-                <Mage_Eav/>
-                <Mage_Adminhtml/>
-                <Mage_Catalog/>
-            </depends>
-        </Goodahead_Etm>
-    </modules>
-</config>
+
+class Goodahead_Etm_Model_Source_Entity_Type
+{
+    public function toOptionArray($addEmpty = false)
+    {
+        $collection = Mage::getModel('goodahead_etm/entity_type')->getCollection();
+        $result = array();
+        if ($addEmpty) {
+            $result[] = array(
+                'value' => '',
+                'label' => '',
+            );
+        }
+        $result = array_merge($result, $collection->load()->toOptionArray());
+        return $result;
+    }
+}

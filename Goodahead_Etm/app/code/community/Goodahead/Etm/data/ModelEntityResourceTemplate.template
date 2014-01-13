@@ -1,5 +1,4 @@
-<?xml version="1.0"?>
-<!--
+<?php
 /**
  * This file is part of Goodahead_Etm extension
  *
@@ -27,17 +26,10 @@
  * @copyright  Copyright (c) 2014 Goodahead Ltd. (http://www.goodahead.com)
  * @license    http://www.gnu.org/licenses/lgpl-3.0-standalone.html GNU Lesser General Public License
  */
--->
-<config>
-    <modules>
-        <Goodahead_Etm>
-            <active>true</active>
-            <codePool>community</codePool>
-            <depends>
-                <Mage_Eav/>
-                <Mage_Adminhtml/>
-                <Mage_Catalog/>
-            </depends>
-        </Goodahead_Etm>
-    </modules>
-</config>
+
+class <class> extends Goodahead_Etm_Model_Resource_Entity
+{
+
+    protected $_entityTypeCode = '<entity_type_code>';
+
+}

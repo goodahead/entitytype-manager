@@ -1,12 +1,11 @@
-<?xml version="1.0"?>
-<!--
+<?php
 /**
  * This file is part of Goodahead_Etm extension
  *
  * This extension allows to create and manage custom EAV entity types
  * and EAV entities
  *
- * Copyright (C) 2013 Goodahead Ltd. (http://www.goodahead.com)
+ * Copyright (C) 2014 Goodahead Ltd. (http://www.goodahead.com)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -27,17 +26,34 @@
  * @copyright  Copyright (c) 2014 Goodahead Ltd. (http://www.goodahead.com)
  * @license    http://www.gnu.org/licenses/lgpl-3.0-standalone.html GNU Lesser General Public License
  */
--->
-<config>
-    <modules>
-        <Goodahead_Etm>
-            <active>true</active>
-            <codePool>community</codePool>
-            <depends>
-                <Mage_Eav/>
-                <Mage_Adminhtml/>
-                <Mage_Catalog/>
-            </depends>
-        </Goodahead_Etm>
-    </modules>
-</config>
+
+class Goodahead_Etm_Model_Source_Yesno
+{
+
+    /**
+     * Options getter
+     *
+     * @return array
+     */
+    public function toOptionArray()
+    {
+        return array(
+            array('value' => 1, 'label'=>Mage::helper('adminhtml')->__('Yes')),
+            array('value' => 0, 'label'=>Mage::helper('adminhtml')->__('No')),
+        );
+    }
+
+    /**
+     * Get options in "key-value" format
+     *
+     * @return array
+     */
+    public function toArray()
+    {
+        return array(
+            0 => Mage::helper('adminhtml')->__('No'),
+            1 => Mage::helper('adminhtml')->__('Yes'),
+        );
+    }
+
+}

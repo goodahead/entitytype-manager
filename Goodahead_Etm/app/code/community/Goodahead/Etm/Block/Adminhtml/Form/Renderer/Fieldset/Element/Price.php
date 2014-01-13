@@ -5,7 +5,7 @@
  * This extension allows to create and manage custom EAV entity types
  * and EAV entities
  *
- * Copyright (C) 2013 Goodahead Ltd. (http://www.goodahead.com)
+ * Copyright (C) 2014 Goodahead Ltd. (http://www.goodahead.com)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -26,19 +26,42 @@
  * @copyright  Copyright (c) 2014 Goodahead Ltd. (http://www.goodahead.com)
  * @license    http://www.gnu.org/licenses/lgpl-3.0-standalone.html GNU Lesser General Public License
  */
-?>
-<script type="text/javascript">
-    Variables.init('entity_type_content');
-    Variables.resetData();
 
-    function openVariablesWindow()
+class Goodahead_Etm_Block_Adminhtml_Form_Renderer_Fieldset_Element_Price
+    extends Varien_Data_Form_Element_Text
+{
+    public function __construct($attributes=array())
     {
-        Variables.resetData();
-
-        var entityVariables = $('variables').value.evalJSON();
-
-        if (entityVariables) {
-            Variables.openVariableChooser(entityVariables);
-        }
+        parent::__construct($attributes);
+        $this->addClass('validate-zero-or-greater');
     }
-</script>
+
+    public function getAfterElementHtml()
+    {
+        $html = parent::getAfterElementHtml();
+        /**
+         * getEntityAttribute - use __call
+         */
+        if ($attribute = $this->getEntityAttribute()) {
+            if (!($storeId = $attribute->getStoreId())) {
+                $storeId = $this->getForm()->getDataObject()->getStoreId();
+            }
+            $store = Mage::app()->getStore($storeId);
+            $html.= '<strong>['.(string)$store->getBaseCurrencyCode().']</strong>';
+        }
+
+        return $html;
+    }
+
+    public function getEscapedValue($index=null)
+    {
+        $value = $this->getValue();
+
+        if (!is_numeric($value)) {
+            return null;
+        }
+
+        return number_format($value, 2, null, '');
+    }
+
+}
