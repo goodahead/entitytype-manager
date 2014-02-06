@@ -39,7 +39,7 @@
                     <action>adminhtml/etm_entityType</action>
                     <sort_order>10</sort_order>
                 </manage_entityTypes>
-                <manage_attributes translate="title" update="goodahead_etm/data/updateMenu">
+                <manage_attributes translate="title" module="catalog" update="goodahead_etm/data/updateMenu">
                     <title>Manage Attributes</title>
                     <sort_order>20</sort_order>
                     <base_link>adminhtml/etm_attribute/index/entity_type_id/%d</base_link>
@@ -60,15 +60,15 @@
                         <title>Entity Type Manager</title>
                         <sort_order>65</sort_order>
                         <children>
-                            <manage_attributes translate="title">
+                            <manage_attributes translate="title" module="catalog">
                                 <title>Manage Attributes</title>
                                 <sort_order>0</sort_order>
                                 <children>
-                                    <save translate="title">
+                                    <save translate="title" module="catalog">
                                         <title>Save Attribute</title>
                                         <sort_order>0</sort_order>
                                     </save>
-                                    <delete translate="title">
+                                    <delete translate="title" module="catalog">
                                         <title>Delete Attribute</title>
                                         <sort_order>10</sort_order>
                                     </delete>

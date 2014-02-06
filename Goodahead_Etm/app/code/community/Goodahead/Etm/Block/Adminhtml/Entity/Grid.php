@@ -71,7 +71,7 @@ class Goodahead_Etm_Block_Adminhtml_Entity_Grid
     protected function _prepareColumns()
     {
         $this->addColumn('entity_id', array(
-            'header'            => Mage::helper('goodahead_etm')->__('Entity ID'),
+            'header'            => Mage::helper('catalog')->__('ID'),
             'width'             => '100',
             'index'             => 'entity_id',
             'type'              => 'number'
@@ -81,12 +81,16 @@ class Goodahead_Etm_Block_Adminhtml_Entity_Grid
 
         $entityType = Mage::registry('etm_entity_type');
         $visibleAttr = $this->_getEtmHelper()->getVisibleAttributes($entityType);
+        /** @var $helper Goodahead_Etm_Helper_Data */
+        $helper = Mage::helper('goodahead_etm');
 
+        /** @var $attribute Goodahead_Etm_Model_Entity_Attribute */
         foreach($visibleAttr as $attributeCode => $attribute) {
             if ($attribute->getFrontendInput() == 'image') {
                 continue;
             }
 
+             // TODO: Additional analyze is needed here. Should we use double translations of the 'header' or use only attribute label for admin store?
             $attributeParams = array(
                 'header'            => Mage::helper('goodahead_etm')->__($attribute->getFrontend()->getLabel()),
                 'index'             => $attributeCode,
@@ -98,26 +102,34 @@ class Goodahead_Etm_Block_Adminhtml_Entity_Grid
                 $attributeParams['type'] = 'options';
                 $attributeParams['width'] = '80px';
                 $attributeParams['options'] = array(
-                    '1' => Mage::helper('goodahead_etm')->__('Yes'),
-                    '0' => Mage::helper('goodahead_etm')->__('No')
+                    '1' => Mage::helper('adminhtml')->__('Yes'),
+                    '0' => Mage::helper('adminhtml')->__('No')
                 );
             }
 
             //multiselect
             if ($attribute->getFrontendInput() == 'multiselect') {
-                $attributeParams['options']   = $attribute->getSource()->getAllOptions();
-                $attributeParams['renderer']  = 'goodahead_etm/adminhtml_entity_grid_renderer_multiselect';
+                $attributeParams['type']    = 'options';
+                $attributeParams['options'] = $helper->getOptionsHash($attribute->getSource(), false);
+                $attributeParams['filter']  = 'goodahead_etm/adminhtml_entity_grid_filter_multiselect';
+                $attributeParams['renderer']  = 'goodahead_etm/adminhtml_entity_grid_renderer_options';
             }
 
             //select
             if ($attribute->getFrontendInput() == 'select') {
-                $attributeParams['renderer']  = 'goodahead_etm/adminhtml_entity_grid_renderer_select';
+                $attributeParams['type']    = 'options';
+                $attributeParams['options'] = $helper->getOptionsHash($attribute->getSource(), false);
             }
 
             //price
             if ($attribute->getFrontendInput() == 'price') {
                 $attributeParams['type'] = 'price';
                 $attributeParams['currency_code'] = $store->getBaseCurrency()->getCode();
+            }
+
+            if ($attribute->getFrontendInput() == 'datetime') {
+                $attributeParams['type'] = 'datetime';
+                $attributeParams['width'] = '160px';
             }
 
             $transport = new Varien_Object($attributeParams);
@@ -131,20 +143,20 @@ class Goodahead_Etm_Block_Adminhtml_Entity_Grid
 
         $this->addColumn('action',
             array(
-                'header'    => Mage::helper('goodahead_etm')->__('Actions'),
+                'header'    => Mage::helper('catalog')->__('Action'),
                 'width'     => '100',
                 'type'      => 'action',
                 'getter'    => 'getId',
                 'actions'   => array(
                     array(
-                        'caption' => Mage::helper('goodahead_etm')->__('Edit'),
+                        'caption' => Mage::helper('catalog')->__('Edit'),
                         'url'     => array(
                             'base' => '*/*/edit/entity_type_id/' . $entityType->getId(),
                         ),
                         'field'   => 'entity_id',
                     ),
                     array(
-                        'caption' => Mage::helper('goodahead_etm')->__('Delete'),
+                        'caption' => Mage::helper('catalog')->__('Delete'),
                         'url'     => array(
                             'base' => '*/*/delete/entity_type_id/' . $entityType->getId(),
                         ),
@@ -168,7 +180,7 @@ class Goodahead_Etm_Block_Adminhtml_Entity_Grid
         $this->setMassactionIdField('entity_id');
         $this->getMassactionBlock()->setFormFieldName('entity_ids');
         $this->getMassactionBlock()->addItem('delete', array(
-            'label'   => Mage::helper('goodahead_etm')->__('Delete'),
+            'label'   => Mage::helper('catalog')->__('Delete'),
             'url'     => $this->getUrl('*/*/massDelete', array('entity_type_id' => $entityType->getId())),
             'confirm' => Mage::helper('goodahead_etm')->__('Are you sure you want to delete selected entity types?')
         ));

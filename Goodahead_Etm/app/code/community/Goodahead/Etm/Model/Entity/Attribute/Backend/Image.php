@@ -39,37 +39,42 @@ class Goodahead_Etm_Model_Entity_Attribute_Backend_Image
      */
     public function afterSave($object)
     {
+        parent::afterSave($object);
         $value = $object->getData($this->getAttribute()->getName());
 
         if (is_array($value) && !empty($value['delete'])) {
             $object->setData($this->getAttribute()->getName(), '');
             $this->getAttribute()->getEntity()
                 ->saveAttribute($object, $this->getAttribute()->getName());
-            return;
+            return $this;
         }
 
         $path = Mage::getBaseDir('media') .
             DS . 'goodahead' .
             DS . 'etm' .
+            DS . 'images' .
             DS . $object->getEntityTypeInstance()->getEntityTypeCode() .
             DS . $this->getAttribute()->getAttributeCode() .
             DS
         ;
 
         try {
-            $uploader = new Mage_Core_Model_File_Uploader($this->getAttribute()->getName());
+            $uploader = new Varien_File_Uploader($this->getAttribute()->getName());
             $uploader->setAllowedExtensions(array('jpg','jpeg','gif','png'));
             $uploader->setAllowRenameFiles(true);
-            $result = $uploader->save($path);
+            $uploader->setAllowCreateFolders(true);
+            $uploader->setFilesDispersion(true);
+            $uploader->save($path);
 
-            $object->setData($this->getAttribute()->getName(), $result['file']);
+            $object->setData($this->getAttribute()->getName(), $uploader->getUploadedFileName());
             $this->getAttribute()->getEntity()->saveAttribute($object, $this->getAttribute()->getName());
         } catch (Exception $e) {
-            if ($e->getCode() != Mage_Core_Model_File_Uploader::TMP_NAME_EMPTY) {
+            if ($e->getCode() != Varien_File_Uploader::TMP_NAME_EMPTY) {
                 Mage::logException($e);
             }
-
-            return;
+            /** @TODO ??? */
+            return $this;
         }
+        return $this;
     }
 }

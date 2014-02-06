@@ -30,11 +30,15 @@
 class Goodahead_Etm_Block_Adminhtml_Attribute_Grid
     extends Mage_Eav_Block_Adminhtml_Attribute_Grid_Abstract
 {
+    public function __construct()
+    {
+        parent::__construct();
+        $entityType = $this->_getEntityTypeFromRegistry();
+        $this->setId('goodaheadEtmAttributeGrid_' . $entityType->getEntityTypeCode());
+    }
+
     protected function _construct()
     {
-        $entityType = $this->_getEntityTypeFromRegistry();
-
-        $this->setId('attributeGrid' . $entityType->getId());
         $this->_controller = 'adminhtml_attribute';
         $this->setUseAjax(true);
 
@@ -69,7 +73,7 @@ class Goodahead_Etm_Block_Adminhtml_Attribute_Grid
     {
         /** @var Goodahead_Etm_Model_Resource_Entity_Attribute_Collection $collection */
         $collection = Mage::getResourceModel('goodahead_etm/entity_attribute_collection');
-        $collection->setEntityType($this->_getEntityTypeFromRegistry());
+        $collection->setEntityTypeFilter($this->_getEntityTypeFromRegistry());
         $collection->addFilterToMap('attribute_id', 'main_table.attribute_id');
         $collection->addFilterToMap('entity_type_id', 'main_table.entity_type_id');
         $this->setCollection($collection);
@@ -106,7 +110,7 @@ class Goodahead_Etm_Block_Adminhtml_Attribute_Grid
     protected function _prepareColumns()
     {
         $this->addColumn('attribute_id', array(
-            'header'   => Mage::helper('goodahead_etm')->__('Attribute ID'),
+            'header'   => Mage::helper('catalog')->__('ID'),
             'width'    => '100',
             'sortable' => true,
             'index'    => 'attribute_id',
@@ -119,7 +123,7 @@ class Goodahead_Etm_Block_Adminhtml_Attribute_Grid
 
         $scopes = Mage::getModel('goodahead_etm/source_scope')->toArray();
         $this->addColumn('is_global', array(
-            'header'   => Mage::helper('goodahead_etm')->__('Scope'),
+            'header'   => Mage::helper('catalog')->__('Scope'),
             'sortable' => true,
             'index'    => 'is_global',
             'type'     => 'options',
@@ -127,7 +131,7 @@ class Goodahead_Etm_Block_Adminhtml_Attribute_Grid
         ));
         $yesNo = Mage::getModel('goodahead_etm/source_yesno')->toArray();
         $this->addColumn('is_visible', array(
-            'header'   => Mage::helper('goodahead_etm')->__('Is Visible'),
+            'header'   => Mage::helper('catalog')->__('Visible'),
             'sortable' => true,
             'index'    => 'is_visible',
             'type'     => 'options',
@@ -137,20 +141,20 @@ class Goodahead_Etm_Block_Adminhtml_Attribute_Grid
         // TODO: Add permission check for actions
         $this->addColumn('action',
             array(
-                'header'    => Mage::helper('goodahead_etm')->__('Actions'),
+                'header'    => Mage::helper('catalog')->__('Action'),
                 'width'     => '80px',
                 'type'      => 'action',
                 'getter'    => 'getId',
                 'actions'   => array(
                     array(
-                        'caption' => Mage::helper('goodahead_etm')->__('Edit'),
+                        'caption' => Mage::helper('catalog')->__('Edit'),
                         'url'     => array(
                             'base' => '*/*/edit/entity_type_id/' . $this->_getEntityTypeFromRegistry()->getId(),
                         ),
                         'field'   => 'attribute_id',
                     ),
                     array(
-                        'caption' => Mage::helper('goodahead_etm')->__('Delete'),
+                        'caption' => Mage::helper('catalog')->__('Delete'),
                         'url'     => array(
                             'base' => '*/*/delete/entity_type_id/' . $this->_getEntityTypeFromRegistry()->getId(),
                         ),
@@ -178,7 +182,7 @@ class Goodahead_Etm_Block_Adminhtml_Attribute_Grid
         $this->setMassactionIdField('entity_type_id');
         $this->getMassactionBlock()->setFormFieldName('attribute_ids');
         $this->getMassactionBlock()->addItem('delete', array(
-            'label'   => Mage::helper('goodahead_etm')->__('Delete'),
+            'label'   => Mage::helper('catalog')->__('Delete'),
             'url'     => $this->getUrl('*/*/massDelete', array(
                     'entity_type_id' => $this->_getEntityTypeFromRegistry()->getId(),
                 )),

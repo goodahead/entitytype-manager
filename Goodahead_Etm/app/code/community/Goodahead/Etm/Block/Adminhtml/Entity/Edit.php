@@ -41,7 +41,7 @@ class Goodahead_Etm_Block_Adminhtml_Entity_Edit
         if ($this->_isAllowedAction('save')) {
             $this->_updateButton('save', 'label', Mage::helper('goodahead_etm')->__('Save Entity'));
             $this->_addButton('saveandcontinue', array(
-                'label'     => Mage::helper('goodahead_etm')->__('Save and Continue Edit'),
+                'label'     => Mage::helper('catalog')->__('Save and Continue Edit'),
                 'onclick'   => 'saveAndContinueEdit()',
                 'class'     => 'save',
             ), -100);
@@ -66,7 +66,7 @@ class Goodahead_Etm_Block_Adminhtml_Entity_Edit
         $entityId = $this->getRequest()->getParam('entity_id');
         if ($entityId) {
             $this->_addButton('duplicate', array(
-                'label'     => Mage::helper('goodahead_etm')->__('Duplicate'),
+                'label'     => Mage::helper('catalog')->__('Duplicate'),
                 'onclick'   => 'setLocation(\'' . $this->_getDuplicateUrl($entityId, $entityTypeId) . '\')',
             ), 0);
         }

@@ -92,6 +92,11 @@ class Goodahead_Etm_Model_Entity_Attribute extends Mage_Eav_Model_Entity_Attribu
         return !$this->isScopeGlobal() && !$this->isScopeWebsite();
     }
 
+    public function isSystem()
+    {
+        return $this->getIsUserDefined() == 0;
+    }
+
     /**
      * Delete attributes with given ids
      *
@@ -112,4 +117,16 @@ class Goodahead_Etm_Model_Entity_Attribute extends Mage_Eav_Model_Entity_Attribu
     {
         return Mage::getModel('goodahead_etm/entity_type')->load($this->getEntityTypeId());
     }
+
+    public function isValueEmpty($value)
+    {
+        $attrType = $this->getBackend()->getType();
+        $isEmpty =  //is_array($value) WTF??? Maybe was needed. For now fixed like that.
+            $value === null
+            || $value === false && $attrType != 'int'
+            || $value === '' && ($attrType == 'int' || $attrType == 'decimal' || $attrType == 'datetime');
+
+        return $isEmpty;
+    }
+
 }

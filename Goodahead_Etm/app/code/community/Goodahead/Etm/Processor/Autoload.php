@@ -36,14 +36,11 @@ class Goodahead_Etm_Processor_Autoload
 
     protected $isRegistered = false;
 
-    protected $_dataDirSuffix = false;
+    protected $_dataDirSuffix = 'data';
 
     public function __construct()
     {
         $this->includePath = Mage::getConfig()->getVarDir('goodahead' . DS . 'etm' . DS . 'includes' . DS);
-        if (version_compare(Goodahead_Core_Helper_Data::getMagentoCoreVersion(), '1.6', '<')) {
-            $this->_dataDirSuffix = 'data';
-        }
     }
 
     /**
@@ -201,7 +198,7 @@ class Goodahead_Etm_Processor_Autoload
      */
     protected function _loadClassTemplate($name)
     {
-        $dataPath = Mage::getModuleDir('data', 'Goodahead_Etm') . DS;
+        $dataPath = Mage::getModuleDir('', 'Goodahead_Etm') . DS;
         if ($this->_dataDirSuffix !== false) {
             $dataPath .= $this->_dataDirSuffix . DS;
         }

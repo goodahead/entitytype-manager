@@ -37,15 +37,44 @@ $select = $installer
     ->from(
         array('goodahead_etm_attribute' => $installer->getTable('goodahead_etm/eav_attribute'))
     )
+    ->joinInner(
+        array('eav_attribute' => $installer->getTable('eav/attribute')),
+        'eav_attribute.attribute_id = goodahead_etm_attribute.attribute_id',
+        array(
+             'source_model',
+             'backend_model',
+             'frontend_model',
+             'frontend_input'
+        )
+    )
 ;
 
 $items = $installer->getConnection()->fetchAll($select);
 
+$helper = Mage::helper('goodahead_etm');
+
 if ($items && is_array($items)) {
     foreach ($items as $item) {
-        $installer->getConnection()->update($installer->getTable('eav/attribute'), array(
-            'frontend_label' => $item['attribute_name']
-        ), $installer->getConnection()->quoteInto('attribute_id = ?', $item['attribute_id']));
+        $update = array(
+            'frontend_label' => $item['attribute_name'],
+        );
+        if (empty($item['source_model'])) {
+            $update['source_model'] = $helper->getAttributeSourceModelByInputType($item['frontend_input']);
+        }
+        if (empty($item['backend_model'])) {
+            $update['backend_model'] = $helper->getAttributeBackendModelByInputType($item['frontend_input']);
+        }
+        if (empty($item['frontend_model'])) {
+            $update['frontend_model'] = $helper->getAttributeFrontendModelByInputType($item['frontend_input']);
+        }
+        $update = array_filter($update);
+
+        if (!empty($update)) {
+            $installer->getConnection()->update(
+                $installer->getTable('eav/attribute'),
+                $update,
+                $installer->getConnection()->quoteInto('attribute_id = ?', $item['attribute_id']));
+        }
     }
 }
 
@@ -76,8 +105,11 @@ if ($items && is_array($items)) {
         $installer->getConnection()->update(
             $installer->getTable('eav/entity_type'),
             array(
-                'entity_model'    => sprintf('goodahead_etm/custom_%s_entity', $item['entity_type_code']),
-                'attribute_model' => 'goodahead_etm/attribute',
+                'entity_model'                  => sprintf('goodahead_etm/custom_%s_entity', $item['entity_type_code']),
+                'attribute_model'               => 'goodahead_etm/entity_attribute',
+                'entity_table'                  => 'goodahead_etm/entity',
+                'additional_attribute_table'    => 'goodahead_etm/eav_attribute',
+                'entity_attribute_collection'   => 'goodahead_etm/entity_attribute_collection',
             ),
             $installer->getConnection()->quoteInto('entity_type_id = ?', $item['entity_type_id'])
         );

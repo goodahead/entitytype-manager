@@ -53,7 +53,7 @@ class Goodahead_Etm_Block_Adminhtml_Entity_Types_Grid
     protected function _prepareColumns()
     {
         $this->addColumn('entity_type_id', array(
-            'header'            => Mage::helper('goodahead_etm')->__('Entity Type ID'),
+            'header'            => Mage::helper('catalog')->__('ID'),
             'width'             => '100',
             'filter_index'      => 'entity_type_id',
             'index'             => 'entity_type_id',
@@ -76,11 +76,18 @@ class Goodahead_Etm_Block_Adminhtml_Entity_Types_Grid
 
         $this->addColumn('action',
             array(
-                'header'    => Mage::helper('goodahead_etm')->__('Actions'),
+                'header'    => Mage::helper('catalog')->__('Action'),
                 'width'     => '280px',
                 'type'      => 'action',
                 'getter'    => 'getId',
                 'actions'   => array(
+                    array(
+                        'caption' => Mage::helper('catalog')->__('Manage Attributes'),
+                        'url'     => array(
+                            'base' => '*/etm_attribute',
+                        ),
+                        'field'   => 'entity_type_id',
+                    ),
                     array(
                         'caption' => Mage::helper('goodahead_etm')->__('Manage Entities'),
                         'url'     => array(
@@ -89,21 +96,14 @@ class Goodahead_Etm_Block_Adminhtml_Entity_Types_Grid
                         'field'   => 'entity_type_id',
                     ),
                     array(
-                        'caption' => Mage::helper('goodahead_etm')->__('Manage Attributes'),
-                        'url'     => array(
-                            'base' => '*/etm_attribute',
-                        ),
-                        'field'   => 'entity_type_id',
-                    ),
-                    array(
-                        'caption' => Mage::helper('goodahead_etm')->__('Edit'),
+                        'caption' => Mage::helper('catalog')->__('Edit'),
                         'url'     => array(
                             'base' => '*/*/edit',
                         ),
                         'field'   => 'entity_type_id',
                     ),
                     array(
-                        'caption' => Mage::helper('goodahead_etm')->__('Delete'),
+                        'caption' => Mage::helper('catalog')->__('Delete'),
                         'url'     => array(
                             'base' => '*/*/delete',
                         ),
@@ -125,7 +125,7 @@ class Goodahead_Etm_Block_Adminhtml_Entity_Types_Grid
         $this->setMassactionIdField('entity_type_id');
         $this->getMassactionBlock()->setFormFieldName('entity_type_ids');
         $this->getMassactionBlock()->addItem('delete', array(
-            'label'   => Mage::helper('goodahead_etm')->__('Delete'),
+            'label'   => Mage::helper('catalog')->__('Delete'),
             'url'     => $this->getUrl('*/*/massDelete'),
             'confirm' => Mage::helper('goodahead_etm')->__('Are you sure you want to delete selected entity types?')
         ));

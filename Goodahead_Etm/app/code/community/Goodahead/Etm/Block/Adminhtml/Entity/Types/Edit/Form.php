@@ -44,13 +44,6 @@ class Goodahead_Etm_Block_Adminhtml_Entity_Types_Edit_Form
      */
     protected function _prepareLayout()
     {
-        if ($head = $this->getLayout()->getBlock('head')) {
-            // FIXME: Move to layout
-            $head->addItem('js', 'prototype/window.js')
-                ->addItem('js_css', 'prototype/windows/themes/default.css')
-                ->addCss('lib/prototype/windows/themes/magento.css')
-                ->addItem('js', 'mage/adminhtml/variables.js');
-        }
         return parent::_prepareLayout();
     }
 
@@ -82,21 +75,21 @@ class Goodahead_Etm_Block_Adminhtml_Entity_Types_Edit_Form
         );
 
         $fieldSet->addField('entity_type_code', 'text', array(
-            'label'     => Mage::helper('goodahead_etm')->__("Entity Type Code"),
+            'label'     => Mage::helper('goodahead_etm')->__('Entity Type Code'),
             'name'      => 'entity_type_code',
             'class'     => $validateClass,
             'required'  => true,
         ));
 
         $fieldSet->addField('entity_type_name', 'text', array(
-            'label'     => Mage::helper('goodahead_etm')->__("Entity Type Name"),
+            'label'     => Mage::helper('goodahead_etm')->__('Entity Type Name'),
             'name'      => 'entity_type_name',
             'class'     => 'required-entry',
             'required'  => true,
         ));
 
         $fieldSet->addField('entity_type_root_template', 'select', array(
-            'label'     => Mage::helper('goodahead_etm')->__("Entity Type Root Template"),
+            'label'     => Mage::helper('goodahead_etm')->__('Entity Type Root Template'),
             'name'      => 'entity_type_root_template',
             'values'    => Mage::getSingleton('page/source_layout')->toOptionArray(),
             'class'     => 'required-entry',
@@ -104,7 +97,7 @@ class Goodahead_Etm_Block_Adminhtml_Entity_Types_Edit_Form
         ));
 
         $fieldSet->addField('entity_type_layout_xml', 'textarea', array(
-            'label'     => Mage::helper('goodahead_etm')->__("Layout XML"),
+            'label'     => Mage::helper('goodahead_etm')->__('Layout XML'),
             'name'      => 'entity_type_layout_xml',
             'style'     => 'height:7em',
             'required'  => false,
@@ -116,19 +109,17 @@ class Goodahead_Etm_Block_Adminhtml_Entity_Types_Edit_Form
             'name' => 'variables',
         ));
 
-        $insertVariableButton = $this->getLayout()
-            ->createBlock('adminhtml/widget_button', '', array(
-                'type' => 'button',
-                'label' => Mage::helper('adminhtml')->__('Insert Variable...'),
-                'onclick' => 'openVariablesWindow();return false;'
-            ));
-
+        $insertVariableButton = $this->getLayout()->createBlock('adminhtml/widget_button', '', array(
+            'type' => 'button',
+            'label' => Mage::helper('adminhtml')->__('Insert Variable...'),
+            'onclick' => 'openVariablesWindow();return false;'
+        ));
         $fieldSet->addField('insert_variable', 'note', array(
             'text' => $insertVariableButton->toHtml()
         ));
 
         $fieldSet->addField('entity_type_content', 'textarea', array(
-            'label'     => Mage::helper('goodahead_etm')->__("Content"),
+            'label'     => Mage::helper('cms')->__('Content'),
             'name'      => 'entity_type_content',
             'style'     => 'height:24em',
             'required'  => false,
@@ -139,25 +130,29 @@ class Goodahead_Etm_Block_Adminhtml_Entity_Types_Edit_Form
                 'name' => 'entity_type_id',
             ));
 
+            // TODO: Rework
             $entityTypeAttributes = Mage::getModel('goodahead_etm/source_entity_attribute')->toOptionsArrayWithoutExcludedTypes($entityType, true, array(
                 'boolean',
                 'multiselect',
                 'select',
                 'image',
+                'static',
             ));
 
             $fieldSet->addField('default_attribute_id', 'select', array(
-                'label'     => Mage::helper('goodahead_etm')->__("Default Attribute"),
+                'label'     => Mage::helper('goodahead_etm')->__('Default Attribute'),
                 'name'      => 'default_attribute_id',
                 'required'  => false,
                 'values'    => $entityTypeAttributes,
-                'note'      => Mage::helper('goodahead_etm')->__("This attribute is used to display entity label"),
+                'note'      => Mage::helper('goodahead_etm')->__('This attribute is used to display entity label'),
             ), 'entity_type_name');
 
             $form->getElement('entity_type_code')->setReadonly('readonly');
             $form->getElement('entity_type_code')->setDisabled(1);
             $form->setValues($entityType->getData());
             $form->getElement('variables')->setValue(Zend_Json::encode($this->getVariables()));
+        } else {
+            $form->getElement('variables')->setValue(Zend_Json::encode(array()));
         }
 
         $this->setForm($form);

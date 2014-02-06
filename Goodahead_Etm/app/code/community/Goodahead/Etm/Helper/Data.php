@@ -29,6 +29,8 @@
 
 class Goodahead_Etm_Helper_Data extends Mage_Core_Helper_Abstract
 {
+    const XML_PATH_INPUT_TYPE_MAP   = 'global/goodahead/etm/entity/attribute/input_type_map';
+
     protected $_visibleAttributes   = array();
 
     protected $_entityTypesCode = array();
@@ -39,6 +41,8 @@ class Goodahead_Etm_Helper_Data extends Mage_Core_Helper_Abstract
      * @var Goodahead_Etm_Model_Resource_Entity_Type_Collection
      */
     protected $_entityTypesCollection;
+
+    protected $_inputTypesMap;
 
     protected function _getEntityTypesCollection()
     {
@@ -80,6 +84,7 @@ class Goodahead_Etm_Helper_Data extends Mage_Core_Helper_Abstract
      */
     public function getVisibleAttributes($entityType)
     {
+        // TODO: Use eav/config instead
         if ($entityType instanceof Goodahead_Etm_Model_Entity_Type) {
             $entityTypeId = $entityType->getId();
         } else {
@@ -100,29 +105,48 @@ class Goodahead_Etm_Helper_Data extends Mage_Core_Helper_Abstract
 
     public function getVisibleAttributesCollection($entityType)
     {
+        // TODO: Use eav/config instead
         /** @var Goodahead_Etm_Model_Resource_Entity_Attribute_Collection $collection */
         $collection = Mage::getResourceModel('goodahead_etm/entity_attribute_collection');
-        $collection->setEntityType($entityType);
+        $collection->setEntityTypeFilter($entityType);
         $collection->addFieldToFilter('is_visible', 1);
         $collection->setOrder('sort_order', Zend_Db_Select::SQL_ASC);
 
         return $collection;
     }
 
+    protected function _initInputTypesMap()
+    {
+        if (!isset($this->_inputTypesMap)) {
+            $node = Mage::getConfig()->getNode(self::XML_PATH_INPUT_TYPE_MAP);
+            $this->_inputTypesMap = $node->asArray();
+        }
+        return $this->_inputTypesMap;
+    }
+
     public function getAttributeSourceModelByInputType($inputType)
     {
-        $inputTypes = array(
-            'multiselect'   => array(
-                'backend_model'     => 'eav/entity_attribute_backend_array',
-                'source_model'      => 'eav/entity_attribute_source_table'
-            ),
-            'boolean'       => array(
-                'source_model'      => 'eav/entity_attribute_source_boolean'
-            )
-        );
+        $this->_initInputTypesMap();
+        if (!empty($this->_inputTypesMap[$inputType]['source_model'])) {
+            return $this->_inputTypesMap[$inputType]['source_model'];
+        }
+        return null;
+    }
 
-        if (!empty($inputTypes[$inputType]['source_model'])) {
-            return $inputTypes[$inputType]['source_model'];
+    public function getAttributeBackendModelByInputType($inputType)
+    {
+        $this->_initInputTypesMap();
+        if (!empty($this->_inputTypesMap[$inputType]['backend_model'])) {
+            return $this->_inputTypesMap[$inputType]['backend_model'];
+        }
+        return null;
+    }
+
+    public function getAttributeFrontendModelByInputType($inputType)
+    {
+        $this->_initInputTypesMap();
+        if (!empty($this->_inputTypesMap[$inputType]['frontend_model'])) {
+            return $this->_inputTypesMap[$inputType]['frontend_model'];
         }
         return null;
     }
@@ -251,6 +275,28 @@ class Goodahead_Etm_Helper_Data extends Mage_Core_Helper_Abstract
         }
 
         return Mage::getModel(sprintf('goodahead_etm/custom_%s_entity', $entityTypeCode));
+    }
+
+    /**
+     * Return Options Hash for grid column from attribute source model
+     *
+     * @param Mage_Eav_Model_Entity_Attribute_Source_Interface $source
+     * @param bool                                             $withEmpty
+     * @param bool                                             $defaultValues
+     *
+     * @return array
+     */
+    public function getOptionsHash(
+        Mage_Eav_Model_Entity_Attribute_Source_Interface $source,
+        $withEmpty = true,
+        $defaultValues = false
+    )
+    {
+        $options = array();
+        foreach ($source->getAllOptions($withEmpty, $defaultValues) as $valueArray) {
+            $options[$valueArray['value']] = $valueArray['label'];
+        }
+        return $options;
     }
 
 }

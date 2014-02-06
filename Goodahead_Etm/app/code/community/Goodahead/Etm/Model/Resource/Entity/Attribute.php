@@ -54,12 +54,20 @@ class Goodahead_Etm_Model_Resource_Entity_Attribute
     {
         if ($object->isObjectNew()) {
             /* @var $helper Mage_Catalog_Helper_Product */
-            $helper = Mage::helper('catalog/product');
+            $helper = Mage::helper('goodahead_etm');
 
-            $object->setIsUserDefined(1);
-            $object->setSourceModel(Mage::helper('goodahead_etm')->getAttributeSourceModelByInputType($object->getFrontendInput()));
-            $object->setBackendModel($helper->getAttributeBackendModelByInputType($object->getFrontendInput()));
-            $object->setBackendType($object->getBackendTypeByInput($object->getFrontendInput()));
+            if (!$object->hasSourceModel()) {
+                $object->setSourceModel($helper->getAttributeSourceModelByInputType($object->getFrontendInput()));
+            }
+            if (!$object->hasBackendModel()) {
+                $object->setBackendModel($helper->getAttributeBackendModelByInputType($object->getFrontendInput()));
+            }
+            if (!$object->hasFrontendModel()) {
+                $object->setFrontendModel($helper->getAttributeFrontendModelByInputType($object->getFrontendInput()));
+            }
+            if (!$object->hasBackendType()) {
+                $object->setBackendType($object->getBackendTypeByInput($object->getFrontendInput()));
+            }
         }
 
         return parent::_beforeSave($object);

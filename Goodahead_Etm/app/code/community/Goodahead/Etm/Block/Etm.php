@@ -31,15 +31,20 @@ class Goodahead_Etm_Block_Etm extends Mage_Core_Block_Template
 {
     public function _toHtml()
     {
-        /*
+        /**
          * @var $entity Goodahead_Etm_Model_Entity
          * @var $textProcessor Mage_Core_Model_Email_Template
          */
         $entity = Mage::registry('goodahead_etm_entity');
-        $content = $entity->getEntityTypeInstance()->getEntityTypeContent();
+        $entityType = $entity->getEntityTypeInstance();
+        $content = $entityType->getEntityTypeContent();
 
         $textProcessor = Mage::getModel('core/email_template');
         $textProcessor->setTemplateText($content);
-        return $textProcessor->getProcessedTemplate($entity->getData(), true);
+
+        $data = $entity->getResource()->walkAttributes(
+            'frontend/getValue', array($entity));
+
+        return $textProcessor->getProcessedTemplate($data, true);
     }
 }

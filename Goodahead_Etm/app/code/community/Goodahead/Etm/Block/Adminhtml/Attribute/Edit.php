@@ -60,9 +60,9 @@ class Goodahead_Etm_Block_Adminhtml_Attribute_Edit
         parent::__construct();
 
         if ($this->_isAllowedAction('save')) {
-            $this->_updateButton('save', 'label', Mage::helper('goodahead_etm')->__('Save Attribute'));
+            $this->_updateButton('save', 'label', Mage::helper('catalog')->__('Save Attribute'));
             $this->_addButton('saveandcontinue', array(
-                'label'     => Mage::helper('goodahead_etm')->__('Save and Continue Edit'),
+                'label'     => Mage::helper('catalog')->__('Save and Continue Edit'),
                 'onclick'   => 'saveAndContinueEdit()',
                 'class'     => 'save',
             ), -100);
@@ -71,7 +71,7 @@ class Goodahead_Etm_Block_Adminhtml_Attribute_Edit
         }
 
         if ($this->_isAllowedAction('delete')) {
-            $this->_updateButton('delete', 'label', Mage::helper('goodahead_etm')->__('Delete Attribute'));
+            $this->_updateButton('delete', 'label', Mage::helper('catalog')->__('Delete Attribute'));
         } else {
             $this->_removeButton('delete');
         }
@@ -110,7 +110,7 @@ class Goodahead_Etm_Block_Adminhtml_Attribute_Edit
                  $this->escapeHtml($attribute->getAttributeCode())
             );
         } else {
-            return Mage::helper('goodahead_etm')->__('New Attribute');
+            return Mage::helper('adminhtml')->__('New Attribute');
         }
     }
 

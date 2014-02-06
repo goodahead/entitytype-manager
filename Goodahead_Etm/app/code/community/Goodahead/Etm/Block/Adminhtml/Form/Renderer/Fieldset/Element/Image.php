@@ -39,11 +39,24 @@ class Goodahead_Etm_Block_Adminhtml_Form_Renderer_Fieldset_Element_Image
         return Mage::registry('etm_entity_type');
     }
 
+    public function getValue()
+    {
+        $value = $this->getData('value');
+        if (is_array($value)) {
+            if (!empty($value['value'])) {
+                $value = $value['value'];
+            } else {
+                $value = null;
+            }
+        }
+        return $value;
+    }
+
     protected function _getUrl()
     {
         $url = false;
         if ($this->getValue()) {
-            $url = sprintf('%sgoodahead/etm/%s/%s/%s',
+            $url = sprintf('%sgoodahead/etm/images/%s/%s/%s',
                 Mage::getBaseUrl('media'),
                 $this->getEntityType()->getEntityTypeCode(),
                 $this->getEntityAttribute()->getAttributeCode(),

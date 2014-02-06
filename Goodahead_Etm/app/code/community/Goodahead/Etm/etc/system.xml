@@ -30,7 +30,7 @@
 -->
 <config>
     <sections>
-        <goodahead_etm module="goodahead_etm">
+        <goodahead_etm translate="label" module="goodahead_etm">
             <class>separator-top</class>
             <label>Entity Type Manager</label>
             <tab>general</tab>

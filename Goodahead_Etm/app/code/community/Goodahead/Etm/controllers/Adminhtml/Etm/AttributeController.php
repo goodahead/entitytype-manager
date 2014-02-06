@@ -38,7 +38,7 @@ class Goodahead_Etm_Adminhtml_Etm_AttributeController
         try {
             $this->_initEntityType();
 
-            $this->_initAction($this->__('Manage Attributes'));
+            $this->_initAction(Mage::helper('catalog')->__('Manage Attributes'));
             $this->renderLayout();
         } catch (Goodahead_Etm_Exception $e) {
             Mage::logException($e);
@@ -213,9 +213,13 @@ class Goodahead_Etm_Adminhtml_Etm_AttributeController
                     Mage::throwException(Mage::helper('goodahead_etm')->__('Unable to find attribute.'));
                 }
 
+                if ($attributeModel->isSystem()) {
+                    Mage::throwException(Mage::helper('goodahead_etm')->__('You cannot edit System attributes.'));
+                }
+
                 $this->_initAction($this->__("Edit Attribute with Code '%s'", $attributeModel->getAttributeCode()));
             } else {
-                $this->_initAction($this->__('New Attribute'));
+                $this->_initAction(Mage::helper('adminhtml')->__('New Attribute'));
             }
 
             $data = Mage::getSingleton('adminhtml/session')->getFormData(true);
@@ -264,25 +268,33 @@ class Goodahead_Etm_Adminhtml_Etm_AttributeController
             $data['entity_type_id'] = $entityTypeId;
         }
         if ($data) {
-           /** @var Goodahead_Etm_Model_Entity_Attribute $attributeModel */
-            $attributeModel = Mage::getSingleton('goodahead_etm/entity_attribute');
-
-            // if news item exists, try to load it
-            $attributeId = $this->getRequest()->getParam('attribute_id');
-            if ($attributeId) {
-                $attributeModel->load($attributeId);
-            } else {
-                if (isset($data['frontend_input']) && $data['frontend_input'] == 'image') {
-                    $data['backend_model'] = 'goodahead_etm/entity_attribute_backend_image';
-                }
-            }
-
-            $attributeModel->addData($data);
-
             try {
                 $hasError = false;
                 $this->_initEntityType();
 
+                /** @var Goodahead_Etm_Model_Entity_Attribute $attributeModel */
+                $attributeModel = Mage::getModel('goodahead_etm/entity_attribute');
+
+                // if attribute exists, try to load it
+                $frontendInput = $this->getRequest()->getParam('frontend_input');
+                $attributeId = $this->getRequest()->getParam('attribute_id');
+                if ($attributeId) {
+                    $attributeModel->load($attributeId);
+                    if ($attributeModel->hasData('frontend_input')) {
+                        $frontendInput = $attributeModel->getData('frontend_input');
+                    }
+                } else {
+                    // TODO: Rework to use setup model addAttribute method
+                    $attributeModel->setIsUserDefined(1);
+                }
+
+                $defaultValueField = $attributeModel->getDefaultValueByInput($frontendInput);
+                if ($defaultValueField) {
+                    $data['default_value'] = $this->getRequest()->getParam($defaultValueField);
+                }
+
+
+                $attributeModel->addData($data);
                 $attributeModel->save();
                 $this->_getSession()->addSuccess(
                     Mage::helper('goodahead_etm')->__('Attribute has been saved.')
@@ -298,6 +310,9 @@ class Goodahead_Etm_Adminhtml_Etm_AttributeController
                 $this->_getSession()->addException($e,
                     Mage::helper('goodahead_etm')->__('You are not allowed to edit non-custom attribute')
                 );
+            } catch (Mage_Eav_Exception $e) {
+                $hasError = true;
+                $this->_getSession()->addError($e->getMessage());
             } catch (Mage_Core_Exception $e) {
                 $hasError = true;
                 $this->_getSession()->addError($e->getMessage());

@@ -73,6 +73,34 @@
                 <class>Goodahead_Etm_Block</class>
             </goodahead_etm>
         </blocks>
+        <goodahead>
+            <etm>
+                <entity>
+                    <attribute>
+                        <input_type_map>
+                            <multiselect>
+                                <backend_model>eav/entity_attribute_backend_array</backend_model>
+                                <source_model>eav/entity_attribute_source_table</source_model>
+                            </multiselect>
+                            <select>
+                                <source_model>eav/entity_attribute_source_table</source_model>
+                            </select>
+                            <boolean>
+                                <source_model>eav/entity_attribute_source_boolean</source_model>
+                            </boolean>
+                            <image>
+                                <backend_model>goodahead_etm/entity_attribute_backend_image</backend_model>
+                                <frontend_model>goodahead_etm/entity_attribute_frontend_image</frontend_model>
+                            </image>
+                            <date>
+                                <backend_model>eav/entity_attribute_backend_datetime</backend_model>
+                                <frontend_model>eav/entity_attribute_frontend_datetime</frontend_model>
+                            </date>
+                        </input_type_map>
+                    </attribute>
+                </entity>
+            </etm>
+        </goodahead>
     </global>
     <admin>
         <routers>
@@ -93,6 +121,15 @@
                 </goodahead_etm>
             </updates>
         </layout>
+        <translate>
+            <modules>
+                <Goodahead_Etm>
+                    <files>
+                        <default>Goodahead/Adminhtml/Etm.csv</default>
+                    </files>
+                </Goodahead_Etm>
+            </modules>
+        </translate>
         <events>
             <controller_action_predispatch_adminhtml>
                 <observers>
@@ -177,6 +214,15 @@
                 </goodahead_etm>
             </updates>
         </layout>
+        <translate>
+            <modules>
+                <Goodahead_Etm>
+                    <files>
+                        <default>Goodahead/Etm.csv</default>
+                    </files>
+                </Goodahead_Etm>
+            </modules>
+        </translate>
         <events>
             <catalog_helper_output_construct>
                 <observers>

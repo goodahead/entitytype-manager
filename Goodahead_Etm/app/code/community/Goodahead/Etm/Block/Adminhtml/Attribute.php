@@ -54,7 +54,7 @@ class Goodahead_Etm_Block_Adminhtml_Attribute
         $this->_controller = 'adminhtml_attribute';
 
         $typeName = $this->_getEntityTypeFromRegistry()->getEntityTypeName();
-        $this->_headerText = Mage::helper('goodahead_etm')->__('Manage %s Attributes', $typeName);
+        $this->_headerText = Mage::helper('goodahead_etm')->__("Manage '%s' Attributes", $typeName);
 
         $this->_backButtonLabel = Mage::helper('goodahead_etm')->__('Back to Entity Types List');
         $this->_addBackButton();
@@ -66,7 +66,7 @@ class Goodahead_Etm_Block_Adminhtml_Attribute
         $addUrl = $this->getUrl('*/*/new', array(
             'entity_type_id' => $this->_getEntityTypeFromRegistry()->getId(),
         ));
-        $this->_updateButton('add', 'label', Mage::helper('goodahead_etm')->__('Add New Attribute'));
+        $this->_updateButton('add', 'label', Mage::helper('catalog')->__('Add New Attribute'));
         $this->_updateButton('add', 'onclick', 'setLocation(\'' . $addUrl . '\')');
     }
 }

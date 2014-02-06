@@ -45,6 +45,32 @@ class Goodahead_Etm_Block_Adminhtml_Entity_Edit_Form
         return $this;
     }
 
+    public function getEntity()
+    {
+        return Mage::registry('etm_entity');
+    }
+
+    public function getEntityType()
+    {
+        return Mage::registry('etm_entity_type');
+    }
+
+    protected function _initDefaultValues()
+    {
+        if (!$this->getEntity()->getId()) {
+            foreach (
+                Mage::helper('goodahead_etm')
+                    ->getVisibleAttributes($this->getEntityType()) as $attribute
+            ) {
+                $default = $attribute->getDefaultValue();
+                if ($default != '') {
+                    $this->getEntity()->setData($attribute->getAttributeCode(), $default);
+                }
+            }
+        }
+        return $this;
+    }
+
     /**
      * Preparing form elements for editing Entity
      *
@@ -60,8 +86,9 @@ class Goodahead_Etm_Block_Adminhtml_Entity_Edit_Form
             'use_container' => true
         ));
 
-        $entityType = Mage::registry('etm_entity_type');
-        $entity = Mage::registry('etm_entity');
+        $this->_initDefaultValues();
+        $entityType = $this->getEntityType();
+        $entity = $this->getEntity();
 
         $form->setDataObject($entity);
 
@@ -73,6 +100,9 @@ class Goodahead_Etm_Block_Adminhtml_Entity_Edit_Form
         foreach ($attributes as $attribute) {
             /* @var $attribute Mage_Eav_Model_Entity_Attribute */
             $attribute->unsIsVisible();
+            if ($attribute->isSystem()) {
+                $attribute->setIsVisible(0);
+            }
         }
 
         $this->_setFieldset($attributes, $fieldSet);

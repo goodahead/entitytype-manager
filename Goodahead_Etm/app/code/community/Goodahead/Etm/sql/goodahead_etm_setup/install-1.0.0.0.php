@@ -35,13 +35,12 @@ $installer->createEntityTables('goodahead_etm/entity');
 
 $table = $installer->getConnection()->newTable($installer->getTable('goodahead_etm/eav_entity_type'));
 $table
-    ->addColumn('entity_type_id', Varien_Db_Ddl_Table::TYPE_INTEGER, null, array(
-        'identity'  => true,
+    ->addColumn('entity_type_id', Varien_Db_Ddl_Table::TYPE_SMALLINT, null, array(
         'unsigned'  => true,
         'nullable'  => false,
         'primary'   => true,
     ), 'Entity Type ID')
-    ->addColumn('default_attribute_id', Varien_Db_Ddl_Table::TYPE_INTEGER, null, array(
+    ->addColumn('default_attribute_id', Varien_Db_Ddl_Table::TYPE_SMALLINT, null, array(
         'identity'  => false,
         'unsigned'  => true,
         'nullable'  => true,
@@ -57,9 +56,9 @@ $table
         Varien_Db_Ddl_Table::ACTION_CASCADE, Varien_Db_Ddl_Table::ACTION_CASCADE
     )
     ->addIndex($installer->getIdxName('goodahead_etm/eav_entity_type', array('default_attribute_id')),
-        array('default_attribute_id'))
-    ->setComment('ETM Entity Type extended info');
-$installer->getConnection()->createTable($table);
+        array('default_attribute_id'));
+$table->setOption('comment', 'ETM Entity Type extended info');
+$installer->createTable($table);
 
 // Add column and corresponding indexes to catalog/eav_attribute table, which will hold referenced entity type
 $installer->getConnection()->addColumn($installer->getTable('catalog/eav_attribute'), 'goodahead_etm_entity_type_id', array(
@@ -108,9 +107,9 @@ $table = $installer->getConnection()
     ->addForeignKey(
         $installer->getFkName('goodahead_etm/eav_attribute', 'attribute_id', 'eav/attribute', 'attribute_id'),
         'attribute_id', $installer->getTable('eav/attribute'), 'attribute_id',
-        Varien_Db_Ddl_Table::ACTION_CASCADE, Varien_Db_Ddl_Table::ACTION_CASCADE)
-    ->setComment('ETM EAV Attribute Table');
-$installer->getConnection()->createTable($table);
+        Varien_Db_Ddl_Table::ACTION_CASCADE, Varien_Db_Ddl_Table::ACTION_CASCADE);
+$table->setOption('comment', 'ETM EAV Attribute Table');
+$installer->createTable($table);
 
 /**
  * Add foreign key to entity type table

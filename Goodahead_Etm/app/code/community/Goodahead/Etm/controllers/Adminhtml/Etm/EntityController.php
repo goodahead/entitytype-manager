@@ -86,7 +86,7 @@ class Goodahead_Etm_Adminhtml_Etm_EntityController
                     $collection->delete();
 
                     $this->_getSession()->addSuccess(
-                        $this->__('Total of %d record(s) have been deleted.',
+                        Mage::helper('adminhtml')->__('Total of %d record(s) have been deleted.',
                             count($etmEntitys))
                     );
                 } catch (Exception $e) {
@@ -181,7 +181,7 @@ class Goodahead_Etm_Adminhtml_Etm_EntityController
                     foreach ($validate as $code => $error) {
                         if ($error === true) {
                             Mage::throwException(
-                                Mage::helper('goodahead_etm')->__(
+                                Mage::helper('catalog')->__(
                                     'Attribute "%s" is invalid.',
                                     $entity->getResource()->getAttribute($code)
                                         ->getFrontend()->getLabel()));

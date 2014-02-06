@@ -44,7 +44,7 @@ class Goodahead_Etm_Model_Source_Entity_Attribute
         }
         /** @var $attributesCollection Goodahead_Etm_Model_Resource_Entity_Attribute_Collection */
         $attributesCollection = Mage::getModel('goodahead_etm/entity_attribute')->getCollection();
-        $attributesCollection->setEntityType($entityType);
+        $attributesCollection->setEntityTypeFilter($entityType);
         return array_merge($result, $attributesCollection->load()->toOptionArray());
     }
 
@@ -61,10 +61,12 @@ class Goodahead_Etm_Model_Source_Entity_Attribute
         }
         /** @var $attributesCollection Goodahead_Etm_Model_Resource_Entity_Attribute_Collection */
         $attributesCollection = Mage::getModel('goodahead_etm/entity_attribute')->getCollection();
-        $attributesCollection->setEntityType($entityType);
+        $attributesCollection->setEntityTypeFilter($entityType);
 
         if (count($types)) {
             $attributesCollection->addFieldToFilter('frontend_input', array('nin' => $types));
+            // TODO: Rework
+            $attributesCollection->addFieldToFilter('backend_type', array('neq' => 'static'));
         }
 
         return array_merge($result, $attributesCollection->load()->toOptionArray());

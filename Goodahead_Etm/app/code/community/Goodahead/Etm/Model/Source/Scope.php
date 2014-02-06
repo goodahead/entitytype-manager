@@ -53,9 +53,9 @@ class Goodahead_Etm_Model_Source_Scope
     public function toArray()
     {
         return array(
-            Mage_Catalog_Model_Resource_Eav_Attribute::SCOPE_STORE   => Mage::helper('goodahead_etm')->__('Store View'),
-            Mage_Catalog_Model_Resource_Eav_Attribute::SCOPE_WEBSITE => Mage::helper('goodahead_etm')->__('Website'),
-            Mage_Catalog_Model_Resource_Eav_Attribute::SCOPE_GLOBAL  => Mage::helper('goodahead_etm')->__('Global'),
+            Mage_Catalog_Model_Resource_Eav_Attribute::SCOPE_STORE   => Mage::helper('catalog')->__('Store View'),
+            Mage_Catalog_Model_Resource_Eav_Attribute::SCOPE_WEBSITE => Mage::helper('catalog')->__('Website'),
+            Mage_Catalog_Model_Resource_Eav_Attribute::SCOPE_GLOBAL  => Mage::helper('catalog')->__('Global'),
         );
     }
 }

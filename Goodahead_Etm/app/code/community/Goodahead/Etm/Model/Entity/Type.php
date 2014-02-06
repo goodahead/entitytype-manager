@@ -35,6 +35,8 @@
  */
 class Goodahead_Etm_Model_Entity_Type extends Mage_Eav_Model_Entity_Type
 {
+    protected $_defaultAttribute = null;
+
     protected function _construct()
     {
         $this->_cacheTag = array(
@@ -70,5 +72,15 @@ class Goodahead_Etm_Model_Entity_Type extends Mage_Eav_Model_Entity_Type
             return $collection;
         }
         return 'goodahead_etm/entity_attribute_collection';
+    }
+
+    public function getDefaultAttribute()
+    {
+        if (!isset($this->_defaultAttribute) && $this->getDefaultAttributeId()) {
+            $this->_defaultAttribute = Mage::getSingleton('eav/config')->getAttribute(
+                $this, $this->getDefaultAttributeId()
+            );
+        }
+        return $this->_defaultAttribute;
     }
 }

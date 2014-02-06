@@ -41,7 +41,7 @@ class Goodahead_Etm_Block_Adminhtml_Entity_Types_Edit
         if ($this->_isAllowedAction('save')) {
             $this->_updateButton('save', 'label', Mage::helper('goodahead_etm')->__('Save Entity Type'));
             $this->_addButton('saveandcontinue', array(
-                'label'     => Mage::helper('goodahead_etm')->__('Save and Continue Edit'),
+                'label'     => Mage::helper('catalog')->__('Save and Continue Edit'),
                 'onclick'   => 'saveAndContinueEdit()',
                 'class'     => 'save',
             ), -100);

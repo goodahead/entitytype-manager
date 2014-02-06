@@ -5,7 +5,7 @@
  * This extension allows to create and manage custom EAV entity types
  * and EAV entities
  *
- * Copyright (C) 2013 Goodahead Ltd. (http://www.goodahead.com)
+ * Copyright (C) 2014 Goodahead Ltd. (http://www.goodahead.com)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -49,6 +49,7 @@ function updateEntityTypeBindings()
                     entityTypeBind.value = '';
                 }
             }
+            updateRequriedOptions();
         }
     }
 }
@@ -355,7 +356,11 @@ function checkIsConfigurableVisibility()
 function updateRequriedOptions()
 {
     if ($F('frontend_input')=='select' && $F('is_required')==1) {
-        $('option-count-check').addClassName('required-options-count');
+        if ($('goodahead_etm_entity_type_id') && $('goodahead_etm_entity_type_id').value!='') {
+            $('option-count-check').removeClassName('required-options-count');
+        } else {
+            $('option-count-check').addClassName('required-options-count');
+        }
     } else {
         $('option-count-check').removeClassName('required-options-count');
     }

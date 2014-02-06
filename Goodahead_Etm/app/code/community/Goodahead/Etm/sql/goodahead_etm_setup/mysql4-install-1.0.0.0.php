@@ -36,7 +36,6 @@ $installer->createEntityTables('goodahead_etm/entity');
 $table = $installer->getConnection()->newTable($installer->getTable('goodahead_etm/eav_entity_type'));
 $table
     ->addColumn('entity_type_id', Varien_Db_Ddl_Table::TYPE_SMALLINT, null, array(
-        'identity'  => true,
         'unsigned'  => true,
         'nullable'  => false,
         'primary'   => true,
@@ -57,17 +56,9 @@ $table
         Varien_Db_Ddl_Table::ACTION_CASCADE, Varien_Db_Ddl_Table::ACTION_CASCADE
     )
     ->addIndex($installer->getIdxName('goodahead_etm/eav_entity_type', array('default_attribute_id')),
-        array('default_attribute_id'))
-;
-
-$comment = 'ETM Entity Type extended info';
-if (method_exists($table, 'setComment')) {
-    $table->setComment($comment);
-} else {
-    $table->setOption('comment', $comment);
-}
-
-$installer->getConnection()->createTable($table);
+        array('default_attribute_id'));
+$table->setOption('comment', 'ETM Entity Type extended info');
+$installer->createTable($table);
 
 if ($this->isNewDdlModel()) {
     $columnDefinition = array(
@@ -127,15 +118,8 @@ $table = $installer->getConnection()
         'attribute_id', $installer->getTable('eav/attribute'), 'attribute_id',
         Varien_Db_Ddl_Table::ACTION_CASCADE, Varien_Db_Ddl_Table::ACTION_CASCADE)
 ;
-
-$comment = 'ETM EAV Attribute Table';
-if (method_exists($table, 'setComment')) {
-    $table->setComment($comment);
-} else {
-    $table->setOption('comment', $comment);
-}
-
-$installer->getConnection()->createTable($table);
+$table->setOption('comment', 'ETM EAV Attribute Table');
+$installer->createTable($table);
 
 /**
  * Add foreign key to entity type table

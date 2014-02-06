@@ -77,7 +77,7 @@ class Goodahead_Etm_Adminhtml_Etm_EntityTypeController
                         Mage::getModel('eav/entity_type')->setId($entityTypeId)->delete();
                     }
                     $this->_getSession()->addSuccess(
-                        $this->__('Total of %d record(s) have been deleted.', count($etmEntityTypes))
+                        Mage::helper('adminhtml')->__('Total of %d record(s) have been deleted.', count($etmEntityTypes))
                     );
                 } catch (Exception $e) {
                     $this->_getSession()->addError($e->getMessage());
@@ -185,9 +185,10 @@ class Goodahead_Etm_Adminhtml_Etm_EntityTypeController
                         array_merge(
                             $postData,
                             array(
-                                 'entity_model'     => sprintf('goodahead_etm/custom_%s_entity', $entityTypeCode),
-                                 'attribute_model'  => 'goodahead_etm/entity_attribute',
-                                 'table'            => 'goodahead_etm/entity',
+                                'entity_model'             => sprintf('goodahead_etm/custom_%s_entity', $entityTypeCode),
+                                'attribute_model'          => 'goodahead_etm/entity_attribute',
+                                'table'                    => 'goodahead_etm/entity',
+                                'create_system_attributes' => true,
                             )
                         )
                     );

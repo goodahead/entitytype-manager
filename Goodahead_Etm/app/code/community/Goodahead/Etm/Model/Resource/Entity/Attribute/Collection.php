@@ -37,6 +37,15 @@ class Goodahead_Etm_Model_Resource_Entity_Attribute_Collection
     protected $_entityType;
 
     /**
+     * Should be public due to issue in older magento versions
+     */
+    public function _construct()
+    {
+        $this->_init('goodahead_etm/entity_attribute');
+    }
+
+
+    /**
      * @return Goodahead_Etm_Model_Entity_Type
      */
     public function getEntityType()
@@ -48,11 +57,15 @@ class Goodahead_Etm_Model_Resource_Entity_Attribute_Collection
     }
 
     /**
+     * Compatibility with Goodahead_Etm 1.0.0 implementation
      *
+     *
+     * @deprecated
      */
     public function setEntityType($entityType)
     {
-        if ($entityType instanceof Goodahead_Etm_Model_Entity_Type) {
+        return $this->setEntityTypeFilter($entityType);
+/*        if ($entityType instanceof Goodahead_Etm_Model_Entity_Type) {
             $this->_entityType = $entityType;
         } else {
             $this->_entityType = Mage::getModel('goodahead_etm/entity_type')->load($entityType);
@@ -63,7 +76,7 @@ class Goodahead_Etm_Model_Resource_Entity_Attribute_Collection
         }
         $this->addFieldToFilter('main_table.entity_type_id', $this->getEntityType()->getId());
 
-        return $this;
+        return $this;*/
     }
 
     public function toOptionArray()
@@ -98,15 +111,19 @@ class Goodahead_Etm_Model_Resource_Entity_Attribute_Collection
     {
         parent::_initSelect();
 
+        /**
+         * Make sure this collection can not be used to access attributes from
+         * entities not managed by Entity Type Manager extension
+         */
         $this->getSelect()->joinInner(
             array('etm_entity_type' => $this->getTable('goodahead_etm/eav_entity_type')),
             'main_table.entity_type_id = etm_entity_type.entity_type_id',
             array()
         );
-        $this->getSelect()->joinInner(
-            array('etm_attribute' => $this->getTable('goodahead_etm/eav_attribute')),
-            'main_table.attribute_id = etm_attribute.attribute_id'
-        );
+//        $this->getSelect()->joinInner(
+//            array('etm_attribute' => $this->getTable('goodahead_etm/eav_attribute')),
+//            'main_table.attribute_id = etm_attribute.attribute_id'
+//        );
 
         return $this;
     }

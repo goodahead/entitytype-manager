@@ -40,6 +40,21 @@ class Goodahead_Etm_Model_Resource_Entity_Setup
 
     protected $_callAfterApplyAllUpdates = true;
 
+    protected function _prepareValues($attr)
+    {
+        return array_merge(
+            parent::_prepareValues($attr),
+            array(
+                'is_global'    => $this->_getValue(
+                    $attr,
+                    'global',
+                    Goodahead_Etm_Model_Entity_Attribute::SCOPE_GLOBAL
+                ),
+                'is_visible'   => $this->_getValue($attr, 'visible', 1),
+                'sort_order'   => $this->_getValue($attr, 'sort_order', '')
+            ));
+    }
+
     public function __construct($resourceName)
     {
         parent::__construct($resourceName);
@@ -145,13 +160,9 @@ class Goodahead_Etm_Model_Resource_Entity_Setup
                 ), 'Store Id')
                 ->addColumn('created_at', Varien_Db_Ddl_Table::TYPE_TIMESTAMP, null, array(
                     'nullable'  => false,
-                    'default'   => 0,
                 ), 'Created At')
                 ->addColumn('updated_at', Varien_Db_Ddl_Table::TYPE_TIMESTAMP, null, array(
                     'nullable'  => false,
-                    'default'   => Goodahead_Core_Model_Resource_Setup_Compatibility::getTimestampColumnDefaultValue(
-                        Goodahead_Core_Model_Resource_Setup_Compatibility::TIMESTAMP_INIT_UPDATE
-                    ),
                 ), 'Updated At')
                 ->addColumn('is_active', Varien_Db_Ddl_Table::TYPE_SMALLINT, null, array(
                     'unsigned'  => true,
@@ -170,12 +181,7 @@ class Goodahead_Etm_Model_Resource_Entity_Setup
                     Varien_Db_Ddl_Table::ACTION_CASCADE, Varien_Db_Ddl_Table::ACTION_CASCADE)
             ;
 
-            $comment = 'Eav Entity Main Table';
-            if (method_exists($mainTable, 'setComment')) {
-                $mainTable->setComment($comment);
-            } else {
-                $mainTable->setOption('comment', $comment);
-            }
+            $mainTable->setOption('comment', 'Eav Entity Main Table');
 
             $tables[$this->getTable($baseTableName)] = $mainTable;
         }
@@ -242,7 +248,7 @@ class Goodahead_Etm_Model_Resource_Entity_Setup
                     'default'   => '0',
                     ), 'Entity Id')
                 ->addColumn('value', $fieldType[0], $fieldType[1], array(
-                    'nullable'  => false,
+                    'nullable'  => true,
                     ), 'Attribute Value')
                 ->addIndex($this->getIdxName($eavTableName, array('entity_type_id')),
                     array('entity_type_id'))
@@ -275,12 +281,7 @@ class Goodahead_Etm_Model_Resource_Entity_Setup
                     Varien_Db_Ddl_Table::ACTION_CASCADE, Varien_Db_Ddl_Table::ACTION_CASCADE)
             ;
 
-            $comment = 'Eav Entity Value Table';
-            if (method_exists($eavTable, 'setComment')) {
-                $eavTable->setComment($comment);
-            } else {
-                $eavTable->setOption('comment', $comment);
-            }
+            $eavTable->setOption('comment', 'Eav Entity Value Table');
 
             $tables[$this->getTable($eavTableName)] = $eavTable;
         }
@@ -288,13 +289,13 @@ class Goodahead_Etm_Model_Resource_Entity_Setup
         //$connection->beginTransaction();
         try {
             foreach ($tables as $tableName => $table) {
-                $connection->createTable($table);
+                $this->createTable($table);
                 if (isset($_updateTableName) && $_updateTableName == $tableName) {
                     $connection->changeColumn(
                         $tableName,
                         'value',
                         'value',
-                        'DATETIME NOT NULL'
+                        'DATETIME'
                     );
                 }
             }
@@ -315,34 +316,74 @@ class Goodahead_Etm_Model_Resource_Entity_Setup
      * @param string $code
      * @param array $params
      * @return Mage_Eav_Model_Entity_Setup
+     * @throws Exception
      */
     public function addEntityType($code, array $params)
     {
-        $_updateMode = false;
-        if ($this->getEntityType($code, 'entity_type_id')) {
-            $_updateMode = true;
-        }
-        $params['entity_model'] = $this->_getValue($params, 'entity_model',
-            sprintf('goodahead_etm/custom_%s_entity', $code));
-        parent::addEntityType($code, $params);
-
-        $entityTypeId = $this->getEntityType($code, 'entity_type_id');
-        if ($entityTypeId) {
-            $data = array(
-                'entity_type_id'            => $entityTypeId,
-                'entity_type_name'          => $this->_getValue($params, 'entity_type_name', $code),
-                'default_attribute_id'      => $this->_getValue($params, 'default_attribute_id'),
-                'entity_type_root_template' => $this->_getValue($params, 'entity_type_root_template'),
-                'entity_type_layout_xml'    => $this->_getValue($params, 'entity_type_layout_xml'),
-                'entity_type_content'       => $this->_getValue($params, 'entity_type_content'),
-            );
-            if ($_updateMode) {
-                unset($data['entity_type_id']);
-                $this->updateEntityTypeExtra($code, $data);
-            } else {
-                $this->_conn->insert($this->getTable('goodahead_etm/eav_entity_type'), $data);
+        $this->getConnection()->beginTransaction();
+        try {
+            $_updateMode = false;
+            if ($this->getEntityType($code, 'entity_type_id')) {
+                $_updateMode = true;
             }
+            $params['entity_model'] = $this->_getValue($params, 'entity_model',
+                sprintf('goodahead_etm/custom_%s_entity', $code));
+            $params['attribute_model'] = $this->_getValue($params,
+                'attribute_model', 'goodahead_etm/entity_attribute');
+            $params['table'] = $this->_getValue($params,
+                'table', 'goodahead_etm/entity');
+            $params['additional_attribute_table'] = $this->_getValue($params,
+                'additional_attribute_table', 'goodahead_etm/eav_attribute');
+            $params['entity_attribute_collection'] = $this->_getValue($params,
+                'entity_attribute_collection', 'goodahead_etm/entity_attribute_collection');
+
+            parent::addEntityType($code, $params);
+
+            $entityTypeId = $this->getEntityType($code, 'entity_type_id');
+            if ($entityTypeId) {
+                $data = array(
+                    'entity_type_id'            => $entityTypeId,
+                    'entity_type_name'          => $this->_getValue($params, 'entity_type_name', $code),
+                    'default_attribute_id'      => $this->_getValue($params, 'default_attribute_id'),
+                    'entity_type_root_template' => $this->_getValue($params, 'entity_type_root_template'),
+                    'entity_type_layout_xml'    => $this->_getValue($params, 'entity_type_layout_xml'),
+                    'entity_type_content'       => $this->_getValue($params, 'entity_type_content'),
+                );
+
+                if ($_updateMode) {
+                    unset($data['entity_type_id']);
+                    $this->updateEntityTypeExtra($code, $data);
+                } else {
+                    $this->_conn->insert($this->getTable('goodahead_etm/eav_entity_type'), $data);
+                }
+
+                if ($this->_getValue($params, 'create_system_attributes', false)) {
+                    $this->addAttribute($entityTypeId, 'created_at', array(
+                        'backend'       => 'eav/entity_attribute_backend_time_created',
+                        'type'          => 'static',
+                        'frontend'      => 'eav/entity_attribute_frontend_datetime',
+                        'input'         => 'datetime',
+                        'required'      => false,
+                        'label'         => 'Created At',
+                        'sort_order'    => 1000,
+                    ));
+                    $this->addAttribute($entityTypeId, 'updated_at', array(
+                        'backend'       => 'eav/entity_attribute_backend_time_updated',
+                        'type'          => 'static',
+                        'frontend'      => 'eav/entity_attribute_frontend_datetime',
+                        'input'         => 'datetime',
+                        'required'      => false,
+                        'label'         => 'Updated At',
+                        'sort_order'    => 1000,
+                    ));
+                }
+            }
+            $this->getConnection()->commit();
+        } catch (Exception $e) {
+            $this->getConnection()->rollBack();
+            throw $e;
         }
+
         return $this;
     }
 
@@ -421,12 +462,19 @@ class Goodahead_Etm_Model_Resource_Entity_Setup
         if (method_exists(get_parent_class(__CLASS__), 'getFkName')) {
             return parent::getFkName($priTableName, $priColumnName, $refTableName, $refColumnName);
         } else {
-            return Goodahead_Core_Model_Resource_Setup_Compatibility::getIndexName(
+            return Goodahead_Core_Model_Resource_Setup_Compatibility::getForeignKeyName(
                 $this->getTable($priTableName),
                 $priColumnName,
                 $this->getTable($refTableName),
                 $refColumnName);
         }
+    }
+
+    public function createTable(Varien_Db_Ddl_Table $table)
+    {
+        Goodahead_Core_Model_Resource_Setup_Compatibility::createTable(
+            $this, $table
+        );
     }
 
 }

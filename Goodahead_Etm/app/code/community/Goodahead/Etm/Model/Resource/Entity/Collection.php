@@ -30,9 +30,10 @@
 abstract class Goodahead_Etm_Model_Resource_Entity_Collection
     extends Mage_Eav_Model_Entity_Collection_Abstract
 {
-    protected $_storeId     = null;
-
     protected $_entityTypeCode;
+    protected $_entityType      = null;
+
+    protected $_storeId         = null;
 
     protected function _construct()
     {
@@ -50,9 +51,22 @@ abstract class Goodahead_Etm_Model_Resource_Entity_Collection
      */
     public function setStoreId($storeId)
     {
-        $this->_storeId = $storeId;
+        if (!isset($storeId)) {
+            $this->_storeId = Mage::app()->getStore()->getId();
+        } else {
+            $this->_storeId = $storeId;
+        }
 
         return $this;
+    }
+
+    public function getEntityType()
+    {
+        if (!isset($this->_entityType)) {
+            $this->_entityType = Mage::getModel('goodahead_etm/entity_type')
+                ->loadByCode($this->_entityTypeCode);
+        }
+        return $this->_entityType;
     }
 
     /**
@@ -77,22 +91,36 @@ abstract class Goodahead_Etm_Model_Resource_Entity_Collection
         return $this;
     }
 
-    /**
-     * @param string $valueField
-     * @param string $labelField
-     * @param array $additional
-     * @return array
-     */
-    protected function _toOptionArray($valueField = 'entity_id', $labelField = 'name', $additional = array())
+//    protected function _toOptionArray($valueField = 'entity_id', $labelField = 'name', $additional = array())
+//    {
+//        return parent::_toOptionArray($valueField, $defaultAttribute->getAttributeCode(), $additional);
+//    }
+
+    public function toOptionArray($default = false)
     {
         $defaultAttributeId = $this->getEntity()->getEntityType()->getDefaultAttributeId();
         /** @var Goodahead_Etm_Model_Entity_Attribute $defaultAttribute */
         $defaultAttribute = Mage::getModel('goodahead_etm/entity_attribute')->load($defaultAttributeId);
-
-        $this->addAttributeToSelect($defaultAttribute->getAttributeCode());
-
-        return parent::_toOptionArray($valueField, $defaultAttribute->getAttributeCode(), $additional);
+        if ($defaultAttribute->getId()) {
+            $this->addAttributeToSelect($defaultAttribute->getAttributeCode());
+            return $this->_toOptionArray('entity_id', $defaultAttribute->getAttributeCode() . ($default ? '_default' : ''));
+        } else {
+            $entityTypeName = $this->getEntityType()->getEntityTypeName();
+            $result = array();
+            foreach ($this->_toOptionArray('entity_id', 'entity_id') as $row) {
+                if (strlen($row['value'])) {
+                    $result[] = array(
+                        'label' => sprintf('%s #%05d', $entityTypeName, $row['value']),
+                        'value' => $row['value'],
+                    );
+                } else {
+                    $result[] = $row;
+                }
+            }
+            return $result;
+        }
     }
+
 
     public function _loadAttributes($printQuery = false, $logQuery = false)
     {
@@ -120,13 +148,28 @@ abstract class Goodahead_Etm_Model_Resource_Entity_Collection
         $selects = array();
         foreach ($tableAttributes as $table=>$attributes) {
             $select = $this->_getLoadAttributesSelect($table, $attributes);
-            $selects[$attributeTypes[$table]][] = $this->_addLoadAttributesSelectValues(
-                $select,
-                $table,
-                $attributeTypes[$table]
-            );
+            if (method_exists($this, '_addLoadAttributesSelectValues')) {
+                $selects[$attributeTypes[$table]][] = $this->_addLoadAttributesSelectValues(
+                    $select,
+                    $table,
+                    $attributeTypes[$table]
+                );
+            } else {
+                $selects[$attributeTypes[$table]][] = $select;
+            }
         }
-        $selectGroups = Mage::getResourceHelper('eav')->getLoadAttributesSelectGroups($selects);
+        if (method_exists('Mage', 'getResourceHelper')) {
+            $selectGroups = Mage::getResourceHelper('eav')->getLoadAttributesSelectGroups($selects);
+        } else {
+            /**
+             * 1.4 - 1.5 compatibility
+             */
+            $selectGroups = array();
+            foreach ($selects as $eavType => $selectGroup) {
+                $selectGroups = array_merge($selectGroups, $selectGroup);
+            }
+            $selectGroups = array($selectGroups);
+        }
         foreach ($selectGroups as $selects) {
             if (!empty($selects)) {
                 try {
@@ -165,17 +208,21 @@ abstract class Goodahead_Etm_Model_Resource_Entity_Collection
         } else {
             $select->where('store_id = 0');
         }
-        return $select;
-    }
-
-    protected function _addLoadAttributesSelectValues($select, $table, $type)
-    {
-        parent::_addLoadAttributesSelectValues($select, $table, $type);
         $select->columns(array(
             'store_id' => $table. '.store_id',
         ));
+
         return $select;
     }
+
+//    protected function _addLoadAttributesSelectValues($select, $table, $type)
+//    {
+//        parent::_addLoadAttributesSelectValues($select, $table, $type);
+//        $select->columns(array(
+//            'store_id' => $table. '.store_id',
+//        ));
+//        return $select;
+//    }
 
     protected function _compactValues($values)
     {
@@ -235,9 +282,9 @@ abstract class Goodahead_Etm_Model_Resource_Entity_Collection
              */
             $defCondition = '('.implode(') AND (', $condition).')';
             $defAlias     = $tableAlias . '_default';
-            $defAlias     = $this->getConnection()->getTableName($defAlias);
+//            $defAlias     = $this->getConnection()->getTableName($defAlias);
             $defFieldAlias= str_replace($tableAlias, $defAlias, $fieldAlias);
-            $tableAlias   = $this->getConnection()->getTableName($tableAlias);
+//            $tableAlias   = $this->getConnection()->getTableName($tableAlias);
 
             $defCondition = str_replace($tableAlias, $defAlias, $defCondition);
             $defCondition.= $adapter->quoteInto(
@@ -251,8 +298,12 @@ abstract class Goodahead_Etm_Model_Resource_Entity_Collection
             );
 
             $method = 'joinLeft';
-            $fieldAlias = $this->getConnection()->getCheckSql("{$tableAlias}.value_id > 0",
-                $fieldAlias, $defFieldAlias);
+            if (method_exists($this->getConnection(), 'getCheckSql')) {
+                $fieldAlias = $this->getConnection()->getCheckSql("{$tableAlias}.value_id > 0",
+                    $fieldAlias, $defFieldAlias);
+            } else { // 1.4 - 1.5 compatibility
+                $fieldAlias = new Zend_Db_Expr("IF($tableAlias.value_id>0, $fieldAlias, $defFieldAlias)");
+            }
             $this->_joinAttributes[$fieldCode]['condition_alias'] = $fieldAlias;
             $this->_joinAttributes[$fieldCode]['attribute']       = $attribute;
         } else {
@@ -263,14 +314,14 @@ abstract class Goodahead_Etm_Model_Resource_Entity_Collection
         return parent::_joinAttributeToSelect($method, $attribute, $tableAlias, $condition, $fieldCode, $fieldAlias);
     }
 
-    protected function _beforeLoad()
-    {
-        $attribute = Mage::getSingleton('eav/config')->getCollectionAttribute(
-            $this->getEntity()->getEntityType(),
-            $this->getEntity()->getEntityType()->getDefaultAttributeId()
-        );
-        $attributeCode = $attribute->getAttributeCode();
-        $this->addAttributeToSort($attributeCode);
-    }
+//    protected function _beforeLoad()
+//    {
+//        $attribute = Mage::getSingleton('eav/config')->getCollectionAttribute(
+//            $this->getEntity()->getEntityType(),
+//            $this->getEntity()->getEntityType()->getDefaultAttributeId()
+//        );
+//        $attributeCode = $attribute->getAttributeCode();
+//        $this->addAttributeToSort($attributeCode);
+//    }
 
 }

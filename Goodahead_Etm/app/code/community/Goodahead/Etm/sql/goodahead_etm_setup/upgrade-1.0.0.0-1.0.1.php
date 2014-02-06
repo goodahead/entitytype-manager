@@ -31,21 +31,53 @@
 $installer = $this;
 $installer->startSetup();
 
-$select = $installer->getConnection()->select()
+$select = $installer
+    ->getConnection()
+    ->select()
     ->from(
-        array('goodahead_etm_attribute' => $installer->getTable('goodahead_etm/eav_attribute')),
+        array('goodahead_etm_attribute' => $installer->getTable('goodahead_etm/eav_attribute'))
+    )
+    ->joinInner(
+        array('eav_attribute' => $installer->getTable('eav/attribute')),
+        'eav_attribute.attribute_id = goodahead_etm_attribute.attribute_id',
         array(
-            'frontend_label' => 'attribute_name',
+             'source_model',
+             'backend_model',
+             'frontend_model',
+             'frontend_input'
         )
     )
-    ->where('main.attribute_id = goodahead_etm_attribute.attribute_id');
+;
 
-$updateQuery = $installer->getConnection()->updateFromSelect(
-    $select,
-    array('main' => $installer->getTable('eav/attribute'))
-);
+$items = $installer->getConnection()->fetchAll($select);
 
-$installer->getConnection()->query($updateQuery);
+$helper = Mage::helper('goodahead_etm');
+
+if ($items && is_array($items)) {
+    foreach ($items as $item) {
+        $update = array(
+            'frontend_label' => $item['attribute_name'],
+        );
+        if (empty($item['source_model'])) {
+            $update['source_model'] = $helper->getAttributeSourceModelByInputType($item['frontend_input']);
+        }
+        if (empty($item['backend_model'])) {
+            $update['backend_model'] = $helper->getAttributeBackendModelByInputType($item['frontend_input']);
+        }
+        if (empty($item['frontend_model'])) {
+            $update['frontend_model'] = $helper->getAttributeFrontendModelByInputType($item['frontend_input']);
+        }
+        $update = array_filter($update);
+
+        if (!empty($update)) {
+            $installer->getConnection()->update(
+                $installer->getTable('eav/attribute'),
+                $update,
+                $installer->getConnection()->quoteInto('attribute_id = ?', $item['attribute_id']));
+        }
+    }
+}
+
 
 $installer->getConnection()->dropColumn($installer->getTable('goodahead_etm/eav_attribute'), 'attribute_name');
 
@@ -73,8 +105,11 @@ if ($items && is_array($items)) {
         $installer->getConnection()->update(
             $installer->getTable('eav/entity_type'),
             array(
-                'entity_model'    => sprintf('goodahead_etm/custom_%s_entity', $item['entity_type_code']),
-                'attribute_model' => 'goodahead_etm/entity_attribute',
+                'entity_model'                  => sprintf('goodahead_etm/custom_%s_entity', $item['entity_type_code']),
+                'attribute_model'               => 'goodahead_etm/entity_attribute',
+                'entity_table'                  => 'goodahead_etm/entity',
+                'additional_attribute_table'    => 'goodahead_etm/eav_attribute',
+                'entity_attribute_collection'   => 'goodahead_etm/entity_attribute_collection',
             ),
             $installer->getConnection()->quoteInto('entity_type_id = ?', $item['entity_type_id'])
         );

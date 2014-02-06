@@ -106,11 +106,82 @@ class Goodahead_Etm_Model_Resource_Entity
      * @param Mage_Catalog_Model_Resource_Eav_Attribute $attribute
      * @return boolean
      */
-    protected function _isApplicableAttribute($object, $attribute)
+/*    protected function _isApplicableAttribute($object, $attribute)
     {
         $applyTo = $attribute->getApplyTo();
         return count($applyTo) == 0 || in_array($object->getTypeId(), $applyTo);
+    }*/
+
+    /**
+     * Walk through the attributes and run method with optional arguments
+     *
+     * Returns array with results for each attribute
+     *
+     * if $method is in format "part/method" will run method on specified part
+     * for example: $this->walkAttributes('backend/validate');
+     *
+     * @param string $method
+     * @param array $args
+     * @param array $part attribute, backend, frontend, source
+     * @return array
+     */
+    public function walkAttributes($partMethod, array $args = array())
+    {
+        $methodArr = explode('/', $partMethod);
+        switch (sizeof($methodArr)) {
+            case 1:
+                $part   = 'attribute';
+                $method = $methodArr[0];
+                break;
+
+            case 2:
+                $part   = $methodArr[0];
+                $method = $methodArr[1];
+                break;
+        }
+        $results = array();
+        foreach ($this->getAttributesByCode() as $attrCode => $attribute) {
+
+            if (isset($args[0]) && is_object($args[0]) && !$this->_isApplicableAttribute($args[0], $attribute)) {
+                continue;
+            }
+
+            switch ($part) {
+                case 'attribute':
+                    $instance = $attribute;
+                    break;
+
+                case 'backend':
+                    $instance = $attribute->getBackend();
+                    break;
+
+                case 'frontend':
+                    $instance = $attribute->getFrontend();
+                    break;
+
+                case 'source':
+                    $instance = $attribute->getSource();
+                    break;
+            }
+
+            if (!$this->_isCallableAttributeInstance($instance, $method, $args)) {
+                continue;
+            }
+
+            try {
+                $results[$attrCode] = call_user_func_array(array($instance, $method), $args);
+            } catch (Mage_Eav_Model_Entity_Attribute_Exception $e) {
+                throw $e;
+            } catch (Exception $e) {
+                $e = Mage::getModel('eav/entity_attribute_exception', $e->getMessage());
+                $e->setAttributeCode($attrCode)->setPart($part);
+                throw $e;
+            }
+        }
+
+        return $results;
     }
+
 
     /**
      * Check whether attribute instance (attribute, backend, frontend or source) has method and applicable
@@ -131,7 +202,15 @@ class Goodahead_Etm_Model_Resource_Entity
             }
         }
 
-        return parent::_isCallableAttributeInstance($instance, $method, $args);
+        if (!is_object($instance) || !method_exists($instance, $method)) {
+            return false;
+        }
+
+        if (method_exists(get_parent_class(__CLASS__), '_isCallableAttributeInstance')) {
+            return parent::_isCallableAttributeInstance($instance, $method, $args);
+        } else {
+            return true;
+        }
     }
 
 
@@ -146,6 +225,7 @@ class Goodahead_Etm_Model_Resource_Entity
      */
     protected function _getLoadAttributesSelect($object, $table)
     {
+        $select = parent::_getLoadAttributesSelect($object, $table);
         /**
          * This condition is applicable for all cases when we was work in not single
          * store mode, customize some value per specific store view and than back
@@ -163,14 +243,11 @@ class Goodahead_Etm_Model_Resource_Entity
             $storeIds[] = $storeId;
         }
 
-        $select = $this->_getReadAdapter()->select()
-            ->from(array('attr_table' => $table), array())
-            ->where("attr_table.{$this->getEntityIdField()} = ?", $object->getId())
-            ->where('attr_table.store_id IN (?)', $storeIds);
+        $select->where('store_id IN (?)', $storeIds);
         if ($setId) {
             $select->join(
                 array('set_table' => $this->getTable('eav/entity_attribute')),
-                $this->_getReadAdapter()->quoteInto('attr_table.attribute_id = set_table.attribute_id' .
+                $this->_getReadAdapter()->quoteInto("{$table}.attribute_id = set_table.attribute_id" .
                 ' AND set_table.attribute_set_id = ?', $setId),
                 array()
             );
@@ -203,7 +280,7 @@ class Goodahead_Etm_Model_Resource_Entity
     protected function _prepareLoadSelect(array $selects)
     {
         $select = parent::_prepareLoadSelect($selects);
-        $select->order('store_id');
+        $select->order('store_id', 'desc');
         return $select;
     }
 
@@ -248,9 +325,24 @@ class Goodahead_Etm_Model_Resource_Entity
     }
 
     /**
+     * Initialize attribute value for object
+     *
+     * @deprecated after 1.5.1.0 - mistake in method name
+     *
+     * @param   Varien_Object $object
+     * @param   array $valueRow
+     * @return  Mage_Eav_Model_Entity_Abstract
+     */
+    protected function _setAttribteValue($object, $valueRow)
+    {
+        return $this->_setAttributeValue($object, $valueRow);
+    }
+
+
+    /**
      * Insert or Update attribute data
      *
-     * @param Mage_Catalog_Model_Abstract $object
+     * @param Goodahead_Etm_Model_Entity $object
      * @param Mage_Eav_Model_Entity_Attribute_Abstract $attribute
      * @param mixed $value
      * @return Mage_Catalog_Model_Resource_Abstract
@@ -367,55 +459,55 @@ class Goodahead_Etm_Model_Resource_Entity
         return $this->_saveAttributeValue($object, $attribute, $value);
     }
 
-    /**
-     * Update attribute value for specific store
-     *
-     * @param Mage_Catalog_Model_Abstract $object
-     * @param object $attribute
-     * @param mixed $value
-     * @param int $storeId
-     * @return Mage_Catalog_Model_Resource_Abstract
-     */
-    protected function _updateAttributeForStore($object, $attribute, $value, $storeId)
-    {
-        $adapter = $this->_getWriteAdapter();
-        $table   = $attribute->getBackend()->getTable();
-        $entityIdField = $attribute->getBackend()->getEntityIdField();
-        $select  = $adapter->select()
-            ->from($table, 'value_id')
-            ->where('entity_type_id = :entity_type_id')
-            ->where("$entityIdField = :entity_field_id")
-            ->where('store_id = :store_id')
-            ->where('attribute_id = :attribute_id');
-        $bind = array(
-            'entity_type_id'  => $object->getEntityTypeId(),
-            'entity_field_id' => $object->getId(),
-            'store_id'        => $storeId,
-            'attribute_id'    => $attribute->getId()
-        );
-        $valueId = $adapter->fetchOne($select, $bind);
-        /**
-         * When value for store exist
-         */
-        if ($valueId) {
-            $bind  = array('value' => $this->_prepareValueForSave($value, $attribute));
-            $where = array('value_id = ?' => (int)$valueId);
-
-            $adapter->update($table, $bind, $where);
-        } else {
-            $bind  = array(
-                $idField            => (int)$object->getId(),
-                'entity_type_id'    => (int)$object->getEntityTypeId(),
-                'attribute_id'      => (int)$attribute->getId(),
-                'value'             => $this->_prepareValueForSave($value, $attribute),
-                'store_id'          => (int)$storeId
-            );
-
-            $adapter->insert($table, $bind);
-        }
-
-        return $this;
-    }
+//    /**
+//     * Update attribute value for specific store
+//     *
+//     * @param Mage_Catalog_Model_Abstract $object
+//     * @param object $attribute
+//     * @param mixed $value
+//     * @param int $storeId
+//     * @return Mage_Catalog_Model_Resource_Abstract
+//     */
+//    protected function _updateAttributeForStore($object, $attribute, $value, $storeId)
+//    {
+//        $adapter = $this->_getWriteAdapter();
+//        $table   = $attribute->getBackend()->getTable();
+//        $entityIdField = $attribute->getBackend()->getEntityIdField();
+//        $select  = $adapter->select()
+//            ->from($table, 'value_id')
+//            ->where('entity_type_id = :entity_type_id')
+//            ->where("$entityIdField = :entity_field_id")
+//            ->where('store_id = :store_id')
+//            ->where('attribute_id = :attribute_id');
+//        $bind = array(
+//            'entity_type_id'  => $object->getEntityTypeId(),
+//            'entity_field_id' => $object->getId(),
+//            'store_id'        => $storeId,
+//            'attribute_id'    => $attribute->getId()
+//        );
+//        $valueId = $adapter->fetchOne($select, $bind);
+//        /**
+//         * When value for store exist
+//         */
+//        if ($valueId) {
+//            $bind  = array('value' => $this->_prepareValueForSave($value, $attribute));
+//            $where = array('value_id = ?' => (int)$valueId);
+//
+//            $adapter->update($table, $bind, $where);
+//        } else {
+//            $bind  = array(
+//                $idField            => (int)$object->getId(),
+//                'entity_type_id'    => (int)$object->getEntityTypeId(),
+//                'attribute_id'      => (int)$attribute->getId(),
+//                'value'             => $this->_prepareValueForSave($value, $attribute),
+//                'store_id'          => (int)$storeId
+//            );
+//
+//            $adapter->insert($table, $bind);
+//        }
+//
+//        return $this;
+//    }
 
     /**
      * Delete entity attribute values
@@ -592,6 +684,64 @@ class Goodahead_Etm_Model_Resource_Entity
         }
 
         return parent::_prepareValueForSave($value, $attribute);
+    }
+
+    /**
+     * Prepare data for passed table
+     *
+     * @param Varien_Object $object
+     * @param string $table
+     * @return array
+     */
+    protected function _prepareDataForTable(Varien_Object $object, $table)
+    {
+        if (method_exists(get_parent_class(__CLASS__), '_prepareDataForTable')) {
+            return parent::_prepareDataForTable($object, $table);
+        } else {
+            /**
+             * Compatibility part 1.4 - 1.5
+             */
+            $data = array();
+            $fields = $this->_getWriteAdapter()->describeTable($table);
+            foreach (array_keys($fields) as $field) {
+                if ($object->hasData($field)) {
+                    $fieldValue = $object->getData($field);
+                    if ($fieldValue instanceof Zend_Db_Expr) {
+                        $data[$field] = $fieldValue;
+                    } else {
+                        if (null !== $fieldValue) {
+                            $fieldValue   = $this->_prepareTableValueForSave($fieldValue, $fields[$field]['DATA_TYPE']);
+                            // Method not available in old magento
+                            //$fieldValue = $this->_getWriteAdapter()->prepareColumnValue($fields[$field], $fieldValue);
+                            $data[$field] = $fieldValue;
+                        } else if (!empty($fields[$field]['NULLABLE'])) {
+                            $data[$field] = null;
+                        }
+                    }
+                }
+            }
+            return $data;
+        }
+    }
+
+    /**
+     * Prepare value for save
+     *
+     * @param mixed $value
+     * @param string $type
+     * @return mixed
+     */
+    protected function _prepareTableValueForSave($value, $type)
+    {
+        if (method_exists(get_parent_class(__CLASS__), '_prepareTableValueForSave')) {
+            return parent::_prepareTableValueForSave($value, $type);
+        } else {
+            $type = strtolower($type);
+            if ($type == 'decimal' || $type == 'numeric' || $type == 'float') {
+                $value = Mage::app()->getLocale()->getNumber($value);
+            }
+            return $value;
+        }
     }
 
     /**

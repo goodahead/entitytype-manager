@@ -49,24 +49,46 @@ class Goodahead_Etm_Model_Source_Entity
         $result = array();
 
         $attribute = $this->getAttribute();
+        $storeId = $this->getAttribute()->getStoreId();
+
+        if (!is_array($this->_options)) {
+            $this->_options = array();
+        }
+        if (!is_array($this->_optionsDefault)) {
+            $this->_optionsDefault = array();
+        }
+
         $entityTypeId = $attribute->getData('goodahead_etm_entity_type_id');
 
         /** @var Goodahead_Etm_Model_Entity_Type $entityType */
         $entityType = Mage::getModel('goodahead_etm/entity_type')->load($entityTypeId);
-        if ($entityType->getId()) {
-            /** @var Goodahead_Etm_Model_Resource_Entity_Collection $collection */
-            $collection = Mage::getModel(sprintf('goodahead_etm/custom_%s_entity', $entityType->getEntityTypeCode()))
-                ->getCollection()
-            ;
-            if ($withEmpty) {
-                $result[] = array(
-                    'value' => '',
-                    'label' => '',
-                );
+        if ($entityTypeId = $entityType->getId()) {
+            if (!array_key_exists($entityTypeId, $this->_options)) {
+                $this->_options[$entityTypeId] = array();
             }
-            $result = array_merge($result, $collection->toOptionArray());
+            if (!isset($this->_options[$entityTypeId][$storeId])) {
+                /** @var Goodahead_Etm_Model_Resource_Entity_Collection $collection */
+                $collection = Mage::helper('goodahead_etm')
+                    ->getEntityCollectionByEntityType($entityType);
+                $collection->setStoreId($storeId);
+                $etmDefaultAttribute = $entityType->getDefaultAttribute();
+                if (isset($etmDefaultAttribute)) {
+                    $collection->addAttributeToSort($etmDefaultAttribute->getAttributeCode());
+                }
 
+                $this->_options[$entityTypeId][$storeId]        = $collection->toOptionArray();
+                // TODO: Implement default values for collection
+//                $this->_optionsDefault[$entityTypeId][$storeId] = $collection->toOptionArray(true);
+            }
+            $result =
+                /*$defaultValues
+                    ? $this->_optionsDefault[$entityTypeId][$storeId]
+                    :*/ $this->_options[$entityTypeId][$storeId];
+            if ($withEmpty) {
+                array_unshift($result, array('label' => '', 'value' => ''));
+            }
         }
+
         return $result;
     }
 }

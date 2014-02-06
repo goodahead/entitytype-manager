@@ -54,7 +54,7 @@ class Goodahead_Etm_Block_Adminhtml_Attribute_Edit_Tab_Form
      *
      * @return $this
      */
-    protected function _initFormValues()
+/*    protected function _initFormValues()
     {
         $attribute = $this->getAttributeObject();
 
@@ -62,8 +62,10 @@ class Goodahead_Etm_Block_Adminhtml_Attribute_Edit_Tab_Form
             $this->getForm()->setValues($attribute->getData());
         }
 
+        parent::_initFormValues()
+
         return Mage_Adminhtml_Block_Widget_Form::_initFormValues();
-    }
+    }*/
 
     /**
      * Preparing form elements for editing Entity Type Attribute
@@ -87,17 +89,17 @@ class Goodahead_Etm_Block_Adminhtml_Attribute_Edit_Tab_Form
         $additionalTypes = array(
             array(
                 'value' => 'price',
-                'label' => Mage::helper('goodahead_etm')->__('Price')
+                'label' => Mage::helper('catalog')->__('Price')
             ),
             array(
                 'value' => 'image',
-                'label' => Mage::helper('goodahead_etm')->__('Media Image')
+                'label' => Mage::helper('catalog')->__('Media Image')
             )
         );
         if ($attributeObject->getFrontendInput() == 'gallery') {
             $additionalTypes[] = array(
                 'value' => 'gallery',
-                'label' => Mage::helper('goodahead_etm')->__('Gallery')
+                'label' => Mage::helper('catalog')->__('Gallery')
             );
         }
 
@@ -131,27 +133,23 @@ class Goodahead_Etm_Block_Adminhtml_Attribute_Edit_Tab_Form
         $frontendInputElm->setValues($frontendInputValues);
 
         $scopes = array(
-            Mage_Catalog_Model_Resource_Eav_Attribute::SCOPE_STORE      => Mage::helper('goodahead_etm')->__('Store View'),
-            Mage_Catalog_Model_Resource_Eav_Attribute::SCOPE_WEBSITE    => Mage::helper('goodahead_etm')->__('Website'),
-            Mage_Catalog_Model_Resource_Eav_Attribute::SCOPE_GLOBAL     => Mage::helper('goodahead_etm')->__('Global'),
+            Mage_Catalog_Model_Resource_Eav_Attribute::SCOPE_STORE      => Mage::helper('catalog')->__('Store View'),
+            Mage_Catalog_Model_Resource_Eav_Attribute::SCOPE_WEBSITE    => Mage::helper('catalog')->__('Website'),
+            Mage_Catalog_Model_Resource_Eav_Attribute::SCOPE_GLOBAL     => Mage::helper('catalog')->__('Global'),
         );
-
-        if ($attributeObject->getAttributeCode() == 'status' || $attributeObject->getAttributeCode() == 'tax_class_id') {
-            unset($scopes[Mage_Catalog_Model_Resource_Eav_Attribute::SCOPE_STORE]);
-        }
 
         $fieldset->addField('is_global', 'select', array(
             'name'  => 'is_global',
-            'label' => Mage::helper('goodahead_etm')->__('Scope'),
-            'title' => Mage::helper('goodahead_etm')->__('Scope'),
-            'note'  => Mage::helper('goodahead_etm')->__('Declare attribute value saving scope'),
+            'label' => Mage::helper('catalog')->__('Scope'),
+            'title' => Mage::helper('catalog')->__('Scope'),
+            'note'  => Mage::helper('catalog')->__('Declare attribute value saving scope'),
             'values'=> $scopes
         ), 'attribute_code');
 
         $fieldset->addField('sort_order', 'text', array(
             'name'  => 'sort_order',
-            'label' => Mage::helper('goodahead_etm')->__('Sort Order'),
-            'title' => Mage::helper('goodahead_etm')->__('Sort Order'),
+            'label' => Mage::helper('core')->__('Sort Order'),
+            'title' => Mage::helper('core')->__('Sort Order'),
         ));
 
         Mage::dispatchEvent('goodahead_etm_entity_attribute_edit_prepare_form', array(
