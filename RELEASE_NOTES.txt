@@ -1,0 +1,47 @@
+==== 1.0.1 ====
+
+=== Major Highlights ===
+Significant update introduced to Goodahead Etm extension. Entire approach to Entity Type definition and instantiating reviewed
+This release address all know issues found with previous 1.0.0-rc1 version. List of supported Magento versions extended and now includes Magento Community 1.4.2.0 - 1.8.1.0 and Magento Enterprise 1.9.1.1 - 1.13.1.0
+
+=== Improvements ===
+Entity Type models reworked. Entity-related models instantiation approach changed to support more than one entity-type usage in single script run
+Supported Magento versions list greatly extended. Now extension supports  Magento Community 1.4.2.0 - 1.8.1.0 and Magento Enterprise 1.9.1.1 - 1.13.1
+Minor performance improvements
+
+=== Changes ===
+Changed: Reworked entity type and attribute creation. Goodahead_Etm_Model_Resource_Entity_Setup reworked: addEntityType method now can be used to create entity types
+Changed: Entity Type controller now use setup model to create Entity Types
+Changed: Class inheritance changed to be compatible with older Magento versions
+Added: Added backwards compatibility methods to Entity Type model and all related models to cover functionality missing in older Magento versions
+
+=== Fixes ===
+Fixed: Saving sore view/website scope attributes under not-default scope produce fatal error
+Fixed: No indication on Entity edit form if particular attribute use default or store view scope value
+Fixed: Store view scope values not loaded by source model used for Product Attributes
+Fixed: Default value for Attribute not saved on by Attribute edit form
+Fixed: Default value for Attributes not applied on Entity creation
+Fixed: Entity grid sorting do not work
+Fixed: Entity grid filtering produce fatal error
+Fixed: Entity form validation not working at all
+Fixed: Entity form validation issues for required attributes of type Image always complains for no value defined
+Fixed: Fixed any action on admin resets selected store view
+Fixed: Insert Variable for Entity Type edit page do not work on older Magento versions
+Fixed: Consistency with model definition to use Goodahead_Etm defined models all the time if defined instead of Mage_Eav models (some files had issues and Mage_Eav attribute models were used instead of Goodahead_Etm models, this was causing a lot of issues)
+Changed: Entity Type edit form .js and .css linkage moved from block to layout. Proper layout update handle used to insure backwards compatibility with older Magento versions
+
+
+
+==== 1.0.0-rc1 ====
+
+=== Major Highlights ===
+Goodahead Etm 1.0.0-rc1 version introduced. Originally developed on Magento Hackathon in Leipzig (31.05.2013 - 02.06.2013). It allows to create and manage custom EAV Entity Types
+This extension can be used by store owners who require more detailed data for product attributes of type select (dropdown) and multiselect. It require no developer skills to install and use (only basic HTML/CSS knowledge required in order to create Entity Type landing pages). Magento Developers can find features, provided by this extension usable. It can ease the process of creating custom entities (i.e. brands, manufacturers, suppliers, etc.) and working with them
+
+=== Features ===
+Goodahead Etm extension allow customer:
+  * Define custom Entity Types (i.e. Brand, Manufacturer, Supplier, etc.) 
+  * Populate defined Entity Types with custom attributes
+  * Create landing pages for Entities with Entity Type level template definition
+  * Create Entities of specific Entity Types
+  * Bind Entity Type to any Dropdown or Multiselect Product attribute. By using this functionality this attribute will be populated with options which are actually Entities of that particular Entity Type
