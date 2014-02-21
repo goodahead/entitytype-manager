@@ -11,8 +11,8 @@ landing page appearance.
 This extension can be used by store owners who require require more detailed
 data for product attributes of type select (dropdown) and multiselect.
 It require no developer skills to install and use (only basic HTML/CSS
-knowleadge required in order to create Entity Type landing pages).
-Magento Developers can find features, provided by this extansion usable. It can
+knowledge required in order to create Entity Type landing pages).
+Magento Developers can find features, provided by this extension usable. It can
 ease the process of creating custom entities (i.e. brands, manufacturers,
 suppliers, etc.) and working with them.
 
