@@ -44,6 +44,24 @@ class Goodahead_Etm_Helper_Data extends Mage_Core_Helper_Abstract
 
     protected $_inputTypesMap;
 
+    /**
+     * Initialize helper instance
+     *
+     * @param array $args
+     */
+    public function __construct(array $args = array())
+    {
+        if (@class_exists('Mage_Shell_Abstract')) {
+            $this->runEtmAutoloader();
+        }
+    }
+
+    public function runEtmAutoloader()
+    {
+        Goodahead_Etm_Processor_Autoload::register();
+        return $this;
+    }
+
     protected function _getEntityTypesCollection()
     {
         if (!isset($this->_entityTypesCollection)) {
@@ -95,7 +113,7 @@ class Goodahead_Etm_Helper_Data extends Mage_Core_Helper_Abstract
 
             $this->_visibleAttributes[$entityTypeId] = array();
 
-            foreach($collection as $attribute) {
+            foreach ($collection as $attribute) {
                 $this->_visibleAttributes[$entityTypeId][$attribute->getAttributeCode()] = $attribute;
             }
         }
@@ -181,7 +199,9 @@ class Goodahead_Etm_Helper_Data extends Mage_Core_Helper_Abstract
         $entityTypeId = $resource->getEntityTypeIdByEntityId($entityId);
 
         if (!isset($entityTypeId)) {
-            throw new Goodahead_Etm_Exception(Mage::helper('goodahead_etm')->__('Entity type for this entity not found'));
+            throw new Goodahead_Etm_Exception(
+                Mage::helper('goodahead_etm')->__('Entity type for this entity not found')
+            );
         }
 
         return $entityTypeId;
@@ -200,13 +220,15 @@ class Goodahead_Etm_Helper_Data extends Mage_Core_Helper_Abstract
             $entityType->load($entityTypeId);
 
             if (!$entityType->getId()) {
-                throw new Goodahead_Etm_Exception(Mage::helper('goodahead_etm')->__('Entity type not found'));
+                throw new Goodahead_Etm_Exception(
+                    Mage::helper('goodahead_etm')->__('Entity type not found')
+                );
             }
 
             $this->_entityTypes[$entityType->getId()] = $entityType;
         }
 
-        return $this->_entityTypes[$entityType->getId()];
+        return $this->_entityTypes[$entityTypeId];
     }
 
     /**
@@ -236,7 +258,10 @@ class Goodahead_Etm_Helper_Data extends Mage_Core_Helper_Abstract
      */
     public function getEntityByEntityId($entityId, $storeId = 0)
     {
-        $entity = Mage::getModel(sprintf('goodahead_etm/custom_%s_entity', $this->getEntityTypeCodeByEntityId($entityId)))
+        $entity = Mage::getModel(sprintf(
+            'goodahead_etm/custom_%s_entity',
+            $this->getEntityTypeCodeByEntityId($entityId)
+        ))
             ->setStoreId($storeId)
             ->load($entityId);
 
@@ -251,7 +276,7 @@ class Goodahead_Etm_Helper_Data extends Mage_Core_Helper_Abstract
     {
         if ($type instanceof Goodahead_Etm_Model_Entity_Type) {
             $entityTypeCode = $type->getEntityTypeCode();
-        } elseif (is_int($type)) {
+        } elseif (is_numeric($type)) {
             $entityTypeCode = $this->getEntityTypeCodeById($type);
         } else {
             $entityTypeCode = $type;
@@ -268,7 +293,7 @@ class Goodahead_Etm_Helper_Data extends Mage_Core_Helper_Abstract
     {
         if ($type instanceof Goodahead_Etm_Model_Entity_Type) {
             $entityTypeCode = $type->getEntityTypeCode();
-        } elseif (is_int($type)) {
+        } elseif (is_numeric($type)) {
             $entityTypeCode = $this->getEntityTypeCodeById($type);
         } else {
             $entityTypeCode = $type;

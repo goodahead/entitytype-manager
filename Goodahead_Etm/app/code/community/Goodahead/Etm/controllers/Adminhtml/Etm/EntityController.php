@@ -137,7 +137,10 @@ class Goodahead_Etm_Adminhtml_Etm_EntityController
             $this->_getSession()->unsFormData();
             $entity->addData($data);
         }
-
+        $block = $this->getLayout()->getBlock('catalog.wysiwyg.js');
+        if ($block) {
+            $block->setStoreId($storeId);
+        }
         $this->renderLayout();
     }
 
@@ -282,6 +285,24 @@ class Goodahead_Etm_Adminhtml_Etm_EntityController
     }
 
     /**
+     * WYSIWYG editor action for ajax request
+     *
+     */
+    public function wysiwygAction()
+    {
+        $elementId = $this->getRequest()->getParam('element_id', md5(microtime()));
+        $storeId = $this->getRequest()->getParam('store_id', 0);
+        $storeMediaUrl = Mage::app()->getStore($storeId)->getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA);
+
+        $content = $this->getLayout()->createBlock('adminhtml/catalog_helper_form_wysiwyg_content', '', array(
+            'editor_element_id' => $elementId,
+            'store_id'          => $storeId,
+            'store_media_url'   => $storeMediaUrl,
+        ));
+        $this->getResponse()->setBody($content->toHtml());
+    }
+
+    /**
      * ACL check
      *
      * @return bool
@@ -289,6 +310,7 @@ class Goodahead_Etm_Adminhtml_Etm_EntityController
     protected function _isAllowed()
     {
         switch ($this->getRequest()->getActionName()) {
+            case 'wysiwyg':
             case 'edit':
             case 'save':
                 return Mage::getSingleton('admin/session')->isAllowed('goodahead_etm/manage_entities/save');

@@ -27,31 +27,19 @@
  * @license    http://www.gnu.org/licenses/lgpl-3.0-standalone.html GNU Lesser General Public License
  */
 
-/**
- * Class Goodahead_Etm_Block_Adminhtml_Entity_Grid_Renderer_Select
- *
- * Select column rendered for Entity Grid
- */
-
-class Goodahead_Etm_Block_Adminhtml_Entity_Grid_Renderer_Select
-    extends Mage_Adminhtml_Block_Widget_Grid_Column_Renderer_Select
+class Goodahead_Etm_Block_Adminhtml_Widget_Form extends Mage_Adminhtml_Block_Widget_Form
 {
-    public function render(Varien_Object $row)
+    public function getWysiwygConfig($data = array())
     {
-        $values= $this->_getValue($row);
-        $values = explode(',', $values);
-
-        $attribute = $this->getColumn()->getAttribute();
-        $result = '';
-        if (!empty($values)) {
-            $result = '<ul>';
-            foreach ($values as $value) {
-                $result .= '<li>' . $attribute->getSource()->getOptionText($value) . '</li>';
-            }
-            $result .= '</ul>';
+        $wysiwygTextModeFlag = false;
+        if (is_array($data) && array_key_exists('wysiwyg_text_mode', $data)
+            && $data['wysiwyg_text_mode'] === true
+        ) {
+            $wysiwygTextModeFlag = true;
         }
-
-        return $result;
+        if ($wysiwygTextModeFlag || !$configModel = $this->getWysiwygModelClass()) {
+            $configModel = 'goodahead_etm/wysiwyg_config';
+        }
+        return Mage::getSingleton($configModel)->getConfig($data);
     }
-
 }

@@ -37,6 +37,7 @@
                 <Mage_Eav />
                 <Mage_Adminhtml />
                 <Mage_Catalog />
+                <Mage_Cms />
                 <Goodahead_Core />
             </depends>
         </Goodahead_Etm>

@@ -423,7 +423,7 @@ class Goodahead_Etm_Model_Resource_Entity
                 ->where('entity_type_id = ?', $attribute->getEntityTypeId())
                 ->where('attribute_id = ?', $attribute->getAttributeId())
                 ->where('store_id = ?', $this->getDefaultStoreId())
-                ->where('entity_id = ?',  $object->getEntityId());
+                ->where('entity_id = ?', $object->getEntityId());
             $row = $this->_getReadAdapter()->fetchOne($select);
 
             if (!$row) {
@@ -654,7 +654,8 @@ class Goodahead_Etm_Model_Resource_Entity
     protected function _canUpdateAttribute(
         Mage_Eav_Model_Entity_Attribute_Abstract $attribute,
         $value,
-        array &$origData)
+        array &$origData
+    )
     {
         $result = parent::_canUpdateAttribute($attribute, $value, $origData);
         if ($result &&

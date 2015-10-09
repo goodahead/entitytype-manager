@@ -34,6 +34,7 @@
  */
 class Goodahead_Etm_Block_Adminhtml_Attribute_Edit_Tab_Options
     extends Mage_Eav_Block_Adminhtml_Attribute_Edit_Options_Abstract
+    implements Mage_Adminhtml_Block_Widget_Tab_Interface
 {
     /**
      * Set template used by Product Attributes edit form
@@ -52,5 +53,45 @@ class Goodahead_Etm_Block_Adminhtml_Attribute_Edit_Tab_Options
     public function getAttributeObject()
     {
         return Mage::registry('etm_attribute');
+    }
+
+    /**
+     * Prepare label for tab
+     *
+     * @return string
+     */
+    public function getTabLabel()
+    {
+        return Mage::helper('catalog')->__('Manage Label / Options');
+    }
+
+    /**
+     * Prepare title for tab
+     *
+     * @return string
+     */
+    public function getTabTitle()
+    {
+        return Mage::helper('catalog')->__('Manage Label / Options');
+    }
+
+    /**
+     * Returns status flag about this tab can be shown or not
+     *
+     * @return true
+     */
+    public function canShowTab()
+    {
+        return true;
+    }
+
+    /**
+     * Returns status flag about this tab hidden or not
+     *
+     * @return true
+     */
+    public function isHidden()
+    {
+        return false;
     }
 }

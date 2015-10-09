@@ -51,9 +51,13 @@ $table
     ->addColumn('entity_type_root_template', Varien_Db_Ddl_Table::TYPE_LONGVARCHAR, 128, array(), 'Root Template')
     ->addColumn('entity_type_layout_xml', Varien_Db_Ddl_Table::TYPE_LONGVARCHAR, null, array(), 'Layout XML')
     ->addColumn('entity_type_content', Varien_Db_Ddl_Table::TYPE_LONGVARCHAR, null, array(), 'Content')
-    ->addForeignKey($installer->getFkName('goodahead_etm/eav_entity_type', 'entity_type_id', 'eav/entity_type', 'entity_type_id'),
-        'entity_type_id', $installer->getTable('eav/entity_type'), 'entity_type_id',
-        Varien_Db_Ddl_Table::ACTION_CASCADE, Varien_Db_Ddl_Table::ACTION_CASCADE
+    ->addForeignKey(
+        $installer->getFkName('goodahead_etm/eav_entity_type', 'entity_type_id', 'eav/entity_type', 'entity_type_id'),
+        'entity_type_id',
+        $installer->getTable('eav/entity_type'),
+        'entity_type_id',
+        Varien_Db_Ddl_Table::ACTION_CASCADE,
+        Varien_Db_Ddl_Table::ACTION_CASCADE
     )
     ->addIndex($installer->getIdxName('goodahead_etm/eav_entity_type', array('default_attribute_id')),
         array('default_attribute_id'));
@@ -84,7 +88,12 @@ $installer->getConnection()->addKey(
 );
 
 $installer->getConnection()->addConstraint(
-    $installer->getFkName('catalog/eav_attribute', 'goodahead_etm_entity_type_id', 'goodahead_etm/eav_entity_type', 'entity_type_id'),
+    $installer->getFkName(
+        'catalog/eav_attribute',
+        'goodahead_etm_entity_type_id',
+        'goodahead_etm/eav_entity_type',
+        'entity_type_id'
+    ),
     $installer->getTable('catalog/eav_attribute'),
     'goodahead_etm_entity_type_id',
     $installer->getTable('goodahead_etm/eav_entity_type'),
@@ -125,7 +134,12 @@ $installer->createTable($table);
  * Add foreign key to entity type table
  */
 $installer->getConnection()->addConstraint(
-    $installer->getFkName('goodahead_etm/eav_entity_type', 'default_attribute_id', 'goodahead_etm/eav_attribute', 'attribute_id'),
+    $installer->getFkName(
+        'goodahead_etm/eav_entity_type',
+        'default_attribute_id',
+        'goodahead_etm/eav_attribute',
+        'attribute_id'
+    ),
     $installer->getTable('goodahead_etm/eav_entity_type'),
     'default_attribute_id',
     $installer->getTable('goodahead_etm/eav_attribute'),

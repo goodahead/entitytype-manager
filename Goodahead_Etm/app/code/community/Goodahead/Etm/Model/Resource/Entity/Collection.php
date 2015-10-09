@@ -259,7 +259,10 @@ abstract class Goodahead_Etm_Model_Resource_Entity_Collection
         }
 
         foreach ($this->_itemsById[$entityId] as $object) {
-            $object->setData($attributeCode, array_key_exists('value', $valueInfo) ? $valueInfo['value'] : $valueInfo['default_value']);
+            $object->setData(
+                $attributeCode,
+                array_key_exists('value', $valueInfo) ? $valueInfo['value'] : $valueInfo['default_value']
+            );
         }
 
         return $this;

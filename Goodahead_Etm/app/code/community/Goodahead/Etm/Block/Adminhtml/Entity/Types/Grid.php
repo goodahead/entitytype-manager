@@ -35,6 +35,7 @@ class Goodahead_Etm_Block_Adminhtml_Entity_Types_Grid
         $this->setId('entityTypesGrid');
         $this->_controller = 'adminhtml_entity_types';
         $this->setUseAjax(true);
+        $this->setSaveParametersInSession(true);
 
         $this->setDefaultSort('main_table.entity_type_id');
         $this->setDefaultDir('DESC');
@@ -64,14 +65,14 @@ class Goodahead_Etm_Block_Adminhtml_Entity_Types_Grid
             'header'            => Mage::helper('goodahead_etm')->__('Entity Type Code'),
             'filter_index'      => 'main_table.entity_type_code',
             'index'             => 'entity_type_code',
-            'type'              => 'text'
+            'type'              => 'varchar'
         ));
 
         $this->addColumn('entity_type_name', array(
             'header'            => Mage::helper('goodahead_etm')->__('Entity Type Name'),
             'filter_index'      => 'entity_type_name',
             'index'             => 'entity_type_name',
-            'type'              => 'text'
+            'type'              => 'varchar'
         ));
 
         $this->addColumn('action',

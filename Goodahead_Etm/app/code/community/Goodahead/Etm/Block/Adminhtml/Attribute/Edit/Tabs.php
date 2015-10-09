@@ -43,29 +43,4 @@ class Goodahead_Etm_Block_Adminhtml_Attribute_Edit_Tabs
         $this->setDestElementId('edit_form');
         $this->setTitle(Mage::helper('goodahead_etm')->__('Entity Attribute Information'));
     }
-
-    /**
-     * Initialize tabs for Attribute edit form
-     *
-     * @return Goodahead_Etm_Block_Adminhtml_Attribute_Edit_Tabs
-     */
-    protected function _beforeToHtml()
-    {
-        // FIXME: move tab initialization section to layout
-
-        $this->addTab('main', array(
-            'label'     => Mage::helper('catalog')->__('Properties'),
-            'title'     => Mage::helper('catalog')->__('Properties'),
-            'content'   => $this->getLayout()->createBlock('goodahead_etm/adminhtml_attribute_edit_tab_form')->toHtml(),
-            'active'    => true
-        ));
-
-        $this->addTab('labels', array(
-            'label'     => Mage::helper('catalog')->__('Manage Label / Options'),
-            'title'     => Mage::helper('catalog')->__('Manage Label / Options'),
-            'content'   => $this->getLayout()->createBlock('goodahead_etm/adminhtml_attribute_edit_tab_options')->toHtml(),
-        ));
-
-        return parent::_beforeToHtml();
-    }
 }

@@ -27,31 +27,31 @@
  * @license    http://www.gnu.org/licenses/lgpl-3.0-standalone.html GNU Lesser General Public License
  */
 
-/**
- * Class Goodahead_Etm_Block_Adminhtml_Entity_Grid_Renderer_Multiselect
- *
- * Multiselect column rendered for Entity Grid
- */
-
-class Goodahead_Etm_Block_Adminhtml_Entity_Grid_Renderer_Multiselect
-    extends Mage_Adminhtml_Block_Widget_Grid_Column_Renderer_Abstract
+class Goodahead_Etm_Block_Adminhtml_Widget_Form_Element_Wysiwyg_Fake
+    extends Varien_Data_Form_Element_Editor
+    implements Varien_Data_Form_Element_Renderer_Interface
 {
-    public function render(Varien_Object $row)
+    protected $_element;
+
+    public function render(Varien_Data_Form_Element_Abstract $element)
     {
-        $values= $this->_getValue($row);
-        $values = explode(',', $values);
-
-        $attribute = $this->getColumn()->getAttribute();
-        $result = '';
-        if (!empty($values)) {
-            $result = '<ul>';
-            foreach ($values as $value) {
-                $result .= '<li>' . $attribute->getSource()->getOptionText($value) . '</li>';
-            }
-            $result .= '</ul>';
-        }
-
-        return $result;
+        $this->_element = $element;
+        return $this->getElementHtml();
     }
 
+    public function getElement()
+    {
+        return $this->_element;
+    }
+
+    public function getElementHtml()
+    {
+        $element = $this->getElement();
+        if ($element->getConfig('widget_window_url')) {
+            $html = $element->_getButtonsHtml() . $element->getTextInputHtml();
+            $html = $element->_wrapIntoContainer($html);
+            return $html;
+        }
+        return $element->getTextInputHtml();
+    }
 }

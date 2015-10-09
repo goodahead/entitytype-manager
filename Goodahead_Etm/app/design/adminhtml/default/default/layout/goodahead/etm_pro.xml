@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<layout>
+    <adminhtml_etm_entity_edit>
+        <reference name="head">
+            <action method="setCanLoadTinyMce"><can_load_tiny_mce>true</can_load_tiny_mce></action>
+        </reference>
+        <reference name="js">
+            <block type="core/template" template="catalog/wysiwyg/js.phtml" name="catalog.wysiwyg.js" />
+        </reference>
+        <reference name="etm.entity.form_container">
+            <block type="goodahead_etmpro/adminhtml_entity_edit_form_config" name="etm.entity.form.container.config" />
+        </reference>
+    </adminhtml_etm_entity_edit>
+
+    <adminhtml_etm_entitytype_edit>
+        <reference name="head">
+            <action method="setCanLoadTinyMce"><can_load_tiny_mce>true</can_load_tiny_mce></action>
+        </reference>
+        <reference name="etm_entity_type_edit_tab_page_layout">
+            <action method="setWysiwygModelClass"><wysiwyg_model_class>cms/wysiwyg_config</wysiwyg_model_class></action>
+        </reference>
+        <reference name="etm_entity_type_edit_tab_list_page_layout">
+            <action method="setWysiwygModelClass"><wysiwyg_model_class>cms/wysiwyg_config</wysiwyg_model_class></action>
+        </reference>
+        <reference name="js">
+            <block type="core/template" template="catalog/wysiwyg/js.phtml" name="catalog.wysiwyg.js" />
+        </reference>
+    </adminhtml_etm_entitytype_edit>
+</layout>

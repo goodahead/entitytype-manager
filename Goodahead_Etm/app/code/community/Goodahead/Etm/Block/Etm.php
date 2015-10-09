@@ -29,22 +29,99 @@
 
 class Goodahead_Etm_Block_Etm extends Mage_Core_Block_Template
 {
+    protected $_entity;
+    protected $_templateFilter;
+
+    public function setEntity($entity)
+    {
+        if ($entity instanceof Goodahead_Etm_Model_Entity) {
+            $this->_entity = $entity;
+            $this->_templateFilter = null;
+        } else {
+            $helper = Mage::helper('goodahead_etm');
+
+            try {
+                $entity = $helper->getEntityByEntityId(
+                    $this->getRequest()->getParam('entity_id'),
+                    Mage::app()->getStore()->getId()
+                );
+                $this->_entity = $entity;
+                $this->_templateFilter = null;
+            } catch (Exception $e) {
+                Mage::logException($e);
+            }
+        }
+        return $this;
+    }
+
+    /**
+     * @return Goodahead_Etm_Model_Entity
+     */
+    public function getEntity()
+    {
+        if (isset($this->_entity)) {
+            return $this->_entity;
+        }
+        return Mage::registry('goodahead_etm_entity');
+    }
+
+    public function getEntityType()
+    {
+        $entity = $this->getEntity();
+        if ($entity instanceof Goodahead_Etm_Model_Entity) {
+            return $entity->getEntityTypeInstance();
+        }
+        return Mage::registry('goodahead_etm_entity_type');
+    }
+
+    /**
+     * @return Goodahead_Etm_Model_Template_Filter
+     */
+    protected function _getTemplateFilter()
+    {
+        if (!isset($this->_templateFilter)) {
+            /**
+             * @var $entity Goodahead_Etm_Model_Entity
+             */
+            $entity = $this->getEntity();
+            $data = $entity->getResource()->walkAttributes(
+                'frontend/getValue', array($entity));
+
+            $templateFilter = Mage::getModel('goodahead_etm/template_filter');
+            $templateFilter
+                ->setStoreId(Mage::app()->getStore()->getId())
+                ->setUseAbsoluteLinks(true)
+                ->setPlainTemplateMode(false)
+                ->setVariables($data)
+                ->setEntity($entity)
+                ->setEntityType($entity->getEntityTypeInstance());
+            $this->_templateFilter = $templateFilter;
+        }
+        return $this->_templateFilter;
+    }
+
+    protected function _prepareLayout()
+    {
+        parent::_prepareLayout();
+        $entityType = $this->getEntityType();
+        if (
+            $entityType instanceof Goodahead_Etm_Model_Entity_Type
+            && $entityType->getEntityTypeTitle()
+        ) {
+            $titleBlock = Mage::app()->getLayout()->getBlock('head');
+            if ($titleBlock) {
+                $titleBlock->setTitle(
+                    $this->_getTemplateFilter()
+                        ->filter($entityType->getEntityTypeTitle()));
+            }
+        }
+        return $this;
+    }
+
     public function _toHtml()
     {
-        /**
-         * @var $entity Goodahead_Etm_Model_Entity
-         * @var $textProcessor Mage_Core_Model_Email_Template
-         */
-        $entity = Mage::registry('goodahead_etm_entity');
-        $entityType = $entity->getEntityTypeInstance();
-        $content = $entityType->getEntityTypeContent();
-
-        $textProcessor = Mage::getModel('core/email_template');
-        $textProcessor->setTemplateText($content);
-
-        $data = $entity->getResource()->walkAttributes(
-            'frontend/getValue', array($entity));
-
-        return $textProcessor->getProcessedTemplate($data, true);
+        return $this->_getTemplateFilter()->filter(
+            $this->getEntity()->getEntityTypeInstance()->getEntityTypeContent()
+        );
     }
 }

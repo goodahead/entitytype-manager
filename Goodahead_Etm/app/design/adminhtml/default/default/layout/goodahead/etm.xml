@@ -40,11 +40,16 @@
     <adminhtml_etm_attribute_edit>
         <update handle="editor" />
 
-        <reference name="left">
-            <block type="goodahead_etm/adminhtml_attribute_edit_tabs" name="etm.attribute.form_container"/>
-        </reference>
         <reference name="content">
-            <block type="goodahead_etm/adminhtml_attribute_edit" name="attribute_edit_content"></block>
+            <block type="goodahead_etm/adminhtml_attribute_edit" name="attribute_edit_content" />
+        </reference>
+        <reference name="left">
+            <block type="goodahead_etm/adminhtml_attribute_edit_tabs" name="etm.attribute.form_container">
+                <block type="goodahead_etm/adminhtml_attribute_edit_tab_form" name="etm_attribute_edit_tab_main" />
+                <block type="goodahead_etm/adminhtml_attribute_edit_tab_options" name="etm_attribute_edit_tab_labels" />
+                <action method="addTab"><name>main_section</name><block>etm_attribute_edit_tab_main</block></action>
+                <action method="addTab"><name>labels_section</name><block>etm_attribute_edit_tab_labels</block></action>
+            </block>
         </reference>
         <reference name="js">
             <block type="adminhtml/template" name="attribute_edit_js" template="goodahead/etm/entity/attribute/js.phtml"></block>
@@ -79,7 +84,17 @@
         <update handle="editor" />
 
         <reference name="content">
-            <block type="goodahead_etm/adminhtml_entity_types_edit" name="etm.entity.types.form_container" />
+            <block type="goodahead_etm/adminhtml_entity_types_edit" name="etm.entity.types.content" />
+        </reference>
+        <reference name="left">
+            <block type="goodahead_etm/adminhtml_entity_types_edit_tabs" name="etm.entity.types.form_container">
+                <block type="goodahead_etm/adminhtml_entity_types_edit_tab_form" name="etm_entity_type_edit_tab_main" />
+                <block type="goodahead_etm/adminhtml_entity_types_edit_tab_entity" name="etm_entity_type_edit_tab_page_layout" />
+                <block type="goodahead_etm/adminhtml_entity_types_edit_tab_list" name="etm_entity_type_edit_tab_list_page_layout" />
+                <action method="addTab"><name>main_section</name><block>etm_entity_type_edit_tab_main</block></action>
+                <action method="addTab"><name>page_layout_section</name><block>etm_entity_type_edit_tab_page_layout</block></action>
+                <action method="addTab"><name>list_page_layout_section</name><block>etm_entity_type_edit_tab_list_page_layout</block></action>
+            </block>
         </reference>
         <reference name="js">
             <block type="adminhtml/template" name="goodahead_etm_entity_type_edit_variables_js" template="goodahead/etm/entity/type/edit/variables.phtml"></block>

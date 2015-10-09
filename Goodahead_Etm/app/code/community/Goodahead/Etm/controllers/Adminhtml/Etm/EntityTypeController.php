@@ -77,7 +77,8 @@ class Goodahead_Etm_Adminhtml_Etm_EntityTypeController
                         Mage::getModel('eav/entity_type')->setId($entityTypeId)->delete();
                     }
                     $this->_getSession()->addSuccess(
-                        Mage::helper('adminhtml')->__('Total of %d record(s) have been deleted.', count($etmEntityTypes))
+                        Mage::helper('adminhtml')
+                            ->__('Total of %d record(s) have been deleted.', count($etmEntityTypes))
                     );
                 } catch (Exception $e) {
                     $this->_getSession()->addError($e->getMessage());
@@ -118,9 +119,12 @@ class Goodahead_Etm_Adminhtml_Etm_EntityTypeController
 
     public function editAction()
     {
-        $this->_initAction($this->__('Create Entity Type'));
         try {
-            $this->_initEntityType();
+            $entityType = $this->_initEntityType();
+            $this->_initAction($this->__(
+                $entityType->getId() ? 'Edit Entity Type %s' : 'Create Entity Type %s',
+                $this->getEtmHelper()->escapeHtml($entityType->getEntityTypeName())
+            ));
         } catch (Goodahead_Etm_Exception $e) {
             $this->_getSession()->addError($e->getMessage());
             $this->_redirect('*/*/');
@@ -142,7 +146,10 @@ class Goodahead_Etm_Adminhtml_Etm_EntityTypeController
         $redirectPath   = '*/*';
         $redirectParams = array();
 
+        $data = $this->getRequest()->getPost('data');
         $entityTypeId = $this->getRequest()->getPost('entity_type_id', null);
+//        if (array_key_exists())
+//        $entityTypeId
 
         /** @var Goodahead_Etm_Model_Entity_Type $entityTypeModel */
         $entityTypeModel = Mage::getModel('goodahead_etm/entity_type');
@@ -152,23 +159,27 @@ class Goodahead_Etm_Adminhtml_Etm_EntityTypeController
                 $hasError = false;
                 $entityTypeModel->load($entityTypeId);
 
-                $postFields = array(
-//                    'entity_type_code',
-                    'entity_type_name',
-                    'entity_type_root_template',
-                    'entity_type_layout_xml',
-                    'entity_type_content',
-                    'default_attribute_id'
-                );
-                $postData = array();
-                foreach ($postFields as $_field) {
-                    $value = $this->getRequest()->getPost($_field, null);
-                    if (isset($value)) {
-                        $postData[$_field] = $value;
-                    }
-                }
+//                $postFields = array(
+////                    'entity_type_code',
+//                    'entity_type_name',
+//                    'entity_type_root_template',
+//                    'entity_type_layout_xml',
+//                    'entity_type_content',
+//                    'default_attribute_id'
+//                );
+//                $postData = array();
+//                foreach ($postFields as $_field) {
+//                    $value = $this->getRequest()->getPost($_field, null);
+//                    if (isset($value)) {
+//                        $postData[$_field] = $value;
+//                    }
+//                }
+                $postData = $this->getRequest()->getPost('data', array());
                 if (!$entityTypeModel->getId()) {
-                    $entityTypeCode = $this->getRequest()->getPost('entity_type_code', null);
+                    if (array_key_exists('entity_type_code', $postData)) {
+                        $entityTypeCode = $postData['entity_type_code'];
+                        unset($postData['entity_type_code']);
+                    }
                     if (!isset($entityTypeCode)) {
                         Mage::throwException($this->__('Entity Type Code required'));
                     }
@@ -185,7 +196,10 @@ class Goodahead_Etm_Adminhtml_Etm_EntityTypeController
                         array_merge(
                             $postData,
                             array(
-                                'entity_model'             => sprintf('goodahead_etm/custom_%s_entity', $entityTypeCode),
+                                'entity_model'             => sprintf(
+                                    'goodahead_etm/custom_%s_entity',
+                                    $entityTypeCode
+                                ),
                                 'attribute_model'          => 'goodahead_etm/entity_attribute',
                                 'table'                    => 'goodahead_etm/entity',
                                 'create_system_attributes' => true,
@@ -196,12 +210,16 @@ class Goodahead_Etm_Adminhtml_Etm_EntityTypeController
                     $entityTypeModel->load($entityTypeId);
                     Mage::app()->cleanCache(array(Mage_Adminhtml_Block_Page_Menu::CACHE_TAGS));
                 } else {
+                    if (array_key_exists('entity_type_code', $postData)) {
+                        unset($postData['entity_type_code']);
+                    }
                     $entityTypeModel->addData($postData);
                     $entityTypeModel->save();
                 }
 
                 $this->_getSession()->addSuccess(
-                    Mage::helper('goodahead_etm')->__('Entity type "%s" successfully saved', $entityTypeModel->getEntityTypeName())
+                    Mage::helper('goodahead_etm')
+                        ->__('Entity type "%s" successfully saved', $entityTypeModel->getEntityTypeName())
                 );
 
                 // check if 'Save and Continue'
@@ -225,7 +243,9 @@ class Goodahead_Etm_Adminhtml_Etm_EntityTypeController
             }
 
             if ($hasError) {
-                $this->_getSession()->setFormData($postData);
+                if (isset($postData)) {
+                    $this->_getSession()->setFormData($postData);
+                }
                 $redirectPath   = '*/*/edit';
                 if ($entityTypeModel->getId()) {
                     $redirectParams['entity_type_id'] = $entityTypeId;

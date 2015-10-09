@@ -29,9 +29,17 @@
  */
 -->
 <layout>
-    <goodahead_etm_entity>
+    <goodahead_etm_entity_view>
         <reference name="content">
             <block type="goodahead_etm/etm" name="etm"/>
         </reference>
-    </goodahead_etm_entity>
+    </goodahead_etm_entity_view>
+
+    <goodahead_etm_entity_list>
+        <reference name="content">
+            <block type="goodahead_etm/entity_list" name="goodahead_etm.entity_list">
+                <block type="page/html_pager" as="entity_list_pager" name="goodahead_etm.entity_list_pager"/>
+            </block>
+        </reference>
+    </goodahead_etm_entity_list>
 </layout>

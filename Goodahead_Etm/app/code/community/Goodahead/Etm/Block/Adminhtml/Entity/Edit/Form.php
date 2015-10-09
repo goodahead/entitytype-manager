@@ -131,12 +131,22 @@ class Goodahead_Etm_Block_Adminhtml_Entity_Edit_Form
     // TODO: add media images and media gallery support
     protected function _getAdditionalElementTypes()
     {
-        return array(
+        $additionalElementTypes = array(
             'file'      => Mage::getConfig()->getBlockClassName('adminhtml/customer_form_element_file'),
 //            'image'     => Mage::getConfig()->getBlockClassName('adminhtml/customer_form_element_image'),
             'image'     => Mage::getConfig()->getBlockClassName('goodahead_etm/adminhtml_form_renderer_fieldset_element_image'),
             'boolean'   => Mage::getConfig()->getBlockClassName('adminhtml/customer_form_element_boolean'),
             'price'     => Mage::getConfig()->getBlockClassName('goodahead_etm/adminhtml_form_renderer_fieldset_element_price'),
         );
+
+        $additionalTypesFromConfig = array();
+        $formContainer = $this->getParentBlock();
+        if ($formContainer && ($configBlock = $formContainer->getChild('etm.entity.form.container.config'))) {
+            $additionalTypesFromConfig = $configBlock->getAdditionalElementTypes();
+            if (!is_array($additionalTypesFromConfig)) {
+                $additionalTypesFromConfig = array();
+            }
+        }
+        return array_merge($additionalElementTypes, $additionalTypesFromConfig);
     }
 }

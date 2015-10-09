@@ -1,3 +1,47 @@
+==== 1.0.2 ====
+
+Improved ETM entity type edit form:
+  * moved tab initialization section to layout
+  * applied widget tab interface for all children tab form blocks (sections)
+  * added prepare form dispatch events for all children tab form blocks
+    - "goodahead_etm_entity_types_edit_prepare_form_main_section" for "Properties" (etm_entity_type_edit_tab_main)
+    - "goodahead_etm_entity_types_edit_prepare_form_page_layout_section" for "Entity Page Layout" (etm_entity_type_edit_tab_page_layout)
+    - "goodahead_etm_entity_types_edit_prepare_form_list_page_layout_section" for "Entities List Page Layout" (etm_entity_type_edit_tab_list_page_layout)
+  * added possibility for include additional element types
+Improved ETM attribute edit form:
+  * moved tab initialization section to layout
+  * applied widget tab interface for all children tab form blocks (sections)
+Changed: Added storeId setter for WYSIWYG JavaScript block if it available (for further improvements)
+Added: Entity list on frontend
+Changed: Admin form for editing Entity Type extended. Additional tabs added to edit Entity List page layout and content
+Added: Now it's possible to define template for Entity Landing page title
+Fixed: Page title for Edit action for Entity Type Controller
+Changed: Moved backend menu additional logic (dynamic menu updating, editing, etc) to the Goodahead_Core extension
+Improved: reworked Insert Variables (WYSIWYG Variables Plug-in) logic for proper fields of Entity Type edit/create form and its children (tabs):
+  * reworked main form block
+  * reworked entity tab from block
+  * reworked entity list tab from block
+  * added WYSIWYG Variables Plug-in related logic:
+    - custom renderers
+    - observers for including additional (core/custom/etc) variables
+    - custom WYSIWYG config model for enabling core WYSIWYG Variables Plug-in
+    - custom JavaScript for replacing MagentovariablePlugin that can only operate with one set of the Variables per page
+Improved: added WYSIWYG action for Entity controller (for further improvements)
+Fixed: Minor fixes to the image attribute frontend model (added slash trim, added condition to prevent output incorrect URL if image was not set)
+Fixed: Grid parameters are saved in the session for such grids as grid of ETM entities, grid of ETM entity types, grid of ETM attributes
+Fixed: Etm helper _getEntityTypeByEntityTypeId method - related to different issues (incorrect entity type by existing id)
+Fixed: Added fix for execute Etm autoloader for Magento shell scripts which are extended from Mage_Shell_Abstract class
+
+
+
+==== 1.0.1.1 ====
+
+Fixed: adminhtml controller rewrite complaint (changed before to after)
+Fixed: Fixed store-dependent data not loading for entity view page on frontend
+Minor code cleanup
+
+
+
 ==== 1.0.1 ====
 
 === Major Highlights ===

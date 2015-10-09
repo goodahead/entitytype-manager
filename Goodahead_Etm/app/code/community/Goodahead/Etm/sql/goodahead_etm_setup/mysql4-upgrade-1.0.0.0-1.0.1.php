@@ -79,9 +79,16 @@ if ($items && is_array($items)) {
 }
 
 
-$installer->getConnection()->dropColumn($installer->getTable('goodahead_etm/eav_attribute'), 'attribute_name');
+$installer->getConnection()->dropColumn(
+    $installer->getTable('goodahead_etm/eav_attribute'),
+    'attribute_name'
+);
 
-$installer->getConnection()->addColumn($installer->getTable('goodahead_etm/eav_attribute'), 'sort_order', 'INT(4) UNSIGNED NOT NULL DEFAULT 0');
+$installer->getConnection()->addColumn(
+    $installer->getTable('goodahead_etm/eav_attribute'),
+    'sort_order',
+    'INT(4) UNSIGNED NOT NULL DEFAULT 0'
+);
 
 $select = $installer->getConnection()->select();
 $select->from(array(

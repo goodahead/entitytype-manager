@@ -31,7 +31,7 @@
 <config>
     <modules>
         <Goodahead_Etm>
-            <version>1.0.1</version>
+            <version>1.0.2</version>
         </Goodahead_Etm>
     </modules>
     <global>
@@ -107,7 +107,7 @@
             <adminhtml>
                 <args>
                     <modules>
-                        <Goodahead_Etm before="Mage_Adminhtml">Goodahead_Etm_Adminhtml</Goodahead_Etm>
+                        <Goodahead_Etm after="Mage_Adminhtml">Goodahead_Etm_Adminhtml</Goodahead_Etm>
                     </modules>
                 </args>
             </adminhtml>
@@ -131,22 +131,6 @@
             </modules>
         </translate>
         <events>
-            <controller_action_predispatch_adminhtml>
-                <observers>
-                    <goodahead_etm_render_menu>
-                        <class>goodahead_etm/observer</class>
-                        <method>renderMenu</method>
-                    </goodahead_etm_render_menu>
-                </observers>
-            </controller_action_predispatch_adminhtml>
-            <core_layout_block_create_after>
-                <observers>
-                    <goodahead_etm_render_menu>
-                        <class>goodahead_etm/observer</class>
-                        <method>updateMenuBlockCacheId</method>
-                    </goodahead_etm_render_menu>
-                </observers>
-            </core_layout_block_create_after>
             <adminhtml_catalog_product_attribute_edit_prepare_form>
                 <observers>
                     <goodahead_etm_add_additional_fields>
@@ -195,6 +179,22 @@
                     </add_handler_to_catalog_output_helper>
                 </observers>
             </catalog_helper_output_construct>
+            <cms_wysiwyg_config_prepare>
+                <observers>
+                    <goodahead_etm_variable_observer>
+                        <class>goodahead_etm/observer</class>
+                        <method>prepareWysiwygPluginVariables</method>
+                    </goodahead_etm_variable_observer>
+                </observers>
+            </cms_wysiwyg_config_prepare>
+            <goodahead_core_wysiwyg_plugin_action_response_before>
+                <observers>
+                    <goodahead_etm_variable_wysiwyg_action_addon>
+                        <class>goodahead_etm/observer</class>
+                        <method>wysiwygPluginActionResponse</method>
+                    </goodahead_etm_variable_wysiwyg_action_addon>
+                </observers>
+            </goodahead_core_wysiwyg_plugin_action_response_before>
         </events>
     </adminhtml>
     <frontend>

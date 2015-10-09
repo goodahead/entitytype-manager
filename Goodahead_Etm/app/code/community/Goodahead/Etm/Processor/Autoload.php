@@ -32,15 +32,15 @@ class Goodahead_Etm_Processor_Autoload
 
     static protected $_instance;
 
-    protected $includePath = '';
+    protected $_includePath = '';
 
-    protected $isRegistered = false;
+    protected $_isRegistered = false;
 
     protected $_dataDirSuffix = 'data';
 
     public function __construct()
     {
-        $this->includePath = Mage::getConfig()->getVarDir('goodahead' . DS . 'etm' . DS . 'includes' . DS);
+        $this->_includePath = Mage::getConfig()->getVarDir('goodahead' . DS . 'etm' . DS . 'includes' . DS);
     }
 
     /**
@@ -48,7 +48,7 @@ class Goodahead_Etm_Processor_Autoload
      */
     public function getIsRegistered()
     {
-        return $this->isRegistered;
+        return $this->_isRegistered;
     }
 
     /**
@@ -57,7 +57,7 @@ class Goodahead_Etm_Processor_Autoload
      */
     public function setIsRegistered($flag)
     {
-        $this->isRegistered = $flag;
+        $this->_isRegistered = $flag;
 
         return $this;
     }
@@ -101,7 +101,7 @@ class Goodahead_Etm_Processor_Autoload
         ) {
             $classFileName = $class . '.php';
 
-            if (!file_exists($this->includePath . $classFileName)) {
+            if (!file_exists($this->_includePath . $classFileName)) {
                 if (!$this->_generateClass($class)) {
                     return false;
                 }
@@ -149,8 +149,8 @@ class Goodahead_Etm_Processor_Autoload
             ), $template
         );
 
-        if (Mage::getConfig()->createDirIfNotExists($this->includePath)) {
-            file_put_contents($this->includePath . $class . '.php', $template);
+        if (Mage::getConfig()->createDirIfNotExists($this->_includePath)) {
+            file_put_contents($this->_includePath . $class . '.php', $template);
 
             return true;
         }
@@ -183,8 +183,8 @@ class Goodahead_Etm_Processor_Autoload
             ), $template
         );
 
-        if (Mage::getConfig()->createDirIfNotExists($this->includePath)) {
-            file_put_contents($this->includePath . $class . '.php', $template);
+        if (Mage::getConfig()->createDirIfNotExists($this->_includePath)) {
+            file_put_contents($this->_includePath . $class . '.php', $template);
 
             return true;
         }

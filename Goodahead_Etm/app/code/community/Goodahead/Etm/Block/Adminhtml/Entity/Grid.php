@@ -43,6 +43,7 @@ class Goodahead_Etm_Block_Adminhtml_Entity_Grid
         $this->setId('entityType');
         $this->_controller = 'adminhtml_entity';
         $this->setUseAjax(true);
+        $this->setSaveParametersInSession(true);
 
         $this->setDefaultSort('main_table.entity_id');
         $this->setDefaultDir('DESC');
@@ -56,7 +57,7 @@ class Goodahead_Etm_Block_Adminhtml_Entity_Grid
 
     protected function _prepareCollection()
     {
-        $entityType = Mage::registry('etm_entity_type');
+        $entityType = $this->getEntityType();
 
         $collection = $this->_getEtmHelper()
             ->getEntityCollectionByEntityType($entityType)
@@ -79,7 +80,7 @@ class Goodahead_Etm_Block_Adminhtml_Entity_Grid
 
         $store = $this->_getStore();
 
-        $entityType = Mage::registry('etm_entity_type');
+        $entityType = $this->getEntityType();
         $visibleAttr = $this->_getEtmHelper()->getVisibleAttributes($entityType);
         /** @var $helper Goodahead_Etm_Helper_Data */
         $helper = Mage::helper('goodahead_etm');
@@ -132,6 +133,11 @@ class Goodahead_Etm_Block_Adminhtml_Entity_Grid
                 $attributeParams['width'] = '160px';
             }
 
+            if ($attribute->getFrontendInput() == 'textarea') {
+                $attributeParams['escape'] = true;
+                $attributeParams['nl2br'] = true;
+            }
+
             $transport = new Varien_Object($attributeParams);
             Mage::dispatchEvent('goodahead_etm_entity_grid_prepare_column', array(
                 'attribute' => $attribute,
@@ -175,7 +181,7 @@ class Goodahead_Etm_Block_Adminhtml_Entity_Grid
 
     protected function _prepareMassaction()
     {
-        $entityType = Mage::registry('etm_entity_type');
+        $entityType = $this->getEntityType();
 
         $this->setMassactionIdField('entity_id');
         $this->getMassactionBlock()->setFormFieldName('entity_ids');
@@ -185,6 +191,11 @@ class Goodahead_Etm_Block_Adminhtml_Entity_Grid
             'confirm' => Mage::helper('goodahead_etm')->__('Are you sure you want to delete selected entity types?')
         ));
         return $this;
+    }
+
+    public function getEntityType()
+    {
+        return Mage::registry('etm_entity_type');
     }
 
     public function getRowUrl($row)

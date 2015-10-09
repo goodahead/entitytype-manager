@@ -27,38 +27,8 @@
  * @license    http://www.gnu.org/licenses/lgpl-3.0-standalone.html GNU Lesser General Public License
  */
 
-class Goodahead_Etm_Model_Observer {
-
-    public function renderMenu($observer)
-    {
-        /** @var $menu Varien_Simplexml_Element */
-        $menu = Mage::getSingleton('admin/config')->getAdminhtmlConfig()->getNode('menu');
-        foreach ($menu->xpath('//*[@update]') as $node) {
-            $helperName = explode('/', (string)$node->getAttribute('update'));
-            $helperMethod = array_pop($helperName);
-            $helperName = implode('/', $helperName);
-            $helper = Mage::helper($helperName);
-            if ($helper && method_exists($helper, $helperMethod)) {
-                $helper->$helperMethod($node);
-            }
-        }
-    }
-
-    public function updateMenuBlockCacheId($observer)
-    {
-        $block = $observer->getEvent()->getBlock();
-        if ($block instanceof Mage_Adminhtml_Block_Page_Menu) {
-            /** @var $menu Varien_Simplexml_Element */
-            $menu = Mage::getSingleton('admin/config')->getAdminhtmlConfig()->getNode('menu');
-            $additionalCacheKeyInfo = $block->getAdditionalCacheKeyInfo();
-            if (!is_array($additionalCacheKeyInfo)) {
-                $additionalCacheKeyInfo = array();
-            }
-            $additionalCacheKeyInfo['goodahead_etm_cache_key_info'] = md5($menu->asXML());
-            $block->setAdditionalCacheKeyInfo($additionalCacheKeyInfo);
-        }
-    }
-
+class Goodahead_Etm_Model_Observer
+{
     public function adminhtmlCatalogProductAttributeEditPrepareForm($observer)
     {
         /* @var $form Varien_Data_Form */
@@ -73,7 +43,8 @@ class Goodahead_Etm_Model_Observer {
             'name' => 'goodahead_etm_entity_type_id',
             'label' => $_helper->__("Bind to Custom Entity Type"),
             'title' => $_helper->__('Can be used only with catalog input type Dropdown or Multiple Select'),
-            'note' => $_helper->__('Can be used only with catalog input type Dropdown or Multiple Select. Bind this product attribute to custom Entity Type.'),
+            'note' => $_helper->__('Can be used only with catalog input type Dropdown or Multiple Select.'
+                . ' Bind this product attribute to custom Entity Type.'),
             'values' => Mage::getModel('goodahead_etm/source_entity_type')->toOptionArray(true),
         ), 'frontend_input');
 
@@ -117,12 +88,21 @@ class Goodahead_Etm_Model_Observer {
             if ($attribute->hasData('goodahead_etm_entity_type_id')) {
                 if ($attribute->hasData('goodahead_etm_entity_type_default_value')) {
                     if ($attribute->getFrontendInput() == 'select') {
-                        $attribute->setData('default_value', $attribute->getData('goodahead_etm_entity_type_default_value'));
+                        $attribute->setData(
+                            'default_value',
+                            $attribute->getData('goodahead_etm_entity_type_default_value')
+                        );
                     } elseif ($attribute->getFrontendInput() == 'multiselect') {
                         if (is_array($attribute->getData('goodahead_etm_entity_type_default_value'))) {
-                            $attribute->setData('default_value', implode(',', $attribute->getData('goodahead_etm_entity_type_default_value')));
+                            $attribute->setData(
+                                'default_value',
+                                implode(',', $attribute->getData('goodahead_etm_entity_type_default_value'))
+                            );
                         } else {
-                            $attribute->setData('default_value', $attribute->getData('goodahead_etm_entity_type_default_value'));
+                            $attribute->setData(
+                                'default_value',
+                                $attribute->getData('goodahead_etm_entity_type_default_value')
+                            );
                         }
                     }
                 }
@@ -152,9 +132,15 @@ class Goodahead_Etm_Model_Observer {
         if ($attribute->hasData('goodahead_etm_entity_type_id')) {
             if ($attribute->hasData('default_value')) {
                 if ($attribute->getFrontendInput() == 'multiselect') {
-                    $attribute->setData('goodahead_etm_entity_type_default_value', explode(',', $attribute->getData('default_value')));
+                    $attribute->setData(
+                        'goodahead_etm_entity_type_default_value',
+                        explode(',', $attribute->getData('default_value'))
+                    );
                 } else {
-                    $attribute->setData('goodahead_etm_entity_type_default_value', $attribute->getData('default_value'));
+                    $attribute->setData(
+                        'goodahead_etm_entity_type_default_value',
+                        $attribute->getData('default_value')
+                    );
                 }
             }
         }
@@ -174,4 +160,147 @@ class Goodahead_Etm_Model_Observer {
         Goodahead_Etm_Processor_Autoload::register();
     }
 
+    public function wysiwygPluginActionResponse(Varien_Event_Observer $observer)
+    {
+        $event = $observer->getEvent();
+        $variablesObject = $event->getVariables();
+        $variables = $variablesObject->getData();
+        /* @var $action Goodahead_Core_Adminhtml_Goodahead_Core_System_VariableController */
+        $action = $event->getAction();
+        $etmParam = $action->getRequest()->getParam('etm', null);
+        if (isset($etmParam)) {
+            $requestVariableParams = json_decode(base64_decode($etmParam), true);
+            $variableNameList = array(
+                'entity_type_id', 'entity_id', 'store_id',
+                'etm_entity_attributes', 'etm_entity_type_toolbar', 'etm_attributes',
+            );
+            $variableParams = array();
+            foreach ($variableNameList as $key) {
+                $variableParams[$key] = (array_key_exists($key, $requestVariableParams) && !empty($requestVariableParams[$key]))
+                    ? $requestVariableParams[$key]
+                    : null;
+            }
+            if (isset($variableParams['entity_type_id'])) {
+                $entityType = Mage::getModel('goodahead_etm/entity_type')
+                    ->load($variableParams['entity_type_id']);
+                Mage::register('etm_entity_type', $entityType);
+                if ($entityType->getId()) {
+                    if (isset($variableParams['etm_entity_attributes'])) {
+                        $variables[] = $this->getEtmEntityAttributeVariables();
+                    }
+                    if (isset($variableParams['etm_attributes']) && isset($variableParams['entity_id'])) {
+                        $entity = $this->getEtmHelper()
+                            ->getEntityModelByEntityType(Mage::registry('etm_entity_type'));
+                        $entity
+                            ->setStoreId($variableParams['store_id'])
+                            ->load($variableParams['entity_id']);
+                        if ($entity->getId()) {
+                            $variables[] = array(); // TODO result against array
+                        }
+                    }
+                }
+            }
+            if (isset($variableParams['etm_entity_type_toolbar'])) {
+                $variables[] = $this->getEtmEntitesListVariables();
+            }
+            $variablesObject->setData($variables);
+        }
+        return $this;
+    }
+
+    public function prepareWysiwygPluginVariables(Varien_Event_Observer $observer)
+    {
+        $event = $observer->getEvent();
+        $config = $event->getConfig();
+
+        if ($config->getData('add_variables') && $config->getData('etm_variables')) {
+            $etmVariables = base64_encode(json_encode($config->getData('etm_variables')));
+            $plugins = $config->getData('plugins');
+            $variablePluginId = null;
+            foreach ($plugins as $pluginId => $pluginData) {
+                if (array_key_exists('name', $pluginData) && $pluginData['name'] == 'magentovariable') {
+                    $variablePluginId = $pluginId;
+                    break;
+                }
+            }
+            if (isset($variablePluginId)) {
+                $variablesUrl = $this->_getVariablesWysiwygActionUrl(array('etm' => $etmVariables));
+                if (isset($plugins[$variablePluginId]['options']['onclick']['subject'])) {
+                    $plugins[$variablePluginId]['options']['onclick']['subject'] = 
+                        'GoodaheadvariablePlugin.loadChooser(\''.$variablesUrl.'\', \'{{html_id}}\');';
+                    $config->setData('plugins', $plugins);
+                }
+            }
+        }
+        return $this;
+    }
+
+    /* @return Goodahead_Etm_Helper_Data */
+    protected function getEtmHelper()
+    {
+        return Mage::helper('goodahead_etm');
+    }
+
+    protected function getEtmEntityAttributeVariables()
+    {
+        $entityType = Mage::registry('etm_entity_type');
+
+        $visibleAttribute = $this->getEtmHelper()->getVisibleAttributes($entityType);
+        $variables = array();
+
+        foreach($visibleAttribute as $attributeCode => $attribute) {
+            $variables[] = array(
+                'value' => $attributeCode,
+                'label' => $attribute->getFrontend()->getLabel()
+            );
+        }
+
+        $optionArray = array();
+        foreach ($variables as $variable) {
+            $optionArray[] = array(
+                'value' => '{{var ' . $variable['value'] . '}}',
+                'label' => $this->getEtmHelper()->__('%s', $variable['label'])
+            );
+        }
+        if ($optionArray) {
+            $optionArray = array(
+                'label' => Mage::helper('core')->__('Entity Attributes'),
+                'value' => $optionArray
+            );
+        }
+
+        return $optionArray;
+    }
+
+    public function getEtmEntitesListVariables()
+    {
+        return array(
+            'label' => $this->getEtmHelper()->__('Template'),
+            'value' => array(
+                array(
+                    'label' => $this->getEtmHelper()->__('Pager (with sample configurations)'),
+                    'value' => '{{pager limits=25|50|75 frame_length=2 page_var_name=page}}',
+                ),
+                array(
+                    'label' => $this->getEtmHelper()->__('Pager'),
+                    'value' => '{{pager}}',
+                ),
+                array(
+                    'label' => $this->getEtmHelper()->__('Entity Type List (list of entities)'),
+                    'value' => '{{items}}',
+                )
+            ),
+        );
+    }
+
+    /**
+     * Return url of action to get variables
+     *
+     * @return string
+     */
+    protected function _getVariablesWysiwygActionUrl($params = array())
+    {
+        return Mage::getSingleton('adminhtml/url')
+            ->getUrl('*/goodahead_core_system_variable/wysiwygPlugin', $params);
+    }
 }

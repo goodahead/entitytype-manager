@@ -51,7 +51,12 @@ $table
     ->addColumn('entity_type_root_template', Varien_Db_Ddl_Table::TYPE_TEXT, 128, array(), 'Root Template')
     ->addColumn('entity_type_layout_xml', Varien_Db_Ddl_Table::TYPE_TEXT, null, array(), 'Layout XML')
     ->addColumn('entity_type_content', Varien_Db_Ddl_Table::TYPE_TEXT, null, array(), 'Content')
-    ->addForeignKey($installer->getFkName('goodahead_etm/eav_entity_type', 'entity_type_id', 'eav/entity_type', 'entity_type_id'),
+    ->addForeignKey($installer->getFkName(
+            'goodahead_etm/eav_entity_type',
+            'entity_type_id',
+            'eav/entity_type',
+            'entity_type_id'
+        ),
         'entity_type_id', $installer->getTable('eav/entity_type'), 'entity_type_id',
         Varien_Db_Ddl_Table::ACTION_CASCADE, Varien_Db_Ddl_Table::ACTION_CASCADE
     )
@@ -61,12 +66,13 @@ $table->setOption('comment', 'ETM Entity Type extended info');
 $installer->createTable($table);
 
 // Add column and corresponding indexes to catalog/eav_attribute table, which will hold referenced entity type
-$installer->getConnection()->addColumn($installer->getTable('catalog/eav_attribute'), 'goodahead_etm_entity_type_id', array(
-    'type' => Varien_Db_Ddl_Table::TYPE_SMALLINT,
-    'unsigned'  => true,
-    'nullable'  => true,
-    'comment' => 'Entity Type Manager Entity type Binding'
-));
+$installer->getConnection()
+    ->addColumn($installer->getTable('catalog/eav_attribute'), 'goodahead_etm_entity_type_id', array(
+        'type' => Varien_Db_Ddl_Table::TYPE_SMALLINT,
+        'unsigned' => true,
+        'nullable' => true,
+        'comment' => 'Entity Type Manager Entity type Binding'
+    ));
 
 $installer->getConnection()->addIndex(
     $installer->getTable('catalog/eav_attribute'),
@@ -75,7 +81,12 @@ $installer->getConnection()->addIndex(
 );
 
 $installer->getConnection()->addForeignKey(
-    $installer->getFkName('catalog/eav_attribute', 'goodahead_etm_entity_type_id', 'goodahead_etm/eav_entity_type', 'entity_type_id'),
+    $installer->getFkName(
+        'catalog/eav_attribute',
+        'goodahead_etm_entity_type_id',
+        'goodahead_etm/eav_entity_type',
+        'entity_type_id'
+    ),
     $installer->getTable('catalog/eav_attribute'),
     'goodahead_etm_entity_type_id',
     $installer->getTable('goodahead_etm/eav_entity_type'),
@@ -115,7 +126,12 @@ $installer->createTable($table);
  * Add foreign key to entity type table
  */
 $installer->getConnection()->addForeignKey(
-    $installer->getFkName('goodahead_etm/eav_entity_type', 'default_attribute_id', 'goodahead_etm/eav_attribute', 'attribute_id'),
+    $installer->getFkName(
+        'goodahead_etm/eav_entity_type',
+        'default_attribute_id',
+        'goodahead_etm/eav_attribute',
+        'attribute_id'
+    ),
     $installer->getTable('goodahead_etm/eav_entity_type'),
     'default_attribute_id',
     $installer->getTable('goodahead_etm/eav_attribute'),

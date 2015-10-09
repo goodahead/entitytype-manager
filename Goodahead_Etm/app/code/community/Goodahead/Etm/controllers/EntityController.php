@@ -27,22 +27,26 @@
  * @license    http://www.gnu.org/licenses/lgpl-3.0-standalone.html GNU Lesser General Public License
  */
 
-class Goodahead_Etm_IndexController extends Mage_Core_Controller_Front_Action
+class Goodahead_Etm_EntityController extends Mage_Core_Controller_Front_Action
 {
-    public function indexAction()
+    public function viewAction()
     {
         /** @var Goodahead_Etm_Helper_Data $helper */
         $helper = Mage::helper('goodahead_etm');
 
         try {
-            $entity = $helper->getEntityByEntityId($this->getRequest()->getParam('entity_id'));
+            $entity = $helper->getEntityByEntityId(
+                $this->getRequest()->getParam('entity_id'),
+                Mage::app()->getStore()->getId()
+            );
 
             if ($entity->getId()) {
                 $entityType = $entity->getEntityTypeInstance();
                 Mage::register('goodahead_etm_entity', $entity);
+                Mage::register('goodahead_etm_entity_type', $entityType);
                 $this->getLayout()->getUpdate()
                     ->addHandle('default')
-                    ->addHandle('goodahead_etm_entity')
+                    ->addHandle('goodahead_etm_entity_view')
                     ->addHandle('ENTITY_TYPE_' . $entityType->getEntityTypeCode());
                 $this->addActionLayoutHandles();
                 if ($entityType->getEntityTypeRootTemplate()) {
@@ -63,6 +67,47 @@ class Goodahead_Etm_IndexController extends Mage_Core_Controller_Front_Action
             } else {
                 $this->_forward('no_route');
             }
+        } catch (Exception $e) {
+            $this->_forward('no_route');
+        }
+    }
+
+    public function listAction()
+    {
+        /** @var Goodahead_Etm_Helper_Data $helper */
+        $helper = Mage::helper('goodahead_etm');
+
+        try {
+            $entityCollection = $helper->getEntityCollectionByEntityType(
+                $this->getRequest()->getParam('entity_type_code')
+            );
+            $entityType = $entityCollection->getEntityType();
+            $entityCollection->setStoreId(Mage::app()->getStore()->getId());
+            $entityCollection->joinVisibleAttributes($entityType->getId());
+
+            Mage::register('goodahead_etm_entity_collection', $entityCollection);
+            Mage::register('goodahead_etm_entity_type', $entityType);
+            $this->getLayout()->getUpdate()
+                ->addHandle('default')
+                ->addHandle('goodahead_etm_entity_list')
+                ->addHandle('ENTITY_TYPE_LIST_' . $entityType->getEntityTypeCode());
+            $this->addActionLayoutHandles();
+            if ($entityType->getEntityTypeListRootTemplate()) {
+                $this->getLayout()->helper('page/layout')->applyHandle(
+                    $entityType->getEntityTypeListRootTemplate());
+            }
+
+            $this->loadLayoutUpdates();
+            $layoutUpdate = $entityType->getEntityTypeListLayoutXml();
+            $this->getLayout()->getUpdate()->addUpdate($layoutUpdate);
+            $this->generateLayoutXml()->generateLayoutBlocks();
+
+            if ($entityType->getEntityTypeListRootTemplate()) {
+                $this->getLayout()->helper('page/layout')
+                    ->applyTemplate($entityType->getEntityTypeListRootTemplate());
+            }
+
+            $this->renderLayout();
         } catch (Exception $e) {
             $this->_forward('no_route');
         }

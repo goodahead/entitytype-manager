@@ -41,6 +41,7 @@ class Goodahead_Etm_Block_Adminhtml_Attribute_Grid
     {
         $this->_controller = 'adminhtml_attribute';
         $this->setUseAjax(true);
+        $this->setSaveParametersInSession(true);
 
         $this->setDefaultSort('attribute_code');
         $this->setDefaultDir('ASC');

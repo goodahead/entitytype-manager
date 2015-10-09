@@ -229,6 +229,10 @@ class Goodahead_Etm_Adminhtml_Etm_AttributeController
 
             Mage::register('etm_attribute', $attributeModel);
 
+            $block = $this->getLayout()->getBlock('catalog.wysiwyg.js');
+            if ($block) {
+                $block->setStoreId(Mage_Core_Model_App::ADMIN_STORE_ID);
+            }
             $this->renderLayout();
             return;
         } catch (Goodahead_Etm_Exception $e) {
